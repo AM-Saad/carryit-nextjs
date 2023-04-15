@@ -1,4 +1,6 @@
 import ms from "ms";
+  
+
 
 export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
   if (!timestamp) return "never";
@@ -16,13 +18,12 @@ export async function fetcher<JSON = any>(
   if (!res.ok) {
     const json = await res.json();
     if (json.error) {
-      const error = new Error(json.error) as Error & {
-        status: number;
-      };
+      console.log(json)
+      const error = new Error(json.error) as Error & { status: number;};
       error.status = res.status;
       throw error;
     } else {
-      throw new Error("An unexpected error occurred");
+      return json
     }
   }
 
@@ -61,3 +62,5 @@ export const truncate = (str: string, length: number) => {
   if (!str || str.length <= length) return str;
   return `${str.slice(0, length)}...`;
 };
+
+

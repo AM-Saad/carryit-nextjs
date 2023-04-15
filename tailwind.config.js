@@ -15,6 +15,15 @@ module.exports = {
         display: ["var(--font-sf)", "system-ui", "sans-serif"],
         default: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
+      backgroundColor: {
+        theme:"#6bb6c2"
+      },
+      colors: {
+        theme:"#6bb6c2"
+      },
+      borderColor: {
+        theme:"#6bb6c2"
+      },
       animation: {
         // Tooltip
         "slide-up-fade": "slide-up-fade 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
@@ -31,6 +40,7 @@ module.exports = {
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
       },
+      
     },
   },
   plugins: [

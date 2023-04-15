@@ -1,56 +1,317 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  relationMode = "prisma"
-}
-
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
-model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@index([userId])
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@index([userId])
+type BillsCreator {
+  id   String @db.ObjectId
+  name String
+}
+
+type BillsStatus {
+  note String
+  paid Boolean
+}
+
+type ChatsConversion {
+  id       String              @map("_id") @db.ObjectId
+  date     ChatsConversionDate
+  msg      String
+  sender   String              @db.ObjectId
+  usertype Int
+}
+
+type ChatsConversionDate {
+  date String
+  time String
+}
+
+type CompaniesOwner {
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  id Json?
+}
+
+type CompaniesRoles {
+  id          String                      @map("_id") @db.ObjectId
+  name        String
+  permissions CompaniesRolesPermissions[]
+}
+
+type CompaniesRolesPermissions {
+  id      String   @map("_id") @db.ObjectId
+  actions String[]
+  name    String
+}
+
+type CompaniesSubscriptions {
+  activated Boolean
+  duration  CompaniesSubscriptionsDuration
+  history   CompaniesSubscriptionsHistory
+}
+
+type CompaniesSubscriptionsDuration {
+  from String
+  to   String
+}
+
+type CompaniesSubscriptionsHistory {
+  activation_counts Int
+  dates             CompaniesSubscriptionsHistoryDates[]
+}
+
+type CompaniesSubscriptionsHistoryDates {
+  id     String  @map("_id") @db.ObjectId
+  data   String
+  status Boolean
+}
+
+type DriversCommission {
+  id     String? @map("_id") @db.ObjectId
+  amount Int
+  bill   String? @db.ObjectId
+  date   String
+  done   Boolean
+}
+
+type DriversCustody {
+  id     String  @map("_id") @db.ObjectId
+  amount Int
+  bill   String  @db.ObjectId
+  date   String
+  done   Boolean
+}
+
+type DriversSalary {
+  base_salary Int? @default(0)
+  commission  Int? @default(0)
+}
+
+type DriversShipments {
+  id  String? @map("_id") @db.ObjectId
+  id_ String? @map("id") @db.ObjectId
+  no  Int
+}
+
+type DriversVehicle {
+  id   String @db.ObjectId
+  name String
+}
+
+type ShipmentsDriver {
+  assignedAt String
+  id         String @db.ObjectId
+  mobile     String
+  name       String
+}
+
+type ShipmentsReceiverZone {
+  name   String
+  zoneId Int
+}
+
+type VehiclesDriver {
+  driverId String? @db.ObjectId
+  name     String
+}
+
+type FuelTank {
+  unit          String?
+  cost_per_unit Int
+  full_capacity Int
+}
+
+type GasHistory {
+  cost   Int
+  date   String
+  amount Int
+}
+
+type Document {
+  name String?
+  path String?
+  type String?
+}
+
+type MaintenanceHistory {
+  id          String   @map("_id") @db.ObjectId
+  amount      Int
+  date        String
+  done        Boolean?
+  description String?
+  type        String?
+}
+
+type ZonesShipments {
+  id       String  @map("_id") @db.ObjectId
+  delivery Boolean
+  id_      String  @map("id") @db.ObjectId
+  no       Int
+}
+
+model Admin {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime?   @db.Date
+  mobile    String?
+  email     String?    @unique
+  name      String?
+  password  String?
+  role      String?
+  updatedAt DateTime?   @db.Date
+  isSuper   Boolean?
+  drivers   Driver[]
+  shipments Shipment[]
+  vehicles  Vehicle[]
+  zones     Zone[]
+}
+
+model Bills {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  v            Int          @map("__v")
+  amount       Int
+  billtype     String
+  category     String
+  createdAt    DateTime     @db.Date
+  creator      BillsCreator
+  date         String
+  due          String
+  itemId       String       @db.ObjectId
+  itemname     String
+  notes        String
+  release_date String
+  serialNo     Int          @unique(map: "serialNo_1")
+  status       BillsStatus
+  updatedAt    DateTime     @db.Date
+}
+
+model Chat {
+  id         String            @id @default(auto()) @map("_id") @db.ObjectId
+  v          Int               @map("__v")
+  active     Boolean
+  admin      String            @db.ObjectId
+  chatId     Int               @unique(map: "chatId_1")
+  conversion ChatsConversion[]
+  driver     String            @db.ObjectId
+}
+
+model Driver {
+  id          String              @id @default(auto()) @map("_id") @db.ObjectId
+  address     String
+  commissions DriversCommission[]
+  image       String
+  mobile      String?
+  name        String
+  password    String
+  salary      DriversSalary
+  shipments   DriversShipments[]
+  vehicle     Vehicle?            @relation(fields: [vehicleId], references: [id])
+  vehicleId   String?             @unique @map("Vehicle") @db.ObjectId
+  admin       Admin?              @relation(fields: [adminId], references: [id])
+  adminId     String?             @map("admin") @db.ObjectId
+  documents   Document[]
+  active      Boolean?
+}
+
+type ShipmentsPickup {
+  address   String
+  apartment Int?
+  area      String?
+  building  Int?
+  floor     Int?
+  name      String
+  phone     String
+  zone      ShipmentsPickupZone?
+}
+
+type ShipmentsPickupZone {
+  name   String
+  zoneId Int?
+}
+
+type ShipmentsReceiver {
+  name      String
+  phone     String
+  address   String
+  city      String?
+  state     String?
+  zip       String?
+  apartment String?
+  floor     String?
+  building  String?
+  is_villa  Boolean?
+}
+
+model Shipment {
+  id            String             @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime           @db.Date
+  customerId    String?
+  date          String
+  delivery_date String
+  driver        ShipmentsDriver?
+  is_fragile    Boolean
+  is_liquid     Boolean
+  notes         String?
+  pickup_date   String?
+  price         Int
+  quantity      Int
+  total_cost    Int
+  receiver      ShipmentsReceiver?
+  shipping_cost Int?
+  status        Int?
+  admin         Admin?             @relation(fields: [adminId], references: [id])
+  adminId       String?            @map("admin") @db.ObjectId
+  shipmentNo    String?            @unique(map: "shipmentNo_1")
+}
+
+model Vehicle {
+  id            String             @id @default(auto()) @map("_id") @db.ObjectId
+  v            Int?                 @map("__v")
+  active       Boolean
+  fuel_type    String?
+  gas_history  GasHistory[]
+  fuel_tank    FuelTank?
+  maintenance  MaintenanceHistory[]
+  name         String
+  vehicle_type String
+  mileage      Int?                 @default(0)
+  notes        String?
+  plate_number String?              @default("00000")
+  model        String?              @default("00000")
+  admin        Admin?               @relation(fields: [adminId], references: [id])
+  adminId      String?              @map("admin") @db.ObjectId
+  description  String?
+  documents    Document[]
+  driver       Driver?
+  driverId     String?              @map("Driver") @db.ObjectId
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  v                 Int      @map("__v")
+  address           String?
+  email             String
+  integrationTokens String?
+  mobile            String?
+  name              String
+  password          String?
+  shipments         String[] @map("shipments") @db.ObjectId
+  signUpToken       String?
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+model Zone {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  v           Int     @map("__v")
+  active      Boolean
+  delivery    Boolean
+  governorate String
+  name        String
+  notes       String
+  pickup      Boolean
+  shipping    Int
+  zoneId      Int
+  admin       Admin?  @relation(fields: [adminId], references: [id])
+  adminId     String? @map("admin") @db.ObjectId
 }

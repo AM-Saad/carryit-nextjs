@@ -1,24 +1,26 @@
 import Modal from "@/components/shared/modal";
 import { signIn } from "next-auth/react";
+
 import {
   useState,
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
+  useEffect,
 } from "react";
 import { LoadingDots, Google } from "@/components/shared/icons";
 import Image from "next/image";
 
-const SignInModal = ({
-  showSignInModal,
-  setShowSignInModal,
-}: {
-  showSignInModal: boolean;
-  setShowSignInModal: Dispatch<SetStateAction<boolean>>;
-}) => {
+
+const SignInModal = ({ showSignInModal, setShowSignInModal, }: { showSignInModal: boolean; setShowSignInModal: Dispatch<SetStateAction<boolean>>; }) => {
   const [signInClicked, setSignInClicked] = useState(false);
 
+  const handleSignIn = async () => {
+
+    setSignInClicked(true);
+    await signIn("google",{ callbackUrl: "localhost:3000" });
+  }
   return (
     <Modal showModal={showSignInModal} setShowModal={setShowSignInModal}>
       <div className="w-full overflow-hidden shadow-xl md:max-w-md md:rounded-2xl md:border md:border-gray-200">
@@ -42,15 +44,11 @@ const SignInModal = ({
         <div className="flex flex-col space-y-4 bg-gray-50 px-4 py-8 md:px-16">
           <button
             disabled={signInClicked}
-            className={`${
-              signInClicked
-                ? "cursor-not-allowed border-gray-200 bg-gray-100"
-                : "border border-gray-200 bg-white text-black hover:bg-gray-50"
-            } flex h-10 w-full items-center justify-center space-x-3 rounded-md border text-sm shadow-sm transition-all duration-75 focus:outline-none`}
-            onClick={() => {
-              setSignInClicked(true);
-              signIn("google");
-            }}
+            className={`${signInClicked
+              ? "cursor-not-allowed border-gray-200 bg-gray-100"
+              : "border border-gray-200 bg-white text-black hover:bg-gray-50"
+              } flex h-10 w-full items-center justify-center space-x-3 rounded-md border text-sm shadow-sm transition-all duration-75 focus:outline-none`}
+            onClick={handleSignIn}
           >
             {signInClicked ? (
               <LoadingDots color="#808080" />
@@ -70,6 +68,10 @@ const SignInModal = ({
 export function useSignInModal() {
   const [showSignInModal, setShowSignInModal] = useState(false);
 
+  useEffect(() => {
+    setShowSignInModal(false);
+  }, []);
+
   const SignInModalCallback = useCallback(() => {
     return (
       <SignInModal
@@ -79,8 +81,5 @@ export function useSignInModal() {
     );
   }, [showSignInModal, setShowSignInModal]);
 
-  return useMemo(
-    () => ({ setShowSignInModal, SignInModal: SignInModalCallback }),
-    [setShowSignInModal, SignInModalCallback],
-  );
+  return useMemo(() => ({ setShowSignInModal, SignInModal: SignInModalCallback }), [setShowSignInModal, SignInModalCallback],);
 }

@@ -10,7 +10,7 @@ export default function Leaflet({
 }) {
   const leafletRef = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
-  const transitionProps = { type: "spring", stiffness: 500, damping: 30 };
+  const transitionProps = { type: "spring", stiffness: 500, damping: 50 };
   useEffect(() => {
     controls.start({
       y: 20,
@@ -57,7 +57,7 @@ export default function Leaflet({
       </motion.div>
       <motion.div
         key="leaflet-backdrop"
-        className="fixed inset-0 z-30 bg-gray-100 bg-opacity-10 backdrop-blur"
+        className="fixed inset-0 z-30 bg-gray-100 bg-opacity-40 backdrop-blur"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

@@ -4,6 +4,9 @@ import { NextRequest } from "next/server";
 
 export const config = {
   runtime: "experimental-edge",
+  api:{
+    bodyParser: true,
+  }
 };
 
 const sfPro = fetch(

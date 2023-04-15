@@ -7,7 +7,8 @@ import { Provider as RWBProvider } from "react-wrap-balancer";
 import cx from "classnames";
 import localFont from "@next/font/local";
 import { Inter } from "@next/font/google";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const sfPro = localFont({
   src: "../styles/SF-Pro-Display-Medium.otf",
   variable: "--font-sf",
@@ -28,6 +29,18 @@ export default function MyApp({
         <div className={cx(sfPro.variable, inter.variable)}>
           <Component {...pageProps} />
         </div>
+        <ToastContainer
+        toastStyle={{ fontSize: '1rem', color: 'white' }}
+        theme="colored"
+        position="bottom-left"
+        autoClose={4000}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        
+      />
       </RWBProvider>
       <Analytics />
     </SessionProvider>

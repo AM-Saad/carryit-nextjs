@@ -9,7 +9,9 @@
       "@/components/*": ["components/*"],
       "@/pages/*": ["pages/*"],
       "@/lib/*": ["lib/*"],
-      "@/styles/*": ["styles/*"]
+      "@/styles/*": ["styles/*"],
+      "@/modals/*": ["modals/*"],
+      "@/shared/*": ["shared/*"]
     },
     "strict": true,
     "forceConsistentCasingInFileNames": true,

@@ -1,15 +1,14 @@
 import { FADE_IN_ANIMATION_SETTINGS } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import useScroll from "@/lib/hooks/use-scroll";
 import Meta from "./meta";
 import { useSignInModal } from "./sign-in-modal";
 import UserDropdown from "./user-dropdown";
-
-export default function Layout({
+import { useSession } from "next-auth/react";
+const Layout = ({
   meta,
   children,
 }: {
@@ -19,22 +18,32 @@ export default function Layout({
     image?: string;
   };
   children: ReactNode;
-}) {
-  const { data: session, status } = useSession();
+}) => {
   const { SignInModal, setShowSignInModal } = useSignInModal();
   const scrolled = useScroll(50);
 
+  const { data: session } = useSession()
+
+  const getAdmins = async () => {
+    const admins = await fetch(`/api/admin/${session!.user!.email}`);
+  }
+
+
+  useEffect(() => {
+    if (session) {
+
+      getAdmins();
+    }
+  }, [session]);
   return (
     <>
       <Meta {...meta} />
       <SignInModal />
-      <div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" />
       <div
-        className={`fixed top-0 w-full ${
-          scrolled
-            ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
-            : "bg-white/0"
-        } z-30 transition-all`}
+        className={`fixed top-0 w-full ${scrolled
+          ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
+          : "bg-white/0"
+          } z-30 transition-all`}
       >
         <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
           <Link href="/" className="flex items-center font-display text-2xl">
@@ -45,11 +54,13 @@ export default function Layout({
               height="30"
               className="mr-2 rounded-sm"
             ></Image>
-            <p>Precedent</p>
+            <p>Carry it</p>
           </Link>
+
+
           <div>
             <AnimatePresence>
-              {!session && status !== "loading" ? (
+              {!session ? (
                 <motion.button
                   className="rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
                   onClick={() => setShowSignInModal(true)}
@@ -64,22 +75,25 @@ export default function Layout({
           </div>
         </div>
       </div>
-      <main className="flex w-full flex-col items-center justify-center py-32">
+      {/*  Main content goes here */}
+      <main className="flex w-full flex-col items-center py-32 min-h-[93vh]">
         {children}
       </main>
+
       <div className="absolute w-full border-t border-gray-200 bg-white py-5 text-center">
         <p className="text-gray-500">
-          A free template by{" "}
+          Provided by{" "}
           <a
-            className="font-medium text-gray-800 underline transition-colors"
-            href="https://twitter.com/steventey"
+            className="font-medium text-gray-800  transition-colors"
+            href="https://amsaad.cc"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Steven Tey
+            Abdelrahman Saad <sup> &copy;</sup>
           </a>
         </p>
       </div>
     </>
   );
 }
+export default Layout
