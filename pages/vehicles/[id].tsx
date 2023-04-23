@@ -1,27 +1,26 @@
 import Layout from '@/components/layout'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useRouter } from 'next/router'
 import { vehicleRepository } from '@/lib/repositries'
-import { Status } from '@/shared/models/Response'
-import {Error} from '@/shared/models/Response'
+import { Status } from '@/shared/modals/Response'
+import { Error } from '@/shared/modals/Response'
 import FetchError from '@/components/shared/Error'
 import VehicleFrom from '@/components/admin/vehicle'
 import { toast } from "react-toastify";
+import AdminContext from '@/stores/admin'
 
-const Vehicles = () => {
+
+const Vehicle = () => {
   const router = useRouter()
   const { id } = router.query as { id: string }
-  const [vehicle, setVehicle] = useState(null)
-  const [loading, setLoading] = useState(false)
   const [updating, setUpdating] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
+  const { fetcher, fetchMeta, currentItem } = useContext(AdminContext);
+  const { loading, error } = fetchMeta
 
-  const fetch_vehicle = async () => {
-    setLoading(true)
-    const res = await vehicleRepository.fetch_vehicle(id)
-    setLoading(false)
-    res.status === Status.SUCCESS && setVehicle(res.items)
-    res.status !== Status.SUCCESS && setError({ message: res.message, code: res.status })
+  const fetch_data = async () => {
+    await fetcher(vehicleRepository.fetch_vehicle(id), false)
+
+
   }
 
   const update_partial_vehicle = async (data: any) => {
@@ -31,7 +30,7 @@ const Vehicles = () => {
     if (res.status !== Status.SUCCESS) {
       return toast.error(res.message)
     }
-    res.status === Status.SUCCESS && setVehicle(res.items)
+    // res.status === Status.SUCCESS && setVehicle(res.items)
   }
 
   const delete_vehicle = async () => {
@@ -46,25 +45,23 @@ const Vehicles = () => {
 
 
   useEffect(() => {
-    id && fetch_vehicle()
+    id && fetch_data()
 
   }, [id])
 
   return (
     <Layout>
-      <div className='border-2 border-black h-full md:w-8/12 p-3 rounded-xl w-full xl:p-5'>
 
-        {error !== null && !loading && <FetchError reload={fetch_vehicle} error={error} />}
-        {loading && <div>Loading...</div>}
-        {!loading && vehicle && <VehicleFrom
-         onUpdate={update_partial_vehicle} 
-         onDelete={delete_vehicle}
-         loading={updating} 
-         vehicle={vehicle} />}
-      </div>
+      {error !== null && !loading && <FetchError reload={fetch_data} error={error} />}
+      {loading && <div>Loading...</div>}
+      {!loading && currentItem && <VehicleFrom
+        onUpdate={update_partial_vehicle}
+        onDelete={delete_vehicle}
+        loading={updating}
+        vehicle={currentItem} />}
 
     </Layout>
   )
 }
 
-export default Vehicles
+export default Vehicle

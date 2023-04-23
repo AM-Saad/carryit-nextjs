@@ -1,5 +1,5 @@
 import { fetcher } from "../utils";
-import Response, { Status } from "shared/models/Response";
+import Response, { Status } from "@/shared/modals/Response";
 import { SHIPMENTS_ROUTE } from '@/lib/constants'
 
 export default class ShipmentRepository {
@@ -38,7 +38,8 @@ export default class ShipmentRepository {
         try {
             const response = await fetcher(`${SHIPMENTS_ROUTE}/${id}`, {
                 method: 'PATCH',
-                body: JSON.stringify({ values: data })
+                body: JSON.stringify(data)
+
             });
             return response
 

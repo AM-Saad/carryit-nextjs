@@ -1,26 +1,42 @@
 import Layout from '@/components/layout'
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { fetcher } from '@/lib/utils'
-import {SHIPMENTS_ROUTE} from '@/lib/constants'
+import { shipmentRepository } from '@/lib/repositries'
+import AdminContext from '@/stores/admin'
+import { useSession } from 'next-auth/react'
+import Loading from '@/components/shared/Loading'
+import FetchError from '@/components/shared/Error'
+import ShipmentFrom from '@/components/admin/shipment'
+
 const Shipment = () => {
   const router = useRouter()
-  const { id } = router.query
+  const { id } = router.query as { id: string }
+  const { data: session } = useSession()
 
-  const fetch_shipment = async () => {
-    const res = await fetcher(`${SHIPMENTS_ROUTE}/${id}`)
+  const { fetcher, fetchMeta, currentItem, updater } = useContext(AdminContext);
+  const { loading, error } = fetchMeta
 
-    console.log(res)
+  const fetch_data = async () => {
+    await fetcher(shipmentRepository.fetch_shipment(id), false)
   }
+
+  const update_data = async (data: any) => {
+    await updater(shipmentRepository.update_partial_shipment(id, data), false)
+  }
+
   useEffect(() => {
-    if (id) {
-      fetch_shipment()
+    if (session && id) {
+      fetch_data()
     }
-  }, [id])
+  }, [session,id]);
+
 
   return (
     <Layout>
 
+      {loading && <Loading />}
+      {error && !loading && <FetchError reload={fetch_data} error={error} />}
+      {(!loading && currentItem) && <ShipmentFrom shipment={currentItem} onDelete={() => { }} onUpdate={update_data} loading={loading} />}
     </Layout>
   )
 }

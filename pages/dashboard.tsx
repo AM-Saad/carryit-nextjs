@@ -10,6 +10,9 @@ const dashboard = () => {
           description: "Dashboard",
         }
       }>
+        <div>
+          <h1>Active Shipments</h1>
+        </div>
 
       </Layout>
     </>

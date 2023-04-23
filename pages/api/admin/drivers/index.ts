@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react';
 import prisma from '../../../../lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
-import { Status } from 'shared/models/Response';
+import { Status } from '@/shared/modals/Response';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 
     try {

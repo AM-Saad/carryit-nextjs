@@ -1,5 +1,5 @@
 import { fetcher } from "../utils";
-import Response, { Status } from "shared/models/Response";
+import Response, { Status } from "@/shared/modals/Response";
 import {VehiclePayload} from '@/modals/Vehicle'
 
 import { VEHICLES_ROUTE } from '@/lib/constants'

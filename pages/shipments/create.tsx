@@ -8,7 +8,7 @@ import { shipmentRepository } from '@/lib/repositries/'
 import Button from '@/components/shared/Button'
 import { Formik } from 'formik'
 import * as Yup from "yup";
-import { Status } from '@/shared/models/Response'
+import { Status } from '@/shared/modals/Response'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import FormikInput from '@/components/shared/FormikInput'
@@ -92,57 +92,56 @@ const Create: React.FC = () => {
 
     return (
         <Layout>
-            <div className='bg-white rounded shadow md:w-8/12 w-full p-3 xl:p-5 h-full'>
-                <Formik
-                    initialValues={initialValues}
-                    validationSchema={validationScheme}
-                    onSubmit={(values, { setSubmitting }) => {
-                        createShipment(values)
-                        setSubmitting(false)
-                    }}
-                >
-                    {({ handleChange, handleBlur, submitForm, errors, touched, values }) => {
-                        { console.log(errors) }
-                        return (
-                            <>
-                                <div className='flex gap-5 items-center lg:col-span-3'>
-                                    <div className="flex gap-2 items-center">
-                                        <span className=" text-gray-600 block">Is Fragile</span>
-                                        <ToggleBtn value={values.is_fragile}
-                                            onChange={(is_fragile: boolean) => handleChange({ target: { name: 'is_fragile', value: is_fragile } })}
-                                        />
-                                    </div>
-                                    <div className="flex gap-2 items-center">
-                                        <span className=" text-gray-600 block">Is Liquid </span>
-                                        <ToggleBtn value={values.is_liquid}
-                                            onChange={(is_liquid: boolean) => handleChange({ target: { name: 'is_liquid', value: is_liquid } })}
-                                        />
-                                    </div>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationScheme}
+                onSubmit={(values, { setSubmitting }) => {
+                    createShipment(values)
+                    setSubmitting(false)
+                }}
+            >
+                {({ handleChange, handleBlur, submitForm, errors, touched, values }) => {
+                    { console.log(errors) }
+                    return (
+                        <>
+                            <div className='flex gap-5 items-center lg:col-span-3'>
+                                <div className="flex gap-2 items-center">
+                                    <span className=" text-gray-600 block">Is Fragile</span>
+                                    <ToggleBtn value={values.is_fragile}
+                                        onChange={(is_fragile: boolean) => handleChange({ target: { name: 'is_fragile', value: is_fragile } })}
+                                    />
                                 </div>
-                                <FormikInput label="Receiver Name" name="receiver.name" />
-                                <FormikInput label="Receiver Phone" name="receiver.phone" />
-                                <FormikInput label="Amount to be collected" name="price" type="number" />
-                                <FormikInput label="Shipping Cost" name="shipping_cost" type="number" />
-                                <FormikInput label="Quantity" name="quantity" type="number" />
-                                <div className='grid md:grid-cols-3 gap-3'>
-                                    <FormikInput label="Address" name="receiver.address" />
-                                    <FormikInput label="Building Number" name="receiver.building" type="number" />
-                                    <FormikInput label="Floor Number" name="receiver.floor" type="number" />
-                                    <FormikInput label="Apartment Number" name="receiver.apartment" type="number" />
+                                <div className="flex gap-2 items-center">
+                                    <span className=" text-gray-600 block">Is Liquid </span>
+                                    <ToggleBtn value={values.is_liquid}
+                                        onChange={(is_liquid: boolean) => handleChange({ target: { name: 'is_liquid', value: is_liquid } })}
+                                    />
                                 </div>
+                            </div>
+                            <FormikInput label="Receiver Name" name="receiver.name" />
+                            <FormikInput label="Receiver Phone" name="receiver.phone" />
+                            <FormikInput label="Amount to be collected" name="price" type="number" />
+                            <FormikInput label="Shipping Cost" name="shipping_cost" type="number" />
+                            <FormikInput label="Quantity" name="quantity" type="number" />
+                            <div className='grid md:grid-cols-3 gap-3'>
+                                <FormikInput label="Address" name="receiver.address" />
+                                <FormikInput label="Building Number" name="receiver.building" type="number" />
+                                <FormikInput label="Floor Number" name="receiver.floor" type="number" />
+                                <FormikInput label="Apartment Number" name="receiver.apartment" type="number" />
+                            </div>
 
-                                <Input
-                                    label="Additional Notes"
-                                    id="notes"
-                                    placeholder="Add Notes"
-                                    type='text'
-                                    onChange={handleChange('notes')}
-                                    value={values.notes}
-                                    handleBlur={handleBlur}
-                                    hasError={errors.notes && touched.notes}
-                                    error={errors.notes}
-                                />
-                                {/* <div className='mt-3 mb-2'>
+                            <Input
+                                label="Additional Notes"
+                                id="notes"
+                                placeholder="Add Notes"
+                                type='text'
+                                onChange={handleChange('notes')}
+                                value={values.notes}
+                                handleBlur={handleBlur}
+                                hasError={errors.notes && touched.notes}
+                                error={errors.notes}
+                            />
+                            {/* <div className='mt-3 mb-2'>
                                     <label htmlFor="vehicle_type" className='text-xs font-medium text-gray-600 mr-3 editable-input_label'>Vehicles Type</label>
                                     <MultiSelect
                                         label='label'
@@ -161,21 +160,19 @@ const Create: React.FC = () => {
                                     />
                                     {errors.vehicle_type && touched.vehicle_type && <span className='text-xs text-red-500'>{errors.vehicle_type}</span>}
                                 </div> */}
- 
 
-                                <Button
-                                    title='Create'
-                                    style='bg-theme text-white'
-                                    type='submit'
-                                    onClick={submitForm}
-                                    loading={loading}
-                                    disabled={loading} />
-                            </>
-                        )
-                    }}
-                </Formik>
-            </div>
 
+                            <Button
+                                title='Create'
+                                style='bg-theme text-white'
+                                type='submit'
+                                onClick={submitForm}
+                                loading={loading}
+                                disabled={loading} />
+                        </>
+                    )
+                }}
+            </Formik>
         </Layout >
     )
 }

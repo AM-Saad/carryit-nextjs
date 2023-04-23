@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '../../../../lib/prisma'
 import { refineResponse } from '@/shared/helpers/refineResponse';
-import { Status } from '@/shared/models/Response';
+import { Status } from '@/shared/modals/Response';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 
 

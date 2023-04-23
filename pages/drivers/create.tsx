@@ -6,7 +6,7 @@ import FormikInput from '@/components/shared/FormikInput';
 import Button from '@/components/shared/Button';
 import { useRouter } from 'next/router';
 import { driverRepository } from '@/lib/repositries/'
-import { Status } from '@/shared/models/Response';
+import { Status } from '@/shared/modals/Response';
 import { toast } from 'react-toastify';
 
 
@@ -39,9 +39,9 @@ const DriverForm = () => {
         })
     });
 
-    const onSubmit = async(values: any) => {
+    const onSubmit = async (values: any) => {
         setLoading(true);
-   const response=   await  driverRepository.create_shipment(values)
+        const response = await driverRepository.create_shipment(values)
         setLoading(false);
         if (response.status === Status.SUCCESS) {
             return router.push(`/drivers/${response.items.id}`)
@@ -53,29 +53,27 @@ const DriverForm = () => {
 
     return (
         <Layout>
-            <div className='bg-white rounded shadow md:w-8/12 w-full p-3 xl:p-5 h-full'>
 
-                <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-                    {({ errors, touched }) => (
-                        <Form>
-                            <FormikInput label="Name" name="name" />
-                            <FormikInput label="Mobile" name="mobile" />
-                            <FormikInput label="Address" name="address" />
-                            <FormikInput label="Password" name="password" type="password" />
-                            <FormikInput label="Base Salary" name="salary.base_salary" type="number" />
-                            <FormikInput label="Commission" name="salary.commission" type="number" />
+            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+                {({ errors, touched }) => (
+                    <Form>
+                        <FormikInput label="Name" name="name" />
+                        <FormikInput label="Mobile" name="mobile" />
+                        <FormikInput label="Address" name="address" />
+                        <FormikInput label="Password" name="password" type="password" />
+                        <FormikInput label="Base Salary" name="salary.base_salary" type="number" />
+                        <FormikInput label="Commission" name="salary.commission" type="number" />
 
-                            <Button
-                                title='Create'
-                                style='bg-theme text-white'
-                                type='submit'
-                                onClick={() => { }}
-                                loading={loading}
-                                disabled={loading} />
-                        </Form>
-                    )}
-                </Formik>
-            </div>
+                        <Button
+                            title='Create'
+                            style='bg-theme text-white'
+                            type='submit'
+                            onClick={() => { }}
+                            loading={loading}
+                            disabled={loading} />
+                    </Form>
+                )}
+            </Formik>
         </Layout>
     );
 };

@@ -19,7 +19,12 @@ const SignInModal = ({ showSignInModal, setShowSignInModal, }: { showSignInModal
   const handleSignIn = async () => {
 
     setSignInClicked(true);
-    await signIn("google",{ callbackUrl: "localhost:3000" });
+    await signIn("google",
+      {
+        callbackUrl: "localhost:3000",
+        
+      }
+    );
   }
   return (
     <Modal showModal={showSignInModal} setShowModal={setShowSignInModal}>
