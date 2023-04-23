@@ -1,5 +1,5 @@
 import { fetcher } from "../utils";
-import Response, { Status } from "shared/models/Response";
+import Response, { Status } from "@/shared/modals/Response";
 
 import { DRIVERS_ROUTE } from '@/lib/constants'
 

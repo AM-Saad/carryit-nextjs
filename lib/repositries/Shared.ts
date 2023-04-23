@@ -1,5 +1,5 @@
 import { fetcher } from "../utils";
-import Response, { Status } from "shared/models/Response";
+import Response, { Status } from "@/shared/modals/Response";
 
 
 export default class SharedRepository {
@@ -7,6 +7,37 @@ export default class SharedRepository {
 
     }
 
+    fetch_admin: (email: string) => Promise<Response> = async (email) => {
+        try {
+            const response = await fetcher(`/api/admin/${email}`);
+            return response
+        } catch (error: any) {
+            return {
+                message: error.message, state: Status.UNEXPECTED_ERROR, items: []
+            }
+
+        }
+    }
+    create_admin: (email: string, name: string) => Promise<Response> = async (email, name) => {
+        try {
+
+            const response = await fetcher(`/api/admin/register`, {
+                method: "POST",
+                body: JSON.stringify({
+                    values: {
+                        email: email,
+                        name: name,
+                    }
+                }),
+            });
+            return response
+        } catch (error: any) {
+            return {
+                message: error.message, state: Status.UNEXPECTED_ERROR, items: []
+            }
+        }
+
+    }
 
     update_documents: (id: string, tag: string, type: string, files: any) => Promise<Response> = async (id, tag, type, files) => {
         const form = new FormData()

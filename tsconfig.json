@@ -11,7 +11,8 @@
       "@/lib/*": ["lib/*"],
       "@/styles/*": ["styles/*"],
       "@/modals/*": ["modals/*"],
-      "@/shared/*": ["shared/*"]
+      "@/shared/*": ["shared/*"],
+      "@/stores/*":["stores/*"]
     },
     "strict": true,
     "forceConsistentCasingInFileNames": true,

@@ -30,45 +30,6 @@ type ChatsConversionDate {
   time String
 }
 
-type CompaniesOwner {
-  /// Could not determine type: the field only had null or empty values in the sample set.
-  id Json?
-}
-
-type CompaniesRoles {
-  id          String                      @map("_id") @db.ObjectId
-  name        String
-  permissions CompaniesRolesPermissions[]
-}
-
-type CompaniesRolesPermissions {
-  id      String   @map("_id") @db.ObjectId
-  actions String[]
-  name    String
-}
-
-type CompaniesSubscriptions {
-  activated Boolean
-  duration  CompaniesSubscriptionsDuration
-  history   CompaniesSubscriptionsHistory
-}
-
-type CompaniesSubscriptionsDuration {
-  from String
-  to   String
-}
-
-type CompaniesSubscriptionsHistory {
-  activation_counts Int
-  dates             CompaniesSubscriptionsHistoryDates[]
-}
-
-type CompaniesSubscriptionsHistoryDates {
-  id     String  @map("_id") @db.ObjectId
-  data   String
-  status Boolean
-}
-
 type DriversCommission {
   id     String? @map("_id") @db.ObjectId
   amount Int
@@ -154,18 +115,20 @@ type ZonesShipments {
 
 model Admin {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime?   @db.Date
+  createdAt DateTime?  @db.Date
   mobile    String?
   email     String?    @unique
   name      String?
   password  String?
   role      String?
-  updatedAt DateTime?   @db.Date
+  updatedAt DateTime?  @db.Date
   isSuper   Boolean?
   drivers   Driver[]
   shipments Shipment[]
   vehicles  Vehicle[]
   zones     Zone[]
+  company   Company?   @relation(fields: [companyId], references: [id])
+  companyId String?    @map("company") @db.ObjectId
 }
 
 model Bills {
@@ -255,8 +218,6 @@ model Shipment {
   is_liquid     Boolean
   notes         String?
   pickup_date   String?
-  price         Int
-  quantity      Int
   total_cost    Int
   receiver      ShipmentsReceiver?
   shipping_cost Int?
@@ -264,10 +225,19 @@ model Shipment {
   admin         Admin?             @relation(fields: [adminId], references: [id])
   adminId       String?            @map("admin") @db.ObjectId
   shipmentNo    String?            @unique(map: "shipmentNo_1")
+  items         Items[]
+  discount      Int?               @default(0)
+}
+
+type Items {
+  name     String
+  price    Float
+  quantity Int
+  itemId   String @db.ObjectId
 }
 
 model Vehicle {
-  id            String             @id @default(auto()) @map("_id") @db.ObjectId
+  id           String               @id @default(auto()) @map("_id") @db.ObjectId
   v            Int?                 @map("__v")
   active       Boolean
   fuel_type    String?
@@ -314,4 +284,56 @@ model Zone {
   zoneId      Int
   admin       Admin?  @relation(fields: [adminId], references: [id])
   adminId     String? @map("admin") @db.ObjectId
+}
+
+model Product {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  price    Float
+  quantity Int?
+  image    String
+}
+
+model Company {
+  id           String                  @id @default(auto()) @map("_id") @db.ObjectId
+  brand_name   String?                 @unique
+  logo         String?
+  roles        CompaniesRoles[]
+  subscription CompaniesSubscriptions?
+  admins       Admin[]
+  adminsIds    String[]                @map("admins") @db.ObjectId
+}
+
+type CompaniesRoles {
+  id          String?                     @map("_id") @db.ObjectId
+  name        String?
+  permissions CompaniesRolesPermissions[]
+}
+
+type CompaniesRolesPermissions {
+  id      String?  @map("_id") @db.ObjectId
+  actions String[]
+  name    String?
+}
+
+type CompaniesSubscriptions {
+  activated Boolean
+  duration  CompaniesSubscriptionsDuration
+  history   CompaniesSubscriptionsHistory
+}
+
+type CompaniesSubscriptionsDuration {
+  from String
+  to   String
+}
+
+type CompaniesSubscriptionsHistory {
+  activation_counts Int
+  dates             CompaniesSubscriptionsHistoryDates[]
+}
+
+type CompaniesSubscriptionsHistoryDates {
+  id     String  @map("_id") @db.ObjectId
+  data   String
+  status Boolean
 }

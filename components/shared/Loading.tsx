@@ -6,7 +6,7 @@ const Loading = () => {
   
     <div className="ml-4 mt-2 w-full">
   
-      <ul className="mt-5 gap-3 grid grid-cols-2 items-center">
+      <ul className="mt-5 gap-3 grid items-center">
         <li className="w-full min-h-[2rem] bg-gray-200 rounded-md dark:bg-gray-700"></li>
         <li className="w-full min-h-[2rem] bg-gray-200 rounded-md dark:bg-gray-700"></li>
         <li className="w-full min-h-[2rem] bg-gray-200 rounded-md dark:bg-gray-700"></li>

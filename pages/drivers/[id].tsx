@@ -1,28 +1,27 @@
 import Layout from '@/components/layout'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import DriverFrom from '@/components/admin/driver'
-import Response, { Status } from 'shared/models/Response'
+import Response, { Status } from '@/shared/modals/Response'
 import { driverRepository } from '@/lib/repositries/index'
 import FetchError from '@/components/shared/Error'
 import Loading from '@/components/shared/Loading'
 import { toast } from "react-toastify";
+import AdminContext from '@/stores/admin'
 
 const Driver = () => {
   const router = useRouter()
   const { id } = router.query as { id: string }
-  const [driver, setDriver] = useState<any>(null)
-  const [loading, setLoading] = useState<boolean>(false)
   const [updating, setUpdating] = useState<boolean>(false)
-  const [error, setError] = useState<string>('')
 
-  const fetch_driver = async () => {
-    setLoading(true)
-    const { status, items, message }: Response = await driverRepository.fetch_driver(id)
-    setLoading(false)
-    status === Status.SUCCESS && setDriver(items)
-    status !== Status.SUCCESS && setError(message)
+  const { fetcher, fetchMeta, currentItem } = useContext(AdminContext);
+  const { loading, error } = fetchMeta
+
+  const fetch_data = async () => {
+    await fetcher(driverRepository.fetch_driver(id), false)
+
   }
+
 
   const update_partial_driver = async (data: any) => {
     setUpdating(true)
@@ -31,7 +30,7 @@ const Driver = () => {
     if (res.status !== Status.SUCCESS) {
       return toast.error(res.message)
     }
-    setDriver(res.items)
+    // setDriver(res.items)
 
 
   }
@@ -47,23 +46,21 @@ const Driver = () => {
 
   useEffect(() => {
     if (id)
-      fetch_driver()
+      fetch_data()
   }, [id])
 
   return (
     <Layout>
-      <div className='border-2 border-black h-full md:w-8/12 p-3 rounded-xl w-full xl:p-5'>
 
-        {loading && <Loading />}
-        {error && !loading && <FetchError reload={fetch_driver} error={{ message: error, code: Status.UNEXPECTED_ERROR }} />}
+      {loading && <Loading />}
+      {error && !loading && <FetchError reload={fetch_data} error={error} />}
 
-        {!loading && driver && <DriverFrom
-          driver={driver}
-          onUpdate={update_partial_driver}
-          loading={updating}
-          onDelete={delete_driver}
-        />}
-      </div>
+      {!loading && currentItem && <DriverFrom
+        driver={currentItem}
+        onUpdate={update_partial_driver}
+        loading={updating}
+        onDelete={delete_driver}
+      />}
 
     </Layout>
   )

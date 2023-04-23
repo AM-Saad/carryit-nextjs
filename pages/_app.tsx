@@ -9,6 +9,8 @@ import localFont from "@next/font/local";
 import { Inter } from "@next/font/google";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AdminContextProvider } from '@/stores/admin'
+
 const sfPro = localFont({
   src: "../styles/SF-Pro-Display-Medium.otf",
   variable: "--font-sf",
@@ -25,24 +27,26 @@ export default function MyApp({
 }: AppProps<{ session: Session }>) {
   return (
     <SessionProvider session={session}>
-      <RWBProvider>
-        <div className={cx(sfPro.variable, inter.variable)}>
-          <Component {...pageProps} />
-        </div>
-        <ToastContainer
-        toastStyle={{ fontSize: '1rem', color: 'white' }}
-        theme="colored"
-        position="bottom-left"
-        autoClose={4000}
-        newestOnTop
-        closeOnClick
-        pauseOnFocusLoss={false}
-        draggable
-        pauseOnHover={false}
-        
-      />
-      </RWBProvider>
-      <Analytics />
+      <AdminContextProvider>
+        <RWBProvider>
+          <div className={cx(sfPro.variable, inter.variable)}>
+            <Component {...pageProps} />
+          </div>
+          <ToastContainer
+            toastStyle={{ fontSize: '1rem', color: 'white' }}
+            theme="colored"
+            position="bottom-left"
+            autoClose={4000}
+            newestOnTop
+            closeOnClick
+            pauseOnFocusLoss={false}
+            draggable
+            pauseOnHover={false}
+
+          />
+        </RWBProvider>
+        <Analytics />
+      </AdminContextProvider>
     </SessionProvider>
   );
 }

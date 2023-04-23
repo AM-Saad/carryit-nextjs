@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import prisma from '@/lib/prisma';
 import { refineResponse } from '@/shared/helpers/refineResponse';
-import { Status } from '@/shared/models/Response';
+import { Status } from '@/shared/modals/Response';
 
 export let config = {
     api: {

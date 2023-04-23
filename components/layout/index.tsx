@@ -2,38 +2,55 @@ import { FADE_IN_ANIMATION_SETTINGS } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useContext } from "react";
+import AdminContext from '@/stores/admin'
 import useScroll from "@/lib/hooks/use-scroll";
 import Meta from "./meta";
 import { useSignInModal } from "./sign-in-modal";
 import UserDropdown from "./user-dropdown";
 import { useSession } from "next-auth/react";
-const Layout = ({
-  meta,
-  children,
-}: {
+import Response, { Status } from "@/shared/modals/Response";
+import { useRouter } from "next/router";
+
+const links = [
+  { href: '/drivers', name: 'Drivers', icon: '' },
+  { href: '/vehicles', name: 'Vehicles', icon: '' },
+  { href: '/shipments', name: 'Shipments', icon: '' },
+  { href: '/settings', name: 'Setting', icon: '' }
+]
+
+interface Props {
   meta?: {
     title?: string;
     description?: string;
     image?: string;
   };
   children: ReactNode;
-}) => {
+}
+
+const Layout = ({ meta, children }: Props) => {
   const { SignInModal, setShowSignInModal } = useSignInModal();
   const scrolled = useScroll(50);
 
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+  const { admin, fetch_admin } = useContext(AdminContext)
+  const router = useRouter()
 
-  const getAdmins = async () => {
-    const admins = await fetch(`/api/admin/${session!.user!.email}`);
+  const getAdmin = async () => {
+    await fetch_admin(session?.user?.email as string, session?.user?.name as string)
+
   }
 
 
-  useEffect(() => {
-    if (session) {
 
-      getAdmins();
-    }
+
+  useEffect(() => {
+    // if (!session) {
+    //   router.push('/')
+    //   return
+    // }
+    getAdmin();
+    console.log(status)
   }, [session]);
   return (
     <>
@@ -60,7 +77,7 @@ const Layout = ({
 
           <div>
             <AnimatePresence>
-              {!session ? (
+              {!admin ? (
                 <motion.button
                   className="rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
                   onClick={() => setShowSignInModal(true)}
@@ -76,8 +93,24 @@ const Layout = ({
         </div>
       </div>
       {/*  Main content goes here */}
-      <main className="flex w-full flex-col items-center py-32 min-h-[93vh]">
-        {children}
+      <main className="flex gap-10 min-h-[93vh] py-32 w-full">
+        {admin &&
+          <div className="h-full bg-gray w-40 p-3">
+            <ul>
+              {links.map((link: any) =>
+                <>
+                  <li className="mb-5">
+                    <Link href={link.href}>{link.name}</Link>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
+        }
+        <div className='rounded md:w-8/12 w-full p-3 xl:p-5 h-full'>
+
+          {children}
+        </div>
       </main>
 
       <div className="absolute w-full border-t border-gray-200 bg-white py-5 text-center">

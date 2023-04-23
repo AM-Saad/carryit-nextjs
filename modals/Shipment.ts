@@ -12,6 +12,7 @@ export interface ShipmentPayload {
         zip?: string;
         city?: string;
         state?: string;
+        is_villa:boolean
 
     };
     quantity: number;
