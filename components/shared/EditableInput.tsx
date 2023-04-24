@@ -134,16 +134,16 @@ const EditableInput: React.FC<Props> = ((props, ref) => {
               placeholder={`Add ${label}`}
               defaultValue={newVal} />
             <p className='text-red-400 mt-2 editable-input_error text-sm'>{validationError}</p>
-            <div className="flex justify-end gap-2 mt-3">
+            <div className="flex justify-end gap-2 mt-1">
               <button
                 type="button"
-                className="shadow py-1.5 px-4 text-sm bg-gray-800 rounded-full hover:opacity-70 text-white editable-input_cancel"
+                className="shadow py-1 px-3 text-xs bg-gray-800 rounded-full hover:opacity-70 text-white editable-input_cancel"
                 onClick={cancel}>
                 {loading ? `${cancelBtnText ? cancelBtnText : 'Cancel'}...` : `${cancelBtnText ? cancelBtnText : 'Cancel'}`}
               </button>
               <button
                 type="button"
-                className={`shadow py-1.5 px-4 text-sm bg-green-500 rounded-full hover:opacity-70 text-white editable-input_update ${(isEditing && error) ? 'opacity-70' : ''}`}
+                className={`shadow py-1 px-3 text-xs bg-green-500 rounded-full hover:opacity-70 text-white editable-input_update ${(isEditing && error) ? 'opacity-70' : ''}`}
                 onClick={submit}>{loading ? `${updateBtnText ? updateBtnText : 'Update'}...` : `${updateBtnText ? updateBtnText : 'Update'}`}</button>
             </div>
           </div>}

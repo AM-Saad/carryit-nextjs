@@ -7,7 +7,7 @@ import { Status } from '@/shared/modals/Response';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
     let shipment
     if (req.method === 'GET' || req.method === 'PATCH') {
-         shipment = await prisma.shipment.findFirst({ where: { id: req.query.id as string } });
+        shipment = await prisma.shipment.findFirst({ where: { id: req.query.id as string } });
 
     }
     if (req.method === 'GET') {
@@ -45,7 +45,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                         if (index === keyArr.length - 1) {
                             temp[subKey] = value
                         } else {
-                            console.log(subKey )
+                            console.log(subKey)
                             temp[subKey] = temp[subKey] || {}
                             temp = temp[subKey]
                         }
@@ -55,23 +55,26 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
                 query = { ...query, ...tempObj }
             })
+            console.log(query)
+            const receiverQuery = query.receiver
 
-            const newShipment = {...shipment, ...query}
-
+            delete query.receiver
+            console.log(query)
             const id = req.query.id as string
-            // const item = await prisma.shipment.update({
-            //     where: {
-            //         id: id
-            //     },
+            const item = await prisma.shipment.update({
+                where: {
+                    id: id
+                },
 
-            //     data: {
-            //         receiver: {
+                data: {
+                    ...query,
+                    receiver: {
+                        set: { ...shipment?.receiver, ...receiverQuery },
+                    }
+                }
+            })
 
-            //         }
-            //     }
-            // })
-
-            // return res.status(200).json(refineResponse(Status.SUCCESS, 'Shipment updated successfully', item))
+            return res.status(200).json(refineResponse(Status.SUCCESS, 'Shipment updated successfully', item))
 
         } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))
