@@ -153,7 +153,7 @@ const DocumentsContainer: React.FC<{ item: Vehicle | any, context: string }> = (
 
             <span
                 onClick={() => setAddNew(true)}
-                className='w-8 h-8 rounded-full bg-white block text-center border border-gray-800 cursor-pointer hover:shadow-md'
+                className='bg-white border border-gray-800 cursor-pointer flex h-8 hover:shadow-md items-center justify-center rounded-full text-center w-8'
             >+</span>
 
 

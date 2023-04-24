@@ -4,7 +4,7 @@ import prisma from '../../../../lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
 import { } from '.prisma/client';
-
+import { ObjectId } from 'mongodb';
 
 export const config = {
     api: {
@@ -21,7 +21,6 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     if (req.method == 'POST') {
         const { values } = JSON.parse(req.body);
         const admin = await prisma.admin.findFirst({ where: { email: session.user?.email as string } });
-        const total_cost = Number(values.price) + Number(values.shipping_cost);
         const receiver = {
             set: {
                 name: values.receiver.name,
@@ -40,9 +39,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             data: {
                 receiver: receiver,
                 shipping_cost: Number(values.shipping_cost),
-                quantity: Number(values.quantity),
-                price: Number(values.price),
-                total_cost: total_cost,
+                total_cost: (values.price * values.quantity) + Number(values.shipping_cost),
                 is_fragile: values.is_fragile,
                 is_liquid: values.is_liquid,
                 delivery_date: values.delivery_date,
@@ -50,6 +47,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 date: values.date,
                 status: 0,
                 notes: values.notes,
+                items: [
+                    {
+                        name: 'First item',
+                        price: values.price,
+                        quantity: values.quantity,
+                        itemId: new ObjectId().toString()
+                    }
+                ],
                 admin: {
                     connect: {
                         id: admin!.id
