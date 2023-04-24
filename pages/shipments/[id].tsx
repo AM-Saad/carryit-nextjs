@@ -13,7 +13,7 @@ const Shipment = () => {
   const { id } = router.query as { id: string }
   const { data: session } = useSession()
 
-  const { fetcher, fetchMeta, currentItem, updater, remover } = useContext(AdminContext);
+  const { fetcher, fetchMeta, currentItem, updater,updateMeta, remover } = useContext(AdminContext);
   const { loading, error } = fetchMeta
 
   const fetch_data = async () => {
@@ -39,7 +39,7 @@ const Shipment = () => {
 
       {loading && <Loading />}
       {error && !loading && <FetchError reload={fetch_data} error={error} />}
-      {(!loading && currentItem) && <ShipmentFrom shipment={currentItem} onDelete={remove_data} onUpdate={update_data} loading={loading} />}
+      {(!loading && currentItem) && <ShipmentFrom shipment={currentItem} onDelete={remove_data} onUpdate={update_data} loading={updateMeta.loading} />}
     </Layout>
   )
 }
