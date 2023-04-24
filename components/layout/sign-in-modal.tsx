@@ -21,7 +21,8 @@ const SignInModal = ({ showSignInModal, setShowSignInModal, }: { showSignInModal
     setSignInClicked(true);
     await signIn("google",
       {
-        callbackUrl: "localhost:3000",
+        redirect:true,
+        callbackUrl: "/shipments",
         
       }
     );

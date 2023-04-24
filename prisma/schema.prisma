@@ -233,7 +233,7 @@ type Items {
   name     String
   price    Float
   quantity Int
-  itemId   String @db.ObjectId
+  itemId   String? @default(uuid()) @db.ObjectId
 }
 
 model Vehicle {
@@ -297,6 +297,7 @@ model Product {
 model Company {
   id           String                  @id @default(auto()) @map("_id") @db.ObjectId
   brand_name   String?                 @unique
+  main_email   String?                 @unique
   logo         String?
   roles        CompaniesRoles[]
   subscription CompaniesSubscriptions?

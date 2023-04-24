@@ -5,6 +5,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 import GoogleProvider from "next-auth/providers/google"
 import prisma from '@/lib/prisma';
+import { redirect } from 'next/dist/server/api-utils';
 
 
 export default NextAuth({
@@ -17,9 +18,10 @@ export default NextAuth({
     })
   ],
   events: {
-    session: async ({ session, user }: any) => {
-      return
-    }
+    // session: async ({ session, user }: any) => {
+    // },
+    // signIn(message) {
+    // },
   },
   callbacks: {
     async redirect({ url, baseUrl }) {

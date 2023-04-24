@@ -68,7 +68,7 @@ const Shipments = () => {
               height='100'
               style={{ filter: 'drop-shadow(2px 2px 2px #555)' }}
             />
-            <p className='mt-3 font-medium text-gray-700 text-xs sm:text-sm'>No Drivers Associated To Your Company</p>
+            <p className='mt-3 font-medium text-gray-700 text-xs sm:text-sm'>No Shipments Associated To Your Company</p>
             <Link href={"/shipments/create"} className='text-blue-500 text-sm mt-2'>Create New</Link>
           </div>
         }

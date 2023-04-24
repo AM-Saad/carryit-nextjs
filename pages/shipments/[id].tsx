@@ -13,7 +13,7 @@ const Shipment = () => {
   const { id } = router.query as { id: string }
   const { data: session } = useSession()
 
-  const { fetcher, fetchMeta, currentItem, updater } = useContext(AdminContext);
+  const { fetcher, fetchMeta, currentItem, updater, remover } = useContext(AdminContext);
   const { loading, error } = fetchMeta
 
   const fetch_data = async () => {
@@ -23,12 +23,15 @@ const Shipment = () => {
   const update_data = async (data: any) => {
     await updater(shipmentRepository.update_partial_shipment(id, data), false)
   }
+  const remove_data = async () => {
+    await remover(shipmentRepository.delete_shipment(id), '/shipments')
+  }
 
   useEffect(() => {
     if (session && id) {
       fetch_data()
     }
-  }, [session,id]);
+  }, [session, id]);
 
 
   return (
@@ -36,7 +39,7 @@ const Shipment = () => {
 
       {loading && <Loading />}
       {error && !loading && <FetchError reload={fetch_data} error={error} />}
-      {(!loading && currentItem) && <ShipmentFrom shipment={currentItem} onDelete={() => { }} onUpdate={update_data} loading={loading} />}
+      {(!loading && currentItem) && <ShipmentFrom shipment={currentItem} onDelete={remove_data} onUpdate={update_data} loading={loading} />}
     </Layout>
   )
 }

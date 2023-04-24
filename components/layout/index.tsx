@@ -11,6 +11,7 @@ import UserDropdown from "./user-dropdown";
 import { useSession } from "next-auth/react";
 import Response, { Status } from "@/shared/modals/Response";
 import { useRouter } from "next/router";
+import { getCookie } from "@/lib/utils";
 
 const links = [
   { href: '/drivers', name: 'Drivers', icon: '' },
@@ -33,23 +34,25 @@ const Layout = ({ meta, children }: Props) => {
   const scrolled = useScroll(50);
 
   const { data: session, status } = useSession()
-  const { admin, fetch_admin } = useContext(AdminContext)
+  const { admin, fetch_admin, adminMeta } = useContext(AdminContext)
   const router = useRouter()
 
   const getAdmin = async () => {
     await fetch_admin(session?.user?.email as string, session?.user?.name as string)
-
   }
 
 
 
 
+
   useEffect(() => {
-    // if (!session) {
-    //   router.push('/')
-    //   return
-    // }
-    getAdmin();
+    if (status && status === 'unauthenticated') {
+      router.push('/')
+      return
+    }
+    if (session) {
+      getAdmin();
+    }
     console.log(status)
   }, [session]);
   return (
@@ -94,8 +97,8 @@ const Layout = ({ meta, children }: Props) => {
       </div>
       {/*  Main content goes here */}
       <main className="flex gap-10 min-h-[93vh] py-32 w-full">
-        {admin &&
-          <div className="h-full bg-gray w-40 p-3">
+        <div className="h-full bg-gray w-40 p-3">
+          {status === 'authenticated' &&
             <ul>
               {links.map((link: any) =>
                 <>
@@ -105,8 +108,8 @@ const Layout = ({ meta, children }: Props) => {
                 </>
               )}
             </ul>
-          </div>
-        }
+          }
+        </div>
         <div className='rounded md:w-8/12 w-full p-3 xl:p-5 h-full'>
 
           {children}

@@ -5,10 +5,11 @@ import AdminContext from "@/modals/admin_context"
 import { toast } from "react-toastify";
 import { Status } from '@/shared/modals/Response';
 import { sharedRepository, driverRepository, vehicleRepository, shipmentRepository } from '@/lib/repositries';
+import { useRouter } from 'next/router';
 
 const AdminContext = React.createContext<AdminContext>({
 
-    meta: { loading: false, error: null },
+    adminMeta: { loading: false, error: null },
     admin: null,
     fetch_admin: (email: string) => Promise.resolve() as any,
 
@@ -16,6 +17,7 @@ const AdminContext = React.createContext<AdminContext>({
     currentItem: null,
     currentItems: [],
     updater: (callback: any, isList: boolean = false) => Promise.resolve() as any,
+    remover: (callback: any, redirectUrl: string ) => Promise.resolve() as any,
 
     fetchMeta: { loading: false, error: null },
     updateMeta: { loading: false, error: null }
@@ -25,14 +27,14 @@ const AdminContext = React.createContext<AdminContext>({
 
 export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (props) => {
 
-    const [meta, setMeta] = useState<Meta>({ loading: false, error: null })
+    const [adminMeta, setAdminMeta] = useState<Meta>({ loading: false, error: null })
 
     const [currentItems, setCurrentItems] = useState<any>([])
     const [currentItem, setCurrentItem] = useState<any>(null)
     const [fetchMeta, setFetchMeta] = useState<Meta>({ loading: true, error: null })
     const [updateMeta, setUpdateMeta] = useState<Meta>({ loading: false, error: null })
     const [admin, setAdmin] = useState<any>(null)
-
+    const router = useRouter()
 
     const fetcher = async (callback: any, isList: boolean = false): Promise<void | boolean> => {
         setFetchMeta({ loading: true, error: null })
@@ -72,14 +74,30 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
             setUpdateMeta({ loading: false, error: { code: Status.UNEXPECTED_ERROR, message: 'Something went wrong' } })
             toast.error('Something went wrong')
             return false
+        }
 
+    }
+    const remover = async (callback: any, redirectUrl: string): Promise<void> => {
+        setUpdateMeta({ loading: true, error: null })
+        try {
+            const { status, message, items } = await callback
+            if (status != Status.SUCCESS) {
+                setUpdateMeta({ loading: false, error: { code: status, message } })
+                toast.error(message)
+                return
+            }
+            router.push(redirectUrl)
+            setUpdateMeta({ loading: false, error: null })
 
+        } catch (error) {
+            setUpdateMeta({ loading: false, error: { code: Status.UNEXPECTED_ERROR, message: 'Something went wrong' } })
+            toast.error('Something went wrong')
         }
 
     }
 
     const fetch_admin = async (email: string, name: string) => {
-        setMeta({ loading: true, error: null })
+        setAdminMeta({ loading: true, error: null })
         try {
             const response = await sharedRepository.fetch_admin(email)
             let admin
@@ -89,11 +107,13 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
                 admin = res.items
             }
             admin = response.items
+
             setAdmin(admin)
+
         } catch (error) {
             toast.error('Something went wrong')
         }
-        setMeta({ loading: false, error: null })
+        setAdminMeta({ loading: false, error: null })
     }
 
 
@@ -122,7 +142,7 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
     }, [])
 
     const userCtx = {
-        meta,
+        adminMeta,
         admin,
         fetch_admin,
         fetcher,
@@ -133,6 +153,7 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
         fetchMeta,
 
         updateMeta,
+        remover
     }
     return <AdminContext.Provider value={userCtx}>
         {props.children}

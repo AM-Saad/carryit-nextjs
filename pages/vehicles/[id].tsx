@@ -13,8 +13,7 @@ import AdminContext from '@/stores/admin'
 const Vehicle = () => {
   const router = useRouter()
   const { id } = router.query as { id: string }
-  const [updating, setUpdating] = useState(false)
-  const { fetcher, fetchMeta, currentItem } = useContext(AdminContext);
+  const { fetcher, fetchMeta, currentItem, updateMeta, updater, remover } = useContext(AdminContext);
   const { loading, error } = fetchMeta
 
   const fetch_data = async () => {
@@ -24,23 +23,12 @@ const Vehicle = () => {
   }
 
   const update_partial_vehicle = async (data: any) => {
-    setUpdating(true)
-    const res = await vehicleRepository.update_partial_vehicle(id, data)
-    setUpdating(false)
-    if (res.status !== Status.SUCCESS) {
-      return toast.error(res.message)
-    }
-    // res.status === Status.SUCCESS && setVehicle(res.items)
+    await updater(vehicleRepository.update_partial_vehicle(id, data), false)
   }
 
   const delete_vehicle = async () => {
-    setUpdating(true)
-    const res = await vehicleRepository.delete_vehicle(id)
-    setUpdating(false)
-    if (res.status !== Status.SUCCESS) {
-      return toast.error(res.message)
-    }
-    res.status === Status.SUCCESS && router.push('/vehicles')
+     await remover((vehicleRepository.delete_vehicle(id)), '/vehicles')
+
   }
 
 
@@ -57,7 +45,7 @@ const Vehicle = () => {
       {!loading && currentItem && <VehicleFrom
         onUpdate={update_partial_vehicle}
         onDelete={delete_vehicle}
-        loading={updating}
+        loading={updateMeta.loading}
         vehicle={currentItem} />}
 
     </Layout>

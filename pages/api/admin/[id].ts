@@ -6,7 +6,9 @@ import { refineResponse } from 'shared/helpers/refineResponse';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
     const session = await getSession({ req });
     try {
-        const admin = await prisma.admin.findFirst({ where: { email: session?.user?.email as string } });
+        const email = session?.user?.email as string 
+        if(!email) return res.status(404).json(refineResponse(Status.INVALID_PARAMETER, 'Invalid Parameter'))
+        const admin = await prisma.admin.findFirst({ where: { email: email } });
         if (!admin) return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Admin not found'));
 
         return res.status(200).json(refineResponse(Status.SUCCESS, 'Admin fetched successfully', admin));
