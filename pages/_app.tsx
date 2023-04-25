@@ -36,12 +36,12 @@ export default function MyApp({
             toastStyle={{ fontSize: '1rem', color: 'white' }}
             theme="colored"
             position="bottom-left"
-            autoClose={4000}
+            autoClose={8000}
             newestOnTop
-            closeOnClick
+            closeOnClick={false}
             pauseOnFocusLoss={false}
             draggable
-            pauseOnHover={false}
+            pauseOnHover={true}
 
           />
         </RWBProvider>

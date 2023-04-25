@@ -3,6 +3,9 @@ import ToggleBtn from '@/components/shared/ToggleBtn'
 import DocumentsContainer from '@/components/admin/driver/DocumentsContainer'
 import Button from '@/components/shared/Button'
 import { Shipment } from '@/modals/Shipment'
+import Modal from '@/components/shared/modal'
+import ConfirmDeleteItem from '@/components/shared/ConfirmDelete'
+import { useState } from 'react'
 
 interface Props {
   shipment: Shipment,
@@ -14,6 +17,7 @@ interface Props {
 const ShipmentFrom: React.FC<Props> = ({ shipment, onUpdate, loading, onDelete }) => {
 
   const update_partial_shipment = async (data: any) => onUpdate({ values: [data] })
+  const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState<boolean>(false)
 
   return (
     <>
@@ -24,13 +28,18 @@ const ShipmentFrom: React.FC<Props> = ({ shipment, onUpdate, loading, onDelete }
           <ToggleBtn value={shipment.is_fragile} onChange={(value: any) => update_partial_shipment({ is_fragile: value })} />
           <ToggleBtn value={shipment.is_liquid} onChange={(value: any) => update_partial_shipment({ is_liquid: value })} />
           <Button
-            onClick={onDelete}
+            onClick={()=>setOpenConfirmDeleteModal(true)}
             title='Delete'
             style='bg-red-500 text-white'
             loading={loading}
             disabled={loading}
           />
-        </div>
+
+          <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
+            <ConfirmDeleteItem label='Shipment' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
+          </Modal>
+
+          </div>
 
 
       </div>

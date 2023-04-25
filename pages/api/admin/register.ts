@@ -4,6 +4,7 @@ import { getSession } from 'next-auth/react';
 import prisma from '../../../lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
+import jwt from 'jsonwebtoken';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -16,7 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         try {
             const isExist = await prisma.admin.findFirst({ where: { email: values.email } })
-            console.log(isExist)
             if (isExist) {
                 return res.status(401).json(refineResponse(Status.ALREADY_DONE, 'Email already exist', isExist))
             }
@@ -40,18 +40,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                   }
                 }
               })
-          
-            const updatedCompany =await prisma.company.update({
-                where: { id: company.id },
-                data: {
-                  adminsIds: {
-                    push: admin.id
-                  }
-                }
-              })
-              console.log(updatedCompany)
+       
 
-            return res.status(200).json(refineResponse(Status.SUCCESS, "Admin created successfully", admin))
+              const token = jwt.sign({ sub: admin.id }, process.env.NEXT_PUBLIC_JWT_SECRET!, {
+                expiresIn: '7d',
+              });
+            return res.status(200).json(refineResponse(Status.SUCCESS, "Admin created successfully", {admin:admin,token:token}))
         }
         catch (e) {
             console.log(e)

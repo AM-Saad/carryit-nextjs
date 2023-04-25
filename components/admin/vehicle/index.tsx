@@ -4,6 +4,9 @@ import DocumentsContainer from '@/components/admin/driver/DocumentsContainer'
 import MultiSelect from '@/components/shared/MultiSelect'
 import Vehicle, { VehicleTypes, fuelTypesArray, vehicleTypesArray, getFuelUnit } from '@/modals/Vehicle'
 import Button from '@/components/shared/Button'
+import Modal from '@/components/shared/modal'
+import ConfirmDeleteItem from '@/components/shared/ConfirmDelete'
+import { useState } from 'react'
 
 interface Props {
   vehicle: Vehicle,
@@ -18,6 +21,7 @@ interface Props {
 const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading,onDelete }) => {
 
   const update_partial_vehicle = async (data: any) => onUpdate(data)
+  const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState<boolean>(false)
 
 
 
@@ -28,13 +32,21 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading,onDelete }) =
           <div className="flex gap-2 items-center">
             <ToggleBtn value={vehicle.active} onChange={(value: any) => update_partial_vehicle([{ active: value }])} />
           </div>
+          <div>
+
           <Button
-            onClick={onDelete}
+            onClick={()=>setOpenConfirmDeleteModal(true)}
             title='Delete'
             style='bg-red-500 text-white'
             loading={loading}
             disabled={loading}
           />
+
+          <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
+            <ConfirmDeleteItem label='Vehicle' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
+          </Modal>
+          </div>
+
         </div>
         <EditableInput
           label='Name'

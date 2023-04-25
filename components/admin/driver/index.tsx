@@ -2,7 +2,9 @@ import EditableInput from '@/components/shared/EditableInput'
 import ToggleBtn from '@/components/shared/ToggleBtn'
 import DocumentsContainer from '@/components/admin/driver/DocumentsContainer'
 import Button from '@/components/shared/Button'
-
+import ConfirmDeleteItem from '@/components/shared/ConfirmDelete'
+import Modal from '@/components/shared/modal'
+import { useState } from 'react'
 interface Props {
   driver: any,
   onUpdate: (data: any) => void,
@@ -11,6 +13,7 @@ interface Props {
 }
 
 const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) => {
+  const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState<boolean>(false)
 
   const update_partial_driver = async (data: any) => onUpdate({ values: [data] })
 
@@ -31,22 +34,21 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
 
           <ToggleBtn value={driver.active} onChange={(value: any) => update_partial_driver({ active: value })} />
           <Button
-            onClick={onDelete}
+            onClick={()=>setOpenConfirmDeleteModal(true)}
             title='Delete'
             style='bg-red-500 text-white'
             loading={loading}
             disabled={loading}
           />
+
+          <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
+            <ConfirmDeleteItem label='Driver' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
+          </Modal>
         </div>
 
 
       </div>
-      <div className="col-span-3">
 
-
-        {/* <EditProductCategory defaultVal={currentProduct!.category} loading={updatingMeta.loading} onSave={(value: any) => update_partial_product([{ category: value }])} /> */}
-
-      </div>
       <div className="col-span-3">
         <EditableInput
           label='Mobile'
