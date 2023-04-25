@@ -176,6 +176,8 @@ model Driver {
   adminId     String?             @map("admin") @db.ObjectId
   documents   Document[]
   active      Boolean?
+  company     Company?            @relation(fields: [companyId], references: [id])
+  companyId   String?             @map("company") @db.ObjectId
 }
 
 type ShipmentsPickup {
@@ -227,6 +229,8 @@ model Shipment {
   shipmentNo    String?            @unique(map: "shipmentNo_1")
   items         Items[]
   discount      Int?               @default(0)
+  company       Company?           @relation(fields: [companyId], references: [id])
+  companyId     String?            @map("company") @db.ObjectId
 }
 
 type Items {
@@ -256,6 +260,8 @@ model Vehicle {
   documents    Document[]
   driver       Driver?
   driverId     String?              @map("Driver") @db.ObjectId
+  company      Company?             @relation(fields: [companyId], references: [id])
+  companyId    String?              @map("company") @db.ObjectId
 }
 
 model User {
@@ -269,11 +275,13 @@ model User {
   password          String?
   shipments         String[] @map("shipments") @db.ObjectId
   signUpToken       String?
+  company           Company? @relation(fields: [companyId], references: [id])
+  companyId         String?  @map("company") @db.ObjectId
 }
 
 model Zone {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  v           Int     @map("__v")
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  v           Int      @map("__v")
   active      Boolean
   delivery    Boolean
   governorate String
@@ -282,16 +290,20 @@ model Zone {
   pickup      Boolean
   shipping    Int
   zoneId      Int
-  admin       Admin?  @relation(fields: [adminId], references: [id])
-  adminId     String? @map("admin") @db.ObjectId
+  admin       Admin?   @relation(fields: [adminId], references: [id])
+  adminId     String?  @map("admin") @db.ObjectId
+  company     Company? @relation(fields: [companyId], references: [id])
+  companyId   String?  @map("company") @db.ObjectId
 }
 
 model Product {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  price    Float
-  quantity Int?
-  image    String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  price     Float
+  quantity  Int?
+  image     String
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?  @map("company") @db.ObjectId
 }
 
 model Company {
@@ -303,6 +315,12 @@ model Company {
   subscription CompaniesSubscriptions?
   admins       Admin[]
   adminsIds    String[]                @map("admins") @db.ObjectId
+  Driver       Driver[]
+  Shipment     Shipment[]
+  Vehicle      Vehicle[]
+  Product      Product[]
+  Zone         Zone[]
+  User         User[]
 }
 
 type CompaniesRoles {

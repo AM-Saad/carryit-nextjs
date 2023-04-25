@@ -9,7 +9,6 @@ import Meta from "./meta";
 import { useSignInModal } from "./sign-in-modal";
 import UserDropdown from "./user-dropdown";
 import { useSession } from "next-auth/react";
-import Response, { Status } from "@/shared/modals/Response";
 import { useRouter } from "next/router";
 import { getCookie } from "@/lib/utils";
 
@@ -33,12 +32,11 @@ const Layout = ({ meta, children }: Props) => {
   const { SignInModal, setShowSignInModal } = useSignInModal();
   const scrolled = useScroll(50);
 
-  const { data: session, status } = useSession()
   const { admin, fetch_admin, adminMeta } = useContext(AdminContext)
   const router = useRouter()
 
   const getAdmin = async () => {
-    await fetch_admin(session?.user?.email as string, session?.user?.name as string)
+    await fetch_admin()
   }
 
 
@@ -46,15 +44,13 @@ const Layout = ({ meta, children }: Props) => {
 
 
   useEffect(() => {
-    if (status && status === 'unauthenticated') {
+    const token = localStorage.getItem('uidjwt')
+    if (!token) {
       router.push('/')
       return
     }
-    if (session) {
-      getAdmin();
-    }
-    console.log(status)
-  }, [session]);
+    getAdmin();
+  }, []);
   return (
     <>
       <Meta {...meta} />
@@ -96,13 +92,13 @@ const Layout = ({ meta, children }: Props) => {
         </div>
       </div>
       {/*  Main content goes here */}
-      <main className="flex gap-10 min-h-[93vh] py-32 w-full">
-        <div className="h-full bg-gray w-40 p-3">
-          {status === 'authenticated' &&
-            <ul>
+      <main className="sm:flex gap-10 min-h-[93vh] pt-32 w-full">
+        <div className="bg-gray-50 sm:w-40 p-3 my-1">
+          {admin &&
+            <ul className="flex sm:flex-col gap-5 justify-between">
               {links.map((link: any) =>
                 <>
-                  <li className="mb-5">
+                  <li className="sm:mb-5">
                     <Link href={link.href}>{link.name}</Link>
                   </li>
                 </>

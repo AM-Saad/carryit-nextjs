@@ -2,13 +2,15 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '../../../../lib/prisma'
 import { refineResponse } from '@/shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
+import { authMiddleware } from '@/middleware/auth';
+
+export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, id: string) => {
 
 
     if (req.method == 'GET') {
 
         try {
-            const vehicles = await prisma.vehicle.findFirst({ where: { id: req.query.id as string } });
+            const vehicles = await prisma.vehicle.findFirst({ where: { id: req.query.id as string, adminId: id } });
             if (!vehicles) {
                 return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Vehicle not found'));
             }
@@ -31,11 +33,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                     query[keys[0]] = vals[0]
                 }
             })
-            const item = await prisma.vehicle.update({ where: { id: req.query.id as string }, data: query })
+            const item = await prisma.vehicle.updateMany({ where: { id: req.query.id as string, adminId: id as string }, data: query })
 
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Vehicles updated successfully', item))
 
-        } catch (error:any) {
+        } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))
         }
 
@@ -45,8 +47,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         try {
             const item = await prisma.vehicle.delete({ where: { id: req.query.id as string } })
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Vehicles deleted successfully', item))
-        } catch (error:any) {
+        } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))
         }
     }
-}
+})

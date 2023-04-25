@@ -11,16 +11,18 @@ const AdminContext = React.createContext<AdminContext>({
 
     adminMeta: { loading: false, error: null },
     admin: null,
-    fetch_admin: (email: string) => Promise.resolve() as any,
+    fetch_admin: () => Promise.resolve() as any,
 
     fetcher: (callback: any, isList: boolean = false) => Promise.resolve() as any,
     currentItem: null,
     currentItems: [],
     updater: (callback: any, isList: boolean = false) => Promise.resolve() as any,
-    remover: (callback: any, redirectUrl: string ) => Promise.resolve() as any,
+    remover: (callback: any, redirectUrl: string) => Promise.resolve() as any,
 
     fetchMeta: { loading: false, error: null },
-    updateMeta: { loading: false, error: null }
+    updateMeta: { loading: false, error: null },
+
+    authenticate: (email: string, name: string) => Promise.resolve() as any,
 
 })
 
@@ -96,26 +98,44 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
 
     }
 
-    const fetch_admin = async (email: string, name: string) => {
+    const authenticate = async (email: string, name: string) => {
         setAdminMeta({ loading: true, error: null })
         try {
-            const response = await sharedRepository.fetch_admin(email)
-            let admin
+            let response = await sharedRepository.login(email)
 
             if (response.status === Status.DATA_NOT_FOUND) {
-                const res = await sharedRepository.create_admin(email, name)
-                admin = res.items
+                 response = await sharedRepository.create_admin(email, name)
+            } else {
+                if (response.status !== Status.SUCCESS) {
+                    toast.error(response.message)
+                    router.push('/')
+                    return
+                }
             }
-            admin = response.items
-
-            setAdmin(admin)
-
+            localStorage.setItem('uidjwt', response.items.token)
+            router.push('/dashboard')
+            return
         } catch (error) {
             toast.error('Something went wrong')
         }
         setAdminMeta({ loading: false, error: null })
     }
 
+    const fetch_admin  = async () => {
+        setAdminMeta({ loading: true, error: null })
+        try {
+            const response = await sharedRepository.fetch_admin()
+            if (response.status !== Status.SUCCESS) {
+                toast.error(response.message)
+                return
+            }
+            const admin = response.items
+            setAdmin(admin)
+        } catch (error) {
+            toast.error('Something went wrong')
+        }
+        setAdminMeta({ loading: false, error: null })
+    }
 
     const update_partial_driver = async (id: string, data: any) => {
         setUpdateMeta({ loading: true, error: null })
@@ -153,7 +173,9 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
         fetchMeta,
 
         updateMeta,
-        remover
+        remover,
+
+        authenticate
     }
     return <AdminContext.Provider value={userCtx}>
         {props.children}

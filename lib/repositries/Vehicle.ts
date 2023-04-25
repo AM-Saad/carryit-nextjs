@@ -1,15 +1,27 @@
 import { fetcher } from "../utils";
 import Response, { Status } from "@/shared/modals/Response";
-import {VehiclePayload} from '@/modals/Vehicle'
-
+import {VehiclePayload} from '@/modals/Vehicle' 
 import { VEHICLES_ROUTE } from '@/lib/constants'
+import useLocalStorage from "../hooks/use-local-storage";
+import useAuthToken from "../hooks/useAuthToken";
+
 export default class ShipmentRepository {
     constructor() {
 
     }
+    getToken = () => {
+        return window.localStorage.getItem('uidjwt')
+        
+    }
     fetch_vehicles: () => Promise<Response> = async () => {
         try {
-            const response = await fetcher(VEHICLES_ROUTE);
+            const response = await fetcher(VEHICLES_ROUTE,{
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            });
             return response
 
         } catch (error: any) {
@@ -23,7 +35,13 @@ export default class ShipmentRepository {
     }
     fetch_vehicle: (id: string) => Promise<Response> = async (id) => {
         try {
-            const response = await fetcher(`${VEHICLES_ROUTE}/${id}`);
+            const response = await fetcher(`${VEHICLES_ROUTE}/${id}`,{
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            });
             return response
 
         } catch (error: any) {
@@ -39,7 +57,11 @@ export default class ShipmentRepository {
         try {
             const response = await fetcher(VEHICLES_ROUTE, {
                 method: 'POST',
-                body: JSON.stringify({ values: data })
+                body: JSON.stringify({ values: data }),
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
             });
             return response
 
@@ -55,6 +77,10 @@ export default class ShipmentRepository {
         try {
             const response = await fetcher(`${VEHICLES_ROUTE}/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
             });
             return response
 
@@ -70,7 +96,11 @@ export default class ShipmentRepository {
         try {
             const response = await fetcher(`${VEHICLES_ROUTE}/${id}`, {
                 method: 'PATCH',
-                body: JSON.stringify({ values: data })
+                body: JSON.stringify({ values: data }),
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
             });
             return response
 

@@ -3,7 +3,7 @@ import Meta from "@/shared/modals/meta";
 interface AdminContext {
 
     admin: any;
-    fetch_admin: (email: string, name: string) => Promise<void>;
+    fetch_admin: () => Promise<void>;
     adminMeta: Meta,
     fetcher: (callback: any, isList: boolean) => Promise<void | boolean>;
     currentItem: any
@@ -14,7 +14,7 @@ interface AdminContext {
     fetchMeta: Meta
     updateMeta: Meta
 
-
+    authenticate: (email: string, name: string) => Promise<void>;
 }
 
 export default AdminContext;

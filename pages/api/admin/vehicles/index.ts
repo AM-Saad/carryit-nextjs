@@ -3,15 +3,16 @@ import { getSession } from 'next-auth/react';
 import prisma from '../../../../lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
-import Vehicle from '@/modals/Vehicle';
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
+import { authMiddleware } from '@/middleware/auth';
+
+export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, id) => {
     const session = await getSession({ req });
     if (!session) {
         return res.status(401).json(refineResponse(Status.TOKEN_EXPIRED, 'Unauthorized'));
     }
     if (req.method == 'GET') {
         try {
-            const vehicle = await prisma.vehicle.findMany({});
+            const vehicle = await prisma.vehicle.findMany({ where: { adminId: id } });
             if (!vehicle) {
                 return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Vehicles not found'));
             }
@@ -22,7 +23,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         }
     }
     if (req.method == 'POST') {
-        const { values } = JSON.parse(req.body);
+        console.log(req.body)
+        const { values } = req.body
         const admin = await prisma.admin.findFirst({ where: { email: session.user?.email as string } });
 
         console.log(values)
@@ -41,8 +43,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 active: values.active,
                 plate_number: values.plate_number,
                 model: values.model,
-                gas_history:[],
-                maintenance:[],
+                gas_history: [],
+                maintenance: [],
                 admin: {
                     connect: {
                         id: admin!.id
@@ -62,4 +64,4 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     }
 
 
-}
+})

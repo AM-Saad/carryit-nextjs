@@ -22,7 +22,7 @@ const SignInModal = ({ showSignInModal, setShowSignInModal, }: { showSignInModal
     await signIn("google",
       {
         redirect:true,
-        callbackUrl: "/shipments",
+        callbackUrl: "/sso",
         
       }
     );

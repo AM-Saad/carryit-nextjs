@@ -14,6 +14,10 @@ export default function UserDropdown() {
 
   if (!email) return null;
 
+  const sign_out = () => {
+    localStorage.removeItem('uidjwt')
+    signOut({ redirect: true, callbackUrl: '/' })
+  }
   return (
     <motion.div
       className="relative inline-block text-left"
@@ -29,10 +33,10 @@ export default function UserDropdown() {
               <LayoutDashboard className="h-4 w-4" />
               <p className="text-sm">Dashboard</p>
             </Link>
-          
+
             <button
               className="relative flex w-full items-center justify-start space-x-2 rounded-md p-2 text-left text-sm transition-all duration-75 hover:bg-gray-100"
-              onClick={() => signOut({ redirect: true , callbackUrl:'/'})}
+              onClick={sign_out}
             >
               <LogOut className="h-4 w-4" />
               <p className="text-sm">Logout</p>
