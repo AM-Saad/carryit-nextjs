@@ -5,6 +5,7 @@ import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
 import { } from '.prisma/client';
 import { ObjectId } from 'bson'
+import { authMiddleware , Token} from '@/middleware/auth';
 
 export const config = {
     api: {
@@ -12,18 +13,14 @@ export const config = {
     },
 }
 
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-    const session = await getSession({ req });
-    if (!session) {
-        return res.status(401).json(refineResponse(Status.TOKEN_EXPIRED, 'Unauthorized'));
-    }
+export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token:Token) => {
+
     // create a new driver
     if (req.method == 'POST') {
-        const { values } = JSON.parse(req.body);
-        const admin = await prisma.admin.findFirst({ where: { email: session.user?.email as string } });
-        const drivers = await prisma.driver.findMany();
-        const id  = new ObjectId();
-            console.log(admin)
+        const { values } = req.body
+        const admin = await prisma.admin.findFirst({ where: { id: token.adminId as string } });
+        const id = new ObjectId();
+        console.log(admin)
         const payload = {
             data: {
                 address: values.address,
@@ -37,6 +34,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                         id: admin!.id
                     }
                 },
+                company:{
+                    connect:{
+                        id: admin!.companyId!
+                    }
+                }
 
             }
         }
@@ -50,4 +52,4 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         }
     }
 
-}
+})

@@ -68,6 +68,7 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
                 toast.error(message)
                 return false
             }
+            console.log(items)
 
             setUpdateMeta({ loading: false, error: null })
             setCurrentItem(items)

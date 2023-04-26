@@ -31,7 +31,7 @@ export default async function uploadImages(req: any, res: any) {
     }
 
     if (!item) {
-        return res.status(404).json({ message: 'Item not found' });
+        return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Item not found'));
     }
 
 
@@ -46,6 +46,7 @@ export default async function uploadImages(req: any, res: any) {
             form.parse(req, async (err, fields, files: any) => {
                 
                 if (err) {
+                    console.log(err)
                     return res.status(500).json({ error: 'Error uploading images' });
                 }
 
@@ -113,21 +114,20 @@ export default async function uploadImages(req: any, res: any) {
                 }
             })
         );
-        let vehicle: any;
         // Remove the deleted image paths from the item's documents array
         const newDocuments = item.documents.filter((doc: any) => doc.path !== imageId);
         if (tag === 'drivers') {
-            vehicle = await prisma.driver.update({
+           await prisma.driver.update({
                 where: { id: itemId },
                 data: { documents: newDocuments },
             });
         } else if (tag === 'vehicles') {
-            vehicle = await prisma.vehicle.update({
+           await prisma.vehicle.update({
                 where: { id: itemId },
                 data: { documents: newDocuments },
             });
         }
-
+        const vehicle = await prisma.vehicle.findFirst({ where: { id: itemId } });
         return res.status(200).json(refineResponse(Status.SUCCESS, 'Image deleted successfully', vehicle));
     }
 

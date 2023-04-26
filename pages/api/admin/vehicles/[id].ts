@@ -2,15 +2,15 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '../../../../lib/prisma'
 import { refineResponse } from '@/shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
-import { authMiddleware } from '@/middleware/auth';
+import { Token, authMiddleware } from '@/middleware/auth';
 
-export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, id: string) => {
+export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
 
     if (req.method == 'GET') {
 
         try {
-            const vehicles = await prisma.vehicle.findFirst({ where: { id: req.query.id as string, adminId: id } });
+            const vehicles = await prisma.vehicle.findFirst({ where: { id: req.query.id as string, adminId: token.adminId } });
             if (!vehicles) {
                 return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Vehicle not found'));
             }
@@ -23,7 +23,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
     }
     if (req.method == 'PATCH') {
         try {
-            const { values } = JSON.parse(req.body);
+            const { values } = req.body
             let query: any = {}
 
             values.forEach((i: any) => {
@@ -33,9 +33,9 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                     query[keys[0]] = vals[0]
                 }
             })
-            const item = await prisma.vehicle.updateMany({ where: { id: req.query.id as string, adminId: id as string }, data: query })
-
-            return res.status(200).json(refineResponse(Status.SUCCESS, 'Vehicles updated successfully', item))
+            const item = await prisma.vehicle.updateMany({ where: { id: req.query.id as string, adminId: token.adminId as string }, data: query })
+            const vehicle = await prisma.vehicle.findFirst({ where: { id: req.query.id as string, adminId: token.adminId as string } });
+            return res.status(200).json(refineResponse(Status.SUCCESS, 'Vehicle updated successfully', vehicle))
 
         } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))
@@ -45,7 +45,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
 
     if (req.method == 'DELETE') {
         try {
-            const item = await prisma.vehicle.delete({ where: { id: req.query.id as string } })
+            const item = await prisma.vehicle.deleteMany({ where: { id: req.query.id as string, adminId: token.adminId! as string } })
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Vehicles deleted successfully', item))
         } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))

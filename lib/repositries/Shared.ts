@@ -1,5 +1,4 @@
 import useLocalStorage from "../hooks/use-local-storage";
-import useAuthToken from "../hooks/useAuthToken";
 import { fetcher } from "../utils";
 import Response, { Status } from "@/shared/modals/Response";
 import { useState } from 'react';
@@ -103,7 +102,6 @@ export default class SharedRepository {
                 body: form,
                 headers: {
                     Authorization: `Bearer ${this.getToken()}`,
-                    "Content-Type": "application/json"
                 }
 
             });

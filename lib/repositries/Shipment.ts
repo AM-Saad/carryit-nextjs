@@ -2,7 +2,6 @@ import { fetcher } from "../utils";
 import Response, { Status } from "@/shared/modals/Response";
 import { SHIPMENTS_ROUTE } from '@/lib/constants'
 import useLocalStorage from "../hooks/use-local-storage";
-import useAuthToken from "../hooks/useAuthToken";
 
 export default class ShipmentRepository {
     constructor() {
@@ -120,6 +119,28 @@ export default class ShipmentRepository {
 
         }
     }
+
+    assign_shipment: (id: string, driverId: string) => Promise<Response> = async (id, driverId) => {
+        try {
+            const response = await fetcher(`${SHIPMENTS_ROUTE}/assign/${id}?driverId=${driverId}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            });
+            return response
+
+        } catch (error: any) {
+            return {
+                message: error.message,
+                status: Status.UNEXPECTED_ERROR,
+                items: []
+            }            
+
+        }
+        }
+    
 
 
 }
