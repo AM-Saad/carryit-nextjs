@@ -11,6 +11,9 @@ import { vehicleRepository } from '@/lib/repositries/'
 import Button from '@/components/shared/Button'
 import { Formik } from 'formik'
 import * as Yup from "yup";
+import { Status } from '@/shared/modals/Response'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/router';
 
 
 
@@ -20,6 +23,9 @@ import * as Yup from "yup";
 const Create: React.FC = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
+    const router = useRouter()
+
+
 
     const initialValues = {
         name: null,
@@ -62,8 +68,12 @@ const Create: React.FC = () => {
 
         setLoading(true)
         const response = await vehicleRepository.create_vehicle(payload)
-        setLoading(false)
 
+        setLoading(false);
+        if (response.status === Status.SUCCESS) {
+            return router.push(`/vehicles/${response.items.id}`)
+        }
+        toast.error(response.message)
 
     }
 

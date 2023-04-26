@@ -4,7 +4,9 @@ import DocumentsContainer from '@/components/admin/driver/DocumentsContainer'
 import Button from '@/components/shared/Button'
 import ConfirmDeleteItem from '@/components/shared/ConfirmDelete'
 import Modal from '@/components/shared/modal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import MultiSelect from '@/components/shared/MultiSelect'
+import { vehicleRepository } from '@/lib/repositries'
 interface Props {
   driver: any,
   onUpdate: (data: any) => void,
@@ -14,8 +16,58 @@ interface Props {
 
 const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) => {
   const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState<boolean>(false)
+  const [vehicles, setVehicles] = useState<any[]>([])
+  const [vehiclesToAssign, setVehicleToAssign] = useState<any[]>([])
+  const [selectedVehicles, setSelectedVehicles] = useState<any[]>([])
+  const [assignVehicleError, setAssignVehicleError] = useState<string | null>(null)
+
 
   const update_partial_driver = async (data: any) => onUpdate({ values: [data] })
+
+
+  const update_vehicle = async (vehicleId: string) => {
+    setAssignVehicleError(null)
+    const vehicle = vehicles.find(item => item.id === vehicleId)
+    if (vehicle.driverId && vehicle.driverId !== driver.id) {
+      return setAssignVehicleError('Vehicle already assigned')
+
+    }
+
+    await vehicleRepository.update_partial_vehicle(vehicleId, [{ driverId: driver.id }])
+    await update_partial_driver({ vehicleId: vehicleId })
+  }
+
+
+  const fetch_vehicles = async () => {
+    const token = localStorage.getItem('uidjwt')
+
+    const res = await fetch('/api/admin/vehicles', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    const data = await res.json()
+
+    const vehicles = data.items.map((item: any) => ({ value: item.id, label: item.name }))
+
+    const currentVehicle = vehicles.find((item: any) => item.value === driver.vehicleId)
+
+
+    if (currentVehicle) {
+      setSelectedVehicles([{ label: currentVehicle.label, value: currentVehicle.value }])
+    }
+    setVehicleToAssign(vehicles)
+    setVehicles(data.items)
+  }
+
+
+  useEffect(() => {
+
+    fetch_vehicles()
+
+  }, [])
+
 
   return (
     <>
@@ -34,7 +86,7 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
 
           <ToggleBtn value={driver.active} onChange={(value: any) => update_partial_driver({ active: value })} />
           <Button
-            onClick={()=>setOpenConfirmDeleteModal(true)}
+            onClick={() => setOpenConfirmDeleteModal(true)}
             title='Delete'
             style='bg-red-500 text-white'
             loading={loading}
@@ -96,6 +148,30 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
         loading={loading}
         required={false}
       />
+
+      <div className='border mb-2 mt-3 pb-2 px-2 rounded-xl'>
+        <label htmlFor="assigned_vehicle" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Assigned Vehicle </label>
+        {assignVehicleError && <p className='text-red-500'>{assignVehicleError}</p>}
+        {vehicles.length > 0 &&
+          <MultiSelect
+            label='label'
+            multiple={false}
+            trackBy="value"
+            closeOnSelect={true}
+            input={(props: any) => {
+              props[0] && update_vehicle(props[0].value)
+
+            }}
+
+            id='assigned_vehicle'
+            options={vehiclesToAssign}
+            placeholder={'Assigned Vehicle'}
+            disabled={loading}
+            preSelected={selectedVehicles}
+          />
+        }
+      </div>
+
       <DocumentsContainer
         item={driver}
         context='drivers'

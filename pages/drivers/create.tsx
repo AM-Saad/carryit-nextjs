@@ -48,7 +48,6 @@ const DriverForm = () => {
         }
         toast.error(response.message)
 
-        console.log(values);
     };
 
     return (

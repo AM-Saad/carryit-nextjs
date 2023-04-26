@@ -3,16 +3,16 @@ import { getSession } from 'next-auth/react';
 import prisma from '../../../../lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
-import { authMiddleware } from '@/middleware/auth';
+import { authMiddleware, Token } from '@/middleware/auth';
 
-export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, id) => {
+export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
     const session = await getSession({ req });
     if (!session) {
         return res.status(401).json(refineResponse(Status.TOKEN_EXPIRED, 'Unauthorized'));
     }
     if (req.method == 'GET') {
         try {
-            const vehicle = await prisma.vehicle.findMany({ where: { adminId: id } });
+            const vehicle = await prisma.vehicle.findMany({ where: { adminId: token.adminId } });
             if (!vehicle) {
                 return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Vehicles not found'));
             }
@@ -50,6 +50,12 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                         id: admin!.id
                     }
                 },
+                company: {
+                    connect: {
+
+                        id: admin?.companyId!
+                    }
+                }
             }
         }
 

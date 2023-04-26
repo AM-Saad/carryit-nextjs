@@ -52,9 +52,9 @@ type DriversSalary {
 }
 
 type DriversShipments {
-  id  String? @map("_id") @db.ObjectId
-  id_ String? @map("id") @db.ObjectId
-  no  Int
+  id         String   @db.ObjectId
+  shipmentId String?  @db.ObjectId
+  shipmentNo         String?
 }
 
 type DriversVehicle {
@@ -170,14 +170,14 @@ model Driver {
   password    String
   salary      DriversSalary
   shipments   DriversShipments[]
-  vehicle     Vehicle?            @relation(fields: [vehicleId], references: [id])
-  vehicleId   String?             @unique @map("Vehicle") @db.ObjectId
-  admin       Admin?              @relation(fields: [adminId], references: [id])
-  adminId     String?             @map("admin") @db.ObjectId
   documents   Document[]
   active      Boolean?
-  company     Company?            @relation(fields: [companyId], references: [id])
-  companyId   String?             @map("company") @db.ObjectId
+
+  vehicleId String?
+  admin     Admin?   @relation(fields: [adminId], references: [id])
+  adminId   String?  @map("admin") @db.ObjectId
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?  @map("company") @db.ObjectId
 }
 
 type ShipmentsPickup {
@@ -215,7 +215,7 @@ model Shipment {
   customerId    String?
   date          String
   delivery_date String
-  driver        ShipmentsDriver?
+  driverId      String?
   is_fragile    Boolean
   is_liquid     Boolean
   notes         String?
@@ -242,7 +242,6 @@ type Items {
 
 model Vehicle {
   id           String               @id @default(auto()) @map("_id") @db.ObjectId
-  v            Int?                 @map("__v")
   active       Boolean
   fuel_type    String?
   gas_history  GasHistory[]
@@ -258,8 +257,7 @@ model Vehicle {
   adminId      String?              @map("admin") @db.ObjectId
   description  String?
   documents    Document[]
-  driver       Driver?
-  driverId     String?              @map("Driver") @db.ObjectId
+  driverId     String?
   company      Company?             @relation(fields: [companyId], references: [id])
   companyId    String?              @map("company") @db.ObjectId
 }

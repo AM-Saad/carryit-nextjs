@@ -2,8 +2,6 @@ import { fetcher } from "../utils";
 import Response, { Status } from "@/shared/modals/Response";
 import {VehiclePayload} from '@/modals/Vehicle' 
 import { VEHICLES_ROUTE } from '@/lib/constants'
-import useLocalStorage from "../hooks/use-local-storage";
-import useAuthToken from "../hooks/useAuthToken";
 
 export default class ShipmentRepository {
     constructor() {

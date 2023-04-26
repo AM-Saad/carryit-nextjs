@@ -1,26 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from 'next-auth/react';
 import prisma from '../../../../lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
-import { } from '.prisma/client';
 import { ObjectId } from 'mongodb';
-
+import { authMiddleware, Token } from '@/middleware/auth';
 export const config = {
     api: {
         bodyParser: true,
     },
 }
+export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-    const session = await getSession({ req });
-    if (!session) {
-        return res.status(401).json(refineResponse(Status.TOKEN_EXPIRED, 'Unauthorized'));
-    }
+
     // create shipment
     if (req.method == 'POST') {
-        const { values } = JSON.parse(req.body);
-        const admin = await prisma.admin.findFirst({ where: { email: session.user?.email as string } });
+        const { values } = req.body
+        const admin = await prisma.admin.findFirst({ where: { id: token.adminId as string } });
         const receiver = {
             set: {
                 name: values.receiver.name,
@@ -57,7 +52,12 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 ],
                 admin: {
                     connect: {
-                        id: admin!.id
+                        id: admin!.id!
+                    }
+                },
+                company: {
+                    connect: {
+                        id: admin!.companyId!
                     }
                 },
                 shipmentNo: `SHP-${Math.floor(Math.random() * 1000000)}`,
@@ -73,4 +73,4 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         }
     }
 
-}
+})

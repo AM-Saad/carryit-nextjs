@@ -3,8 +3,6 @@ import Response, { Status } from "@/shared/modals/Response";
 
 import { DRIVERS_ROUTE } from '@/lib/constants'
 import useLocalStorage from "../hooks/use-local-storage";
-import useAuthToken from "../hooks/useAuthToken";
-
 export default class DriverRepository {
     constructor() {
 

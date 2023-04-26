@@ -1,8 +1,8 @@
 import Layout from '@/components/layout'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import DriverFrom from '@/components/admin/driver'
-import Response, { Status } from '@/shared/modals/Response'
+import  { Status } from '@/shared/modals/Response'
 import { driverRepository } from '@/lib/repositries/index'
 import FetchError from '@/components/shared/Error'
 import Loading from '@/components/shared/Loading'
@@ -24,8 +24,6 @@ const Driver = () => {
   const update_partial_driver = async (data: any) => {
 
     await updater(driverRepository.update_partial_driver(id, data), false)
-
- 
 
   }
 

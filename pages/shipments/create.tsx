@@ -73,9 +73,6 @@ const Create: React.FC = () => {
         delivery_date: Yup.date()
             .default(() => new Date()),
 
-
-
-
     })
     const createShipment = async (payload: ShipmentPayload) => {
 
