@@ -65,10 +65,9 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
             const { status, message, items } = await callback
             if (status != Status.SUCCESS) {
                 setUpdateMeta({ loading: false, error: { code: status, message } })
-                toast.error(message)
+                toast[status != Status.UNEXPECTED_ERROR ? 'info' : 'error'](message)
                 return false
             }
-            console.log(items)
 
             setUpdateMeta({ loading: false, error: null })
             setCurrentItem(items)
