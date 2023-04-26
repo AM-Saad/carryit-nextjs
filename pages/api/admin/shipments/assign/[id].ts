@@ -28,16 +28,15 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
         }
 
         // Check if shipment is already assigned to this driver
-
         if (shipment.driverId === driverId) {
-            return res.status(400).json(refineResponse(Status.ALREADY_DONE, 'Shipment is already assigned'));
+            return res.status(400).json(refineResponse(Status.ALREADY_DONE, 'Shipment is already assigned to this driver'));
         }
 
 
         // Remove shipment from previous driver
         if (shipment.driverId !== null) {
             const currentDriver = await prisma.driver.findFirst({ where: { id: shipment.driverId as string, adminId: token.adminId } })
-            const driverShipments = currentDriver?.shipments.filter(shipment => shipment.id !== id as string);
+            const driverShipments = currentDriver?.shipments.filter(shipment => shipment.shipmentId !== id as string);
             await prisma.driver.update({
                 where: { id: shipment.driverId as string },
                 data: {

@@ -4,9 +4,10 @@ import DocumentsContainer from '@/components/admin/driver/DocumentsContainer'
 import Button from '@/components/shared/Button'
 import ConfirmDeleteItem from '@/components/shared/ConfirmDelete'
 import Modal from '@/components/shared/modal'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import MultiSelect from '@/components/shared/MultiSelect'
-import { vehicleRepository } from '@/lib/repositries'
+import { driverRepository } from '@/lib/repositries'
+import AdminContext from '@/stores/admin'
 interface Props {
   driver: any,
   onUpdate: (data: any) => void,
@@ -23,18 +24,12 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
 
 
   const update_partial_driver = async (data: any) => onUpdate({ values: [data] })
+  const { updater, updateMeta } = useContext(AdminContext)
 
 
-  const update_vehicle = async (vehicleId: string) => {
-    setAssignVehicleError(null)
-    const vehicle = vehicles.find(item => item.id === vehicleId)
-    if (vehicle.driverId && vehicle.driverId !== driver.id) {
-      return setAssignVehicleError('Vehicle already assigned')
+  const assign_vehicle = async (vehicleId: string | null) => {
 
-    }
-
-    await vehicleRepository.update_partial_vehicle(vehicleId, [{ driverId: driver.id }])
-    await update_partial_driver({ vehicleId: vehicleId })
+      await updater(driverRepository.assign_vehicle(driver.id, vehicleId), false)
   }
 
 
@@ -159,7 +154,7 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
             trackBy="value"
             closeOnSelect={true}
             input={(props: any) => {
-              props[0] && update_vehicle(props[0].value)
+              props[0] && assign_vehicle(props[0].value)
 
             }}
 

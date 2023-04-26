@@ -113,6 +113,29 @@ export default class DriverRepository {
             }
 
         }
+
+    }
+
+
+    assign_vehicle: (id: string, vehicleId: string | null) => Promise<Response> = async (id, vehicleId) => {
+        try {
+            const response = await fetcher(`${DRIVERS_ROUTE}/assign/${id}?vehicleId=${vehicleId}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            });
+            return response
+
+        } catch (error: any) {
+            return {
+                message: error.message,
+                status: Status.UNEXPECTED_ERROR,
+                items: []
+            }
+
+        }
     }
 
 
