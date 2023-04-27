@@ -1,13 +1,14 @@
 import Layout from '@/components/layout'
 import React, { useEffect, useState, useContext } from 'react'
 import { useRouter } from 'next/router'
-import { vehicleRepository } from '@/lib/repositries'
+import { vehicleRepository } from '@/lib/repositries/admin'
 import { Status } from '@/shared/modals/Response'
 import { Error } from '@/shared/modals/Response'
 import FetchError from '@/components/shared/Error'
 import VehicleFrom from '@/components/admin/vehicle'
 import { toast } from "react-toastify";
 import AdminContext from '@/stores/admin'
+import { INTERNAL_VEHICLES_ROUTE } from '@/lib/constants'
 
 
 const Vehicle = () => {
@@ -27,7 +28,7 @@ const Vehicle = () => {
   }
 
   const delete_vehicle = async () => {
-     await remover((vehicleRepository.delete_vehicle(id)), '/vehicles')
+     await remover((vehicleRepository.delete_vehicle(id)), INTERNAL_VEHICLES_ROUTE)
 
   }
 

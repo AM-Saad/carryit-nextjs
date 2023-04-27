@@ -3,16 +3,17 @@ import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import DriverFrom from '@/components/admin/driver'
 import  { Status } from '@/shared/modals/Response'
-import { driverRepository } from '@/lib/repositries/index'
+import { driverRepository } from '@/lib/repositries/admin'
 import FetchError from '@/components/shared/Error'
 import Loading from '@/components/shared/Loading'
 import { toast } from "react-toastify";
 import AdminContext from '@/stores/admin'
+import { INTERNAL_DRIVERS_ROUTE } from '@/lib/constants'
 
 const Driver = () => {
   const router = useRouter()
   const { id } = router.query as { id: string }
-  const { fetcher, fetchMeta, currentItem,updater, updateMeta } = useContext(AdminContext);
+  const { fetcher, fetchMeta, currentItem,updater, updateMeta, remover } = useContext(AdminContext);
   const { loading, error } = fetchMeta
 
 
@@ -29,13 +30,8 @@ const Driver = () => {
 
 
   const delete_driver = async () => {
-    // setUpdating(true)
-    const res = await driverRepository.delete_driver(id)
-    // setUpdating(false)
-    if (res.status !== Status.SUCCESS) {
-      return toast.error(res.message)
-    }
-    res.status === Status.SUCCESS && router.push('/drivers')
+    await remover(driverRepository.delete_driver(id), INTERNAL_DRIVERS_ROUTE)
+
   }
 
 

@@ -6,7 +6,7 @@ import ConfirmDeleteItem from '@/components/shared/ConfirmDelete'
 import Modal from '@/components/shared/modal'
 import { useEffect, useState, useContext } from 'react'
 import MultiSelect from '@/components/shared/MultiSelect'
-import { driverRepository } from '@/lib/repositries'
+import { driverRepository } from '@/lib/repositries/admin'
 import AdminContext from '@/stores/admin'
 interface Props {
   driver: any,

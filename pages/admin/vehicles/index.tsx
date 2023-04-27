@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import Layout from '@/components/layout'
 import Link from 'next/link';
-import { vehicleRepository } from '@/lib/repositries'
+import { vehicleRepository } from '@/lib/repositries/admin'
 import Response, { Status } from '@/shared/modals/Response';
 import FetchError from '@/components/shared/Error';
 import Loading from '@/components/shared/Loading';
@@ -9,6 +9,7 @@ import Image from "next/image";
 import AdminContext from '@/stores/admin';
 import { useSession } from "next-auth/react";
 import { TriangleRightIcon } from '@radix-ui/react-icons';
+import { INTERNAL_VEHICLES_ROUTE } from '@/lib/constants';
 
 const Vehicles = () => {
   const { data: session } = useSession()
@@ -46,7 +47,7 @@ const Vehicles = () => {
             </h1>
             <div className='bg-white rounded shadow px-5 xl:px-0 h-full'>
               {currentItems.map((item: any) => (
-                <Link href={`/vehicles/${item.id}`} key={item.id} className='text-black bg-white p-2 border-b flex items-center gap-3 relative group'>
+                <Link href={`/admin/vehicles/${item.id}`} key={item.id} className='text-black bg-white p-2 border-b flex items-center gap-3 relative group'>
                   <TriangleRightIcon className='w-5 h-5 relative block transform transition-all duration-300 group-hover:translate-x-2' />
 
                   <p>{item.name}</p>
@@ -67,7 +68,7 @@ const Vehicles = () => {
               style={{ filter: 'drop-shadow(2px 2px 2px #555)' }}
             />
             <p className='mt-3 font-medium text-gray-700 text-xs sm:text-sm'>No Vehicles Associated To Your Company</p>
-            <Link href={"/vehicles/create"} className='text-blue-500 text-sm mt-2'>Create New</Link>
+            <Link href={`${INTERNAL_VEHICLES_ROUTE}/create`} className='text-blue-500 text-sm mt-2'>Create New</Link>
           </div>
         }
       </Layout>

@@ -9,20 +9,23 @@ import jwt from 'jsonwebtoken';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const { values } = JSON.parse(req.body);
-  console.log(values)
-
   try {
-    // Check if admin exists,
-    const admin = await prisma.admin.findUnique({
-      where: { email: values.email },
+    // Check if driver exists
+    const driver = await prisma.driver.findUnique({
+      where: { mobile: values.phone, },
     });
 
-    if (!admin) {
+    if (!driver) {
       return res.status(401).json(refineResponse(Status.DATA_NOT_FOUND, 'Data Not Found!'));
     }
 
+    // Check if password is correct
+    if (driver.password !== values.password) {
+      return res.status(401).json(refineResponse(Status.INVALID_CREDENTIALS, 'Invalid Credentials!'));
+    }
+    console.log(driver)
     // Create JWT token
-    const token = jwt.sign({ adminId: admin.id, companyId: admin.companyId, driverId: null, isAdmin: true, isDriver: false }, process.env.NEXT_PUBLIC_JWT_SECRET!, {
+    const token = jwt.sign({ driverId: driver.id, company: driver.companyId, adminId: driver.adminId, isAdmin:false, isDriver:true  }, process.env.NEXT_PUBLIC_JWT_SECRET!, {
       expiresIn: '7d',
     });
 

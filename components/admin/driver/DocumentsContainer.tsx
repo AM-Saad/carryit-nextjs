@@ -5,7 +5,7 @@
 import { useState, useEffect, useId, useMemo } from 'react'
 import UploadDocsInput from '@/components/shared/UploadDocsInput'
 import DocumentsAlbum from '@/components/shared/DocumentsAlbum'
-import { sharedRepository } from '@/lib/repositries'
+import { sharedRepository } from '@/lib/repositries/admin'
 import { Status } from '@/shared/modals/Response'
 import { toast } from 'react-toastify'
 import Vehicle from '@/modals/Vehicle'
