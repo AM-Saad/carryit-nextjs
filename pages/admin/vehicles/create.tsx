@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
-import EditableInput from '@/components/shared/EditableInput'
 import ToggleBtn from '@/components/shared/ToggleBtn'
-// import EditProductCategory from '@/components/Admin/Products/EditProductCategory'
-import DocumentsContainer from '@/components/admin/driver/DocumentsContainer'
 import MultiSelect from '@/components/shared/MultiSelect'
 import { VehiclePayload, VehicleTypes, getFuelUnit, fuelTypesArray, vehicleTypesArray } from '@/modals/Vehicle'
 import Input from '@/components/shared/Input'
 import Layout from '@/components/layout'
-import { vehicleRepository } from '@/lib/repositries/'
+import { vehicleRepository } from '@/lib/repositries/admin'
 import Button from '@/components/shared/Button'
 import { Formik } from 'formik'
 import * as Yup from "yup";
@@ -15,6 +12,7 @@ import { Status } from '@/shared/modals/Response'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router';
 
+import { INTERNAL_VEHICLES_ROUTE } from '@/lib/constants'
 
 
 
@@ -71,7 +69,7 @@ const Create: React.FC = () => {
 
         setLoading(false);
         if (response.status === Status.SUCCESS) {
-            return router.push(`/vehicles/${response.items.id}`)
+            return router.push(`${INTERNAL_VEHICLES_ROUTE}/${response.items.id}`)
         }
         toast.error(response.message)
 

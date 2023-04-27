@@ -5,9 +5,10 @@ import Layout from '@/components/layout'
 import FormikInput from '@/components/shared/FormikInput';
 import Button from '@/components/shared/Button';
 import { useRouter } from 'next/router';
-import { driverRepository } from '@/lib/repositries/'
+import { driverRepository } from '@/lib/repositries/admin'
 import { Status } from '@/shared/modals/Response';
 import { toast } from 'react-toastify';
+import { INTERNAL_DRIVERS_ROUTE } from '@/lib/constants';
 
 
 const DriverForm = () => {
@@ -44,7 +45,7 @@ const DriverForm = () => {
         const response = await driverRepository.create_shipment(values)
         setLoading(false);
         if (response.status === Status.SUCCESS) {
-            return router.push(`/drivers/${response.items.id}`)
+            return router.push(`${INTERNAL_DRIVERS_ROUTE}/${response.items.id}`)
         }
         toast.error(response.message)
 

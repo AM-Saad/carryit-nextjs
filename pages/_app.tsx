@@ -10,6 +10,8 @@ import { Inter } from "@next/font/google";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AdminContextProvider } from '@/stores/admin'
+import { DriverContextProvider } from '@/stores/driver'
+import { useRouter } from 'next/router';
 
 const sfPro = localFont({
   src: "../styles/SF-Pro-Display-Medium.otf",
@@ -25,8 +27,10 @@ export default function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
-  return (
-    <SessionProvider session={session}>
+  const router = useRouter();
+
+  let contextProvider = (
+    <>
       <AdminContextProvider>
         <RWBProvider>
           <div className={cx(sfPro.variable, inter.variable)}>
@@ -42,11 +46,42 @@ export default function MyApp({
             pauseOnFocusLoss={false}
             draggable
             pauseOnHover={true}
-
           />
         </RWBProvider>
         <Analytics />
       </AdminContextProvider>
+    </>
+  );
+
+  // conditionally wrap Component with DriverContextProvider
+  console.log(router)
+  if (router.pathname.includes('driver') && !router.pathname.includes('admin')) {
+    contextProvider = (
+      <DriverContextProvider>
+      <RWBProvider>
+        <div className={cx(sfPro.variable, inter.variable)}>
+          <Component {...pageProps} />
+        </div>
+        <ToastContainer
+          toastStyle={{ fontSize: '1rem', color: 'white' }}
+          theme="colored"
+          position="bottom-left"
+          autoClose={8000}
+          newestOnTop
+          closeOnClick={false}
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover={true}
+        />
+      </RWBProvider>
+      <Analytics />
+    </DriverContextProvider>
+    );
+  }
+
+  return (
+    <SessionProvider session={session}>
+      {contextProvider}
     </SessionProvider>
   );
 }

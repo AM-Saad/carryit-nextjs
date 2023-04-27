@@ -1,4 +1,4 @@
-import { fetcher } from "../utils";
+import { fetcher } from "@/lib/utils";
 import Response, { Status } from "@/shared/modals/Response";
 import {VehiclePayload} from '@/modals/Vehicle' 
 import { VEHICLES_ROUTE } from '@/lib/constants'

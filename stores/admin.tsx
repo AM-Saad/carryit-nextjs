@@ -4,7 +4,7 @@ import Meta from '@/shared/modals/meta'
 import AdminContext from "@/modals/admin_context"
 import { toast } from "react-toastify";
 import { Status } from '@/shared/modals/Response';
-import { sharedRepository, driverRepository, vehicleRepository, shipmentRepository } from '@/lib/repositries';
+import { sharedRepository } from '@/lib/repositries/admin';
 import { useRouter } from 'next/router';
 
 const AdminContext = React.createContext<AdminContext>({
@@ -113,7 +113,7 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
                 }
             }
             localStorage.setItem('uidjwt', response.items.token)
-            router.push('/dashboard')
+            router.push('/admin/dashboard')
             return
         } catch (error) {
             toast.error('Something went wrong')
@@ -135,23 +135,6 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
             toast.error('Something went wrong')
         }
         setAdminMeta({ loading: false, error: null })
-    }
-
-    const update_partial_driver = async (id: string, data: any) => {
-        setUpdateMeta({ loading: true, error: null })
-        try {
-            const { status, message } = await driverRepository.update_partial_driver(id, data)
-            if (status != Status.SUCCESS) {
-                // setUpdateMeta({ loading: false, error: message })
-                toast.error(message)
-                return
-            }
-            setUpdateMeta({ loading: false, error: null })
-            // setDriver(data)
-        } catch (error) {
-            toast.error('Something went wrong')
-
-        }
     }
 
 

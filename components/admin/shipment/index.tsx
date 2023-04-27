@@ -5,7 +5,7 @@ import { Shipment } from '@/modals/Shipment'
 import Modal from '@/components/shared/modal'
 import ConfirmDeleteItem from '@/components/shared/ConfirmDelete'
 import { useEffect, useState, useContext } from 'react'
-import { shipmentRepository } from '@/lib/repositries'
+import { shipmentRepository } from '@/lib/repositries/admin'
 import MultiSelect from '@/components/shared/MultiSelect'
 import AdminContext from '@/stores/admin'
 
@@ -28,13 +28,9 @@ const ShipmentFrom: React.FC<Props> = ({ shipment, onUpdate, loading, onDelete }
 
 
   const assign_shipment = async (driverId: string) => {
-    setAssignDriverError(null)
 
     await updater(shipmentRepository.assign_shipment(shipment.id, driverId), false)
   }
-
-  // await shipmentRepository.update_partial_shipment(vehicleId, [{ driverId: driver.id }])
-  // await update_partial_driver({ vehicleId: vehicleId })
 
 
 

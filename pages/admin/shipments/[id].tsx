@@ -1,12 +1,13 @@
 import Layout from '@/components/layout'
 import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { shipmentRepository } from '@/lib/repositries'
+import { shipmentRepository } from '@/lib/repositries/admin'
 import AdminContext from '@/stores/admin'
 import { useSession } from 'next-auth/react'
 import Loading from '@/components/shared/Loading'
 import FetchError from '@/components/shared/Error'
 import ShipmentFrom from '@/components/admin/shipment'
+import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
 
 const Shipment = () => {
   const router = useRouter()
@@ -24,7 +25,7 @@ const Shipment = () => {
     await updater(shipmentRepository.update_partial_shipment(id, data), false)
   }
   const remove_data = async () => {
-    await remover(shipmentRepository.delete_shipment(id), '/shipments')
+    await remover(shipmentRepository.delete_shipment(id), INTERNAL_SHIPMENTS_ROUTE)
   }
 
   useEffect(() => {

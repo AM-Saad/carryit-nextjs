@@ -52,9 +52,9 @@ type DriversSalary {
 }
 
 type DriversShipments {
-  id         String   @db.ObjectId
-  shipmentId String?  @db.ObjectId
-  shipmentNo         String?
+  id         String  @db.ObjectId
+  shipmentId String? @db.ObjectId
+  shipmentNo String?
 }
 
 type DriversVehicle {
@@ -165,7 +165,7 @@ model Driver {
   address     String
   commissions DriversCommission[]
   image       String
-  mobile      String?
+  mobile      String?             @unique
   name        String
   password    String
   salary      DriversSalary

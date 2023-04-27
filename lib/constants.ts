@@ -22,3 +22,8 @@ export const DEPLOY_URL =
 export const VEHICLES_ROUTE = "/api/admin/vehicles";
 export const DRIVERS_ROUTE = "/api/admin/drivers";
 export const SHIPMENTS_ROUTE = "/api/admin/shipments";
+
+export const INTERNAL_VEHICLES_ROUTE = "/admin/vehicles";
+export const INTERNAL_DRIVERS_ROUTE = "/admin/drivers";
+export const INTERNAL_SHIPMENTS_ROUTE = "/admin/shipments";
+

@@ -1,5 +1,4 @@
-import useLocalStorage from "../hooks/use-local-storage";
-import { fetcher } from "../utils";
+import { fetcher } from "@/lib/utils";
 import Response, { Status } from "@/shared/modals/Response";
 import { useState } from 'react';
 

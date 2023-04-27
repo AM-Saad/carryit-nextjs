@@ -4,7 +4,7 @@ import ToggleBtn from '@/components/shared/ToggleBtn'
 import { ShipmentPayload } from '@/modals/Shipment'
 import Input from '@/components/shared/Input'
 import Layout from '@/components/layout'
-import { shipmentRepository } from '@/lib/repositries/'
+import { shipmentRepository } from '@/lib/repositries/admin'
 import Button from '@/components/shared/Button'
 import { Formik } from 'formik'
 import * as Yup from "yup";
@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import FormikInput from '@/components/shared/FormikInput'
 
+import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
 
 
 
@@ -80,7 +81,7 @@ const Create: React.FC = () => {
         const response = await shipmentRepository.create_shipment(payload)
         setLoading(false)
         if (response.status === Status.SUCCESS) {
-            return router.push(`/shipments/${response.items.id}`)
+            return router.push(`${INTERNAL_SHIPMENTS_ROUTE}/${response.items.id}`)
         }
         toast.error(response.message)
 
