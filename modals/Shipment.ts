@@ -15,6 +15,7 @@ export interface ShipmentPayload {
         is_villa?: boolean
 
     };
+    items:{itemId:string,name:string, price:number, quantity:number}[]
     quantity: number;
     is_fragile: boolean;
     is_liquid: boolean;
@@ -24,7 +25,10 @@ export interface ShipmentPayload {
     date: Date;
     delivery_date: Date;
     driverId?: string,
-    status?: number,
+    status?: ShipmentStatus,
+    shipmentNo?: string,
+    total_cost: number,
+    discount:number
 }
 
 
@@ -32,50 +36,49 @@ export enum ShipmentStatus {
     Pending = 0,
     Confirmed = 1,
     Preparing = 2,
-    Shipped = 3,
-    Delivered = 4,
-    Canceled = 5,
+    Ready = 3,
+    Shipped = 4,
+    Delivered = 5,
+    Canceled = 6,
 }
 
-export const ORDER_STATUS_LABELS = new Map<ShipmentStatus, string>([
-    [ShipmentStatus.Pending, "Pending"],
-    [ShipmentStatus.Confirmed, "Confirmed"],
-    [ShipmentStatus.Preparing, "Preparing"],
-    [ShipmentStatus.Shipped, "Shipped"],
-    [ShipmentStatus.Delivered, "Delivered"],
-    [ShipmentStatus.Canceled, "Canceled"],
-]);
+
 
 export const getShipmentStatusColor = (bundleStatus: ShipmentStatus) => {
 
     if (bundleStatus === ShipmentStatus.Pending) {
-        return "gray";
+        return "#FFC107";
     } else if (bundleStatus === ShipmentStatus.Confirmed) {
-        return "purple";
+        return "#2196F3";
     } else if (bundleStatus === ShipmentStatus.Preparing) {
-        return "yellow";
+        return "#FF9800";
+    } else if (bundleStatus === ShipmentStatus.Ready) {
+        return "#4CAF50";
     } else if (bundleStatus === ShipmentStatus.Shipped) {
-        return "orange";
+        return "#9C27B0";
     } else if (bundleStatus === ShipmentStatus.Delivered) {
-        return "green";
+        return "#8BC34A";
     } else {
-        return "red";
+        return "#F44336";
     }
 };
 
 export const getShipmentStatus = (bundleStatus: ShipmentStatus) => {
+    console.log(bundleStatus)
     if (bundleStatus === ShipmentStatus.Pending) {
-        return ShipmentStatus.Pending;
+        return "Pending";
     } else if (bundleStatus === ShipmentStatus.Confirmed) {
-        return ShipmentStatus.Confirmed;
+        return "Confirmed";
     } else if (bundleStatus === ShipmentStatus.Preparing) {
-        return ShipmentStatus.Preparing;
+        return "Preparing";
+    } else if (bundleStatus === ShipmentStatus.Ready) {
+        return "Ready";
     } else if (bundleStatus === ShipmentStatus.Shipped) {
-        return ShipmentStatus.Shipped;
+        return "Shipped";
     } else if (bundleStatus === ShipmentStatus.Delivered) {
-        return ShipmentStatus.Delivered;
+        return "Delivered";
     } else {
-        return "red";
+        return "Canceled";
     }
 };
 

@@ -17,10 +17,10 @@ export enum Status {
 
     
 
-interface Response {
+interface Response<T> {
     message: string;
     status: Status;
-    items?: any
+    items?: T | T[];
 }
 
 export type Error = {
