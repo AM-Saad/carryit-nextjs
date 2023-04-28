@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import prisma from '../../../../lib/prisma'
+import prisma from '@/lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
 import { ObjectId } from 'mongodb';

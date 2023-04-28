@@ -1,6 +1,7 @@
 import { fetcher } from "@/lib/utils";
 import Response, { Status } from "@/shared/modals/Response";
 import { SHIPMENTS_ROUTE } from '@/lib/constants'
+import { Shipment } from "@/modals/Shipment";
 
 export default class ShipmentRepository {
     constructor() {
@@ -11,7 +12,7 @@ export default class ShipmentRepository {
 
     }
 
-    fetch_shipments: () => Promise<Response> = async () => {
+    fetch_shipments: () => Promise<Response<Shipment[]>> = async () => {
 
         try {
             const response = await fetcher(SHIPMENTS_ROUTE, {
@@ -32,7 +33,7 @@ export default class ShipmentRepository {
 
         }
     }
-    fetch_shipment: (id: string) => Promise<Response> = async (id) => {
+    fetch_shipment: (id: string) => Promise<Response<Shipment>> = async (id) => {
         try {
             const response = await fetcher(`${SHIPMENTS_ROUTE}/${id}`, {
                 method: 'GET',
@@ -52,7 +53,7 @@ export default class ShipmentRepository {
 
         }
     }
-    update_partial_shipment: (id: string, data: any) => Promise<Response> = async (id, data) => {
+    update_partial_shipment: (id: string, data: any) => Promise<Response<Shipment>> = async (id, data) => {
         try {
             const response = await fetcher(`${SHIPMENTS_ROUTE}/${id}`, {
                 method: 'PATCH',
@@ -75,7 +76,7 @@ export default class ShipmentRepository {
         }
     }
 
-    create_shipment: (data: any) => Promise<Response> = async (data) => {
+    create_shipment: (data: any) => Promise<Shipment> = async (data) => {
         try {
             const response = await fetcher(`${SHIPMENTS_ROUTE}/create`, {
                 method: 'POST',
@@ -97,7 +98,7 @@ export default class ShipmentRepository {
         }
     }
 
-    delete_shipment: (id: string) => Promise<Response> = async (id) => {
+    delete_shipment: (id: string) => Promise<Response<any>> = async (id) => {
 
         try {
             const response = await fetcher(`${SHIPMENTS_ROUTE}/${id}`, {
@@ -119,7 +120,7 @@ export default class ShipmentRepository {
         }
     }
 
-    assign_shipment: (id: string, driverId: string) => Promise<Response> = async (id, driverId) => {
+    assign_shipment: (id: string, driverId: string) => Promise<Response<Shipment>> = async (id, driverId) => {
         try {
             const response = await fetcher(`${SHIPMENTS_ROUTE}/assign/${id}?driverId=${driverId}`, {
                 method: 'PUT',
@@ -135,10 +136,38 @@ export default class ShipmentRepository {
                 message: error.message,
                 status: Status.UNEXPECTED_ERROR,
                 items: []
-            }            
+            }
 
         }
+    }
+
+
+
+    change_status: (id: string, status: number, canceled: any) => Promise<Response<Shipment>> = async (id, status, canceled) => {
+        try {
+            const response: Response<Shipment> = await fetcher(`${SHIPMENTS_ROUTE}/status/${id}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    status,
+                    canceled
+                })
+            });
+            return response
+
+        } catch (error: any) {
+            return {
+                message: error.message,
+                status: Status.UNEXPECTED_ERROR,
+                items: []
+            }
+
         }
+
+    }
 
 
 }

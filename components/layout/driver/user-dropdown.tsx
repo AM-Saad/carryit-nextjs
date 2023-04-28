@@ -13,7 +13,7 @@ const UserDropdown: React.FC<{ driver: any }> = ({ driver }) => {
   if (!mobile) return null;
 
   const sign_out = () => {
-    localStorage.removeItem('uidjwt')
+    localStorage.removeItem('didjwt')
     signOut({ redirect: true, callbackUrl: '/' })
   }
   return (

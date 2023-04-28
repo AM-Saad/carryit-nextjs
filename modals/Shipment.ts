@@ -15,7 +15,7 @@ export interface ShipmentPayload {
         is_villa?: boolean
 
     };
-    items:{itemId:string,name:string, price:number, quantity:number}[]
+    items: { itemId: string, name: string, price: number, quantity: number }[]
     quantity: number;
     is_fragile: boolean;
     is_liquid: boolean;
@@ -28,7 +28,9 @@ export interface ShipmentPayload {
     status?: ShipmentStatus,
     shipmentNo?: string,
     total_cost: number,
-    discount:number
+    discount: number
+    canceled?: { status: boolean, reason: string },
+
 }
 
 
@@ -41,6 +43,16 @@ export enum ShipmentStatus {
     Delivered = 5,
     Canceled = 6,
 }
+
+export const SHIPMENT_STATUS_LABELS = new Map<ShipmentStatus, string>([
+    [ShipmentStatus.Pending, "Pending"],
+    [ShipmentStatus.Confirmed, "Confirmed"],
+    [ShipmentStatus.Preparing, "Preparing"],
+    [ShipmentStatus.Ready, "Ready"],
+    [ShipmentStatus.Shipped, "Shipped"],
+    [ShipmentStatus.Delivered, "Delivered"],
+    [ShipmentStatus.Canceled, "Canceled"],
+]);
 
 
 
