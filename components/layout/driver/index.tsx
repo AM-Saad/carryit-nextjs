@@ -1,17 +1,17 @@
-import { INTERNAL_DRIVERS_ROUTE, INTERNAL_SHIPMENTS_ROUTE, INTERNAL_VEHICLES_ROUTE } from "@/lib/constants";
+import { FADE_IN_ANIMATION_SETTINGS, INTERNAL_DRIVERS_ROUTE, INTERNAL_SHIPMENTS_ROUTE, INTERNAL_VEHICLES_ROUTE } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode, useEffect, useContext } from "react";
 import DriverContext from '@/stores/driver'
 import useScroll from "@/lib/hooks/use-scroll";
-import Meta from "./meta";
+import Meta from "../meta";
 import { useRouter } from "next/router";
+import UserDropdown from "./user-dropdown";
 
 const links = [
-  { href: INTERNAL_DRIVERS_ROUTE, name: 'Drivers', icon: '' },
-  { href: INTERNAL_VEHICLES_ROUTE, name: 'Vehicles', icon: '' },
-  { href: INTERNAL_SHIPMENTS_ROUTE, name: 'Shipments', icon: '' },
+
+  { href: '/driver/shipments', name: 'Shipments', icon: '' },
   { href: '/admin/settings', name: 'Setting', icon: '' }
 ]
 
@@ -73,7 +73,21 @@ const Layout = ({ meta, children }: Props) => {
             ></Image>
           </Link>
 
-
+          <div>
+            <AnimatePresence>
+              {!driver ? (
+                <motion.button
+                  className="rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
+                  onClick={() => {}}
+                  {...FADE_IN_ANIMATION_SETTINGS}
+                >
+                  Sign In
+                </motion.button>
+              ) : (
+                <UserDropdown driver={driver}/>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
       {/*  Main content goes here */}
