@@ -38,21 +38,6 @@ const Layout = ({ meta, children }: Props) => {
 
 
 
-  useEffect(() => {
-    const token = localStorage.getItem('didjwt')
-    if (!token && router.pathname !== '/driver/login') {
-      router.push('/')
-    }
-    if (token && router.pathname === '/driver/login') {
-      router.push('/driver/dashboard')
-
-    }
-    if (token) {
-      console.log(token)
-      getDriver();
-
-    }
-  }, []);
   return (
     <>
       <Meta {...meta} />
@@ -78,13 +63,13 @@ const Layout = ({ meta, children }: Props) => {
               {!driver ? (
                 <motion.button
                   className="rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
-                  onClick={() => {}}
+                  onClick={() => { }}
                   {...FADE_IN_ANIMATION_SETTINGS}
                 >
                   Sign In
                 </motion.button>
               ) : (
-                <UserDropdown driver={driver}/>
+                <UserDropdown driver={driver} />
               )}
             </AnimatePresence>
           </div>
@@ -106,8 +91,10 @@ const Layout = ({ meta, children }: Props) => {
           }
         </div>
         <div className='rounded md:w-8/12 w-full p-3 xl:p-5 h-full'>
+          {!driverMeta.loading && <div>
 
-          {children}
+            {children}
+          </div>}
         </div>
       </main>
 

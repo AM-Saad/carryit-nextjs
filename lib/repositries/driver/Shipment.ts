@@ -16,7 +16,7 @@ export default class ShipmentRepository {
     fetch_shipments: () => Promise<Response<Shipment[]>> = async () => {
 
         try {
-            const response:Response<Shipment[]> = await fetcher(DRIVER_SHIPMENTS_ROUTE, {
+            const response: Response<Shipment[]> = await fetcher(DRIVER_SHIPMENTS_ROUTE, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${this.getToken()}`,
@@ -34,26 +34,28 @@ export default class ShipmentRepository {
 
         }
     }
-fetch_shipment: (id: string) => Promise<Response<Shipment>> = async (id) => {
-    try {
-        const response:Response<Shipment> = await fetcher(`${DRIVER_SHIPMENTS_ROUTE}/${id}`, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${this.getToken()}`,
-                "Content-Type": "application/json"
+    fetch_shipment: (id: string) => Promise<Response<Shipment>> = async (id) => {
+        try {
+            const response: Response<Shipment> = await fetcher(`${DRIVER_SHIPMENTS_ROUTE}/${id}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            });
+            return response
+
+        } catch (error: any) {
+            return {
+                message: error.message,
+                status: Status.UNEXPECTED_ERROR,
+                items: []
             }
-        });
-        return response
 
-    } catch (error: any) {
-        return {
-            message: error.message,
-            status: Status.UNEXPECTED_ERROR,
-            items: []
         }
-
     }
-}
+
+
 
 
 

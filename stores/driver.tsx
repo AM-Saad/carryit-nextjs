@@ -10,7 +10,7 @@ import { Shipment } from '@/modals/Shipment';
 
 const DriverContext = React.createContext<DriverContext>({
 
-    driverMeta: { loading: false, error: null },
+    driverMeta: { loading: true, error: null },
     driver: null,
     fetch_driver: () => Promise.resolve() as any,
 
@@ -30,7 +30,7 @@ const DriverContext = React.createContext<DriverContext>({
 
 export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (props) => {
 
-    const [driverMeta, setDriverMeta] = useState<Meta>({ loading: false, error: null })
+    const [driverMeta, setDriverMeta] = useState<Meta>({ loading: true, error: null })
 
     const [fetchMeta, setFetchMeta] = useState<Meta>({ loading: true, error: null })
     const [updateMeta, setUpdateMeta] = useState<Meta>({ loading: false, error: null })
@@ -53,7 +53,8 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
             }
 
             localStorage.setItem('didjwt', response.items.token)
-            router.push('/driver/dashboard')
+            localStorage.removeItem('uidjwt')
+            router.reload()
             return
         } catch (error) {
             toast.error('Something went wrong')
@@ -66,15 +67,19 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
         try {
             const response = await sharedRepository.fetch_driver()
             if (response.status !== Status.SUCCESS) {
-                toast.error(response.message)
+                setDriverMeta({ loading: false, error: { message: response.message, code: response.status } })
+                toast[response.status != Status.UNEXPECTED_ERROR ? 'info' : 'error'](response.message)
+                router.push('/driver/login')
+                
+                
                 return
             }
+            setDriverMeta({ loading: false, error: null })
             const admin = response.items
             setDriver(admin)
         } catch (error) {
             toast.error('Something went wrong')
         }
-        setDriverMeta({ loading: false, error: null })
     }
 
 
@@ -121,9 +126,19 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
     }
 
 
-    useEffect(() => {
 
-    }, [])
+    useEffect(() => {
+        const token = localStorage.getItem('didjwt')
+        if (!token) {
+            router.push('/driver/login')
+        }
+        if (token && router.pathname === '/driver/login') {
+            router.push('/driver/dashboard')
+
+        }
+        fetch_driver();
+
+    }, []);
 
     const userCtx = {
         driverMeta,

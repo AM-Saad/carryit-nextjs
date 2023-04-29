@@ -15,7 +15,8 @@ export default function UserDropdown() {
   if (!email) return null;
 
   const sign_out = () => {
-    localStorage.removeItem('didjwt')
+    localStorage.removeItem('uidjwt')
+    signOut({ redirect: true, callbackUrl: '/' })
   }
   return (
     <motion.div

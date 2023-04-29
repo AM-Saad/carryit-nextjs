@@ -8,6 +8,7 @@ import { useEffect, useState, useContext } from 'react'
 import { shipmentRepository } from '@/lib/repositries/admin'
 import MultiSelect from '@/components/shared/MultiSelect'
 import AdminContext from '@/stores/admin'
+import ChangeStatus from './ChangeStatus'
 
 interface Props {
   shipment: Shipment,
@@ -85,6 +86,7 @@ const ShipmentFrom: React.FC<Props> = ({ shipment, onUpdate, loading, onDelete }
           <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
             <ConfirmDeleteItem label='Shipment' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
           </Modal>
+          <ChangeStatus />
 
         </div>
 

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react';
-import prisma from '../../../../lib/prisma'
+import prisma from '@/lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
 import { authMiddleware, Token } from '@/middleware/auth';
@@ -61,7 +61,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
             const receiverQuery = query.receiver
 
             delete query.receiver
-            const item = await prisma.shipment.updateMany({
+          await prisma.shipment.updateMany({
                 where: {
                     id: id,
                     adminId: token!.adminId!

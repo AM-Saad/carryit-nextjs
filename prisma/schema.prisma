@@ -209,6 +209,11 @@ type ShipmentsReceiver {
   is_villa  Boolean?
 }
 
+type Cancled {
+  status Boolean @default(false)
+  reason String?
+}
+
 model Shipment {
   id            String             @id @default(auto()) @map("_id") @db.ObjectId
   createdAt     DateTime           @db.Date
@@ -231,6 +236,7 @@ model Shipment {
   discount      Int?               @default(0)
   company       Company?           @relation(fields: [companyId], references: [id])
   companyId     String?            @map("company") @db.ObjectId
+  canceled      Cancled?
 }
 
 type Items {
