@@ -6,7 +6,6 @@ import DriverContext from '@/stores/driver'
 const Login = () => {
 
   const { authenticate, driverMeta } = useContext(DriverContext)
-
   return (
     <Layout>
       <div>

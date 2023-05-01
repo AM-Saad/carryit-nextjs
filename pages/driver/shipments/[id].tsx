@@ -7,7 +7,6 @@ import Loading from '@/components/shared/Loading'
 import FetchError from '@/components/shared/Error'
 import { ShipmentStatus, getShipmentStatus, getShipmentStatusColor } from '@/modals/Shipment'
 import Button from '@/components/shared/Button'
-import {  } from 'lucide-react'
 
 const Shipment = () => {
     const router = useRouter()
@@ -42,7 +41,7 @@ const Shipment = () => {
                         </div>
                         <div className='flex items-center gap-3'>
                             <button className='btn btn-primary'>Print</button>
-                            <Button title='Start Trip' disabled={currentItem.status !== ShipmentStatus.Ready} onClick={() => { }} />
+                            <Button title='Start Trip' disabled={currentItem.status !== ShipmentStatus.Ready} onClick={() => { router.push(`/driver/shipments/trip/${id}`)  }} />
                         </div>
                     </div>
                     <div className='grid grid-cols-3 gap-5 my-5'>

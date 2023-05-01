@@ -27,13 +27,7 @@ interface Props {
 const Layout = ({ meta, children }: Props) => {
   const scrolled = useScroll(50);
 
-  const { driver, fetch_driver, driverMeta } = useContext(DriverContext)
-  const router = useRouter()
-
-  const getDriver = async () => {
-    await fetch_driver()
-  }
-
+  const { driver, driverMeta } = useContext(DriverContext)
 
 
 
@@ -91,10 +85,9 @@ const Layout = ({ meta, children }: Props) => {
           }
         </div>
         <div className='rounded md:w-8/12 w-full p-3 xl:p-5 h-full'>
-          {!driverMeta.loading && <div>
-
-            {children}
-          </div>}
+            <div>
+              {children}
+            </div>
         </div>
       </main>
 
