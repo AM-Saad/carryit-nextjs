@@ -54,7 +54,6 @@ export default function MyApp({
   );
 
   // conditionally wrap Component with DriverContextProvider
-  console.log(router)
   if (router.pathname.includes('driver') && !router.pathname.includes('admin')) {
     contextProvider = (
       <DriverContextProvider>

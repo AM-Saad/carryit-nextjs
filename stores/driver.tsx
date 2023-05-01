@@ -30,7 +30,7 @@ const DriverContext = React.createContext<DriverContext>({
 
 export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (props) => {
 
-    const [driverMeta, setDriverMeta] = useState<Meta>({ loading: true, error: null })
+    const [driverMeta, setDriverMeta] = useState<Meta>({ loading: false, error: null })
 
     const [fetchMeta, setFetchMeta] = useState<Meta>({ loading: true, error: null })
     const [updateMeta, setUpdateMeta] = useState<Meta>({ loading: false, error: null })
@@ -54,7 +54,8 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
 
             localStorage.setItem('didjwt', response.items.token)
             localStorage.removeItem('uidjwt')
-            router.reload()
+            router.push('/driver/dashboard')
+
             return
         } catch (error) {
             toast.error('Something went wrong')
@@ -66,11 +67,11 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
         setDriverMeta({ loading: true, error: null })
         try {
             const response = await sharedRepository.fetch_driver()
+            console.log(response)
             if (response.status !== Status.SUCCESS) {
                 setDriverMeta({ loading: false, error: { message: response.message, code: response.status } })
                 toast[response.status != Status.UNEXPECTED_ERROR ? 'info' : 'error'](response.message)
                 router.push('/driver/login')
-                
                 
                 return
             }
@@ -129,15 +130,12 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
 
     useEffect(() => {
         const token = localStorage.getItem('didjwt')
-        if (!token) {
-            router.push('/driver/login')
+        if(!token){
+            router.push(('/driver/login'))
         }
-        if (token && router.pathname === '/driver/login') {
-            router.push('/driver/dashboard')
-
+        if(token){
+            fetch_driver()
         }
-        fetch_driver();
-
     }, []);
 
     const userCtx = {
