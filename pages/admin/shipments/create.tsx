@@ -1,22 +1,19 @@
 import React, { useState } from 'react'
-import ToggleBtn from '@/components/shared/ToggleBtn'
-
 import { ShipmentPayload } from '@/modals/Shipment'
-import Input from '@/components/shared/Input'
 import Layout from '@/components/layout'
 import { shipmentRepository } from '@/lib/repositries/admin'
-import Button from '@/components/shared/Button'
 import { Formik } from 'formik'
 import * as Yup from "yup";
 import { Status } from '@/shared/modals/Response'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
-import FormikInput from '@/components/shared/FormikInput'
-
 import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
+import loadable from "@loadable/component"
 
-
-
+const ToggleBtn = loadable(() => import("@/components/shared/ToggleBtn"))
+const Input = loadable(() => import("@/components/shared/Input"))
+const Button = loadable(() => import("@/components/shared/Button"))
+const FormikInput = loadable(() => import("@/components/shared/FormikInput"))
 
 
 const Create: React.FC = () => {
