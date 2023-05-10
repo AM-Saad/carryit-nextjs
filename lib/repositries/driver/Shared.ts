@@ -14,7 +14,7 @@ export default class SharedRepository {
 
     }
 
-    login: (phone: string, password: string) => Promise<Response> = async (phone, password) => {
+    login: (phone: string, password: string) => Promise<Response<any>> = async (phone, password) => {
         try {
             const response = await fetcher(`/api/driver/login`, {
                 method: "POST",
@@ -28,7 +28,7 @@ export default class SharedRepository {
 
         }
     }
-    fetch_driver: () => Promise<Response> = async () => {
+    fetch_driver: () => Promise<Response<any>> = async () => {
         try {
             const response = await fetcher(`/api/driver/`, {
                 method: "GET",

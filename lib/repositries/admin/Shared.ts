@@ -13,7 +13,7 @@ export default class SharedRepository {
         
     }
 
-    login: (email: string) => Promise<Response> = async (email) => {
+    login: (email: string) => Promise<Response<any>> = async (email) => {
         try {
             const response = await fetcher(`/api/admin/login`, {
                 method: "POST",
@@ -31,7 +31,7 @@ export default class SharedRepository {
 
         }
     }
-    fetch_admin: () => Promise<Response> = async () => {
+    fetch_admin: () => Promise<Response<any>> = async () => {
         try {
             const response = await fetcher(`/api/admin/`, {
                 method: "GET",
@@ -49,7 +49,7 @@ export default class SharedRepository {
 
         }
     }
-    create_admin: (email: string, name: string) => Promise<Response> = async (email, name) => {
+    create_admin: (email: string, name: string) => Promise<Response<any>> = async (email, name) => {
         try {
 
             const response = await fetcher(`/api/admin/register`, {
@@ -70,7 +70,7 @@ export default class SharedRepository {
 
     }
 
-    login_admin: (email: string,) => Promise<Response> = async (email) => {
+    login_admin: (email: string,) => Promise<Response<any>> = async (email) => {
 
         try {
             const response = await fetcher(`/api/admin/login`, {
@@ -90,7 +90,7 @@ export default class SharedRepository {
 
     }
 
-    update_documents: (id: string, tag: string, type: string, files: any) => Promise<Response> = async (id, tag, type, files) => {
+    update_documents: (id: string, tag: string, type: string, files: any) => Promise<Response<any>> = async (id, tag, type, files) => {
         const form = new FormData()
         for (const img of files) {
             form.append('images', img.image)
@@ -113,7 +113,7 @@ export default class SharedRepository {
 
         }
     }
-    delete_document: (id: string, tag: string, type: string, imageId: string) => Promise<Response> = async (id, tag, type, imageId) => {
+    delete_document: (id: string, tag: string, type: string, imageId: string) => Promise<Response<any>> = async (id, tag, type, imageId) => {
         try {
             const response = await fetcher(`/api/admin/documents/${id}?type=${type}&&tag=${tag}&&imageId=${imageId}`, {
                 method: 'POST',

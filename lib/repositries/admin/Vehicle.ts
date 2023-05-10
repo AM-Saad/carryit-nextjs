@@ -11,7 +11,7 @@ export default class ShipmentRepository {
         return window.localStorage.getItem('uidjwt')
         
     }
-    fetch_vehicles: () => Promise<Response> = async () => {
+    fetch_vehicles: () => Promise<Response<any>> = async () => {
         try {
             const response = await fetcher(VEHICLES_ROUTE,{
                 method: 'GET',
@@ -31,7 +31,7 @@ export default class ShipmentRepository {
 
         }
     }
-    fetch_vehicle: (id: string) => Promise<Response> = async (id) => {
+    fetch_vehicle: (id: string) => Promise<Response<any>> = async (id) => {
         try {
             const response = await fetcher(`${VEHICLES_ROUTE}/${id}`,{
                 method: 'GET',
@@ -51,7 +51,7 @@ export default class ShipmentRepository {
 
         }
     }
-    create_vehicle: (data: VehiclePayload) => Promise<Response> = async (data) => {
+    create_vehicle: (data: VehiclePayload) => Promise<Response<any>> = async (data) => {
         try {
             const response = await fetcher(VEHICLES_ROUTE, {
                 method: 'POST',
@@ -71,7 +71,7 @@ export default class ShipmentRepository {
 
         }
     }
-    delete_vehicle: (id: string) => Promise<Response> = async (id) => {
+    delete_vehicle: (id: string) => Promise<Response<any>> = async (id) => {
         try {
             const response = await fetcher(`${VEHICLES_ROUTE}/${id}`, {
                 method: 'DELETE',
@@ -90,7 +90,7 @@ export default class ShipmentRepository {
 
         }
     }
-    update_partial_vehicle: (id: string, data: any) => Promise<Response> = async (id, data) => {
+    update_partial_vehicle: (id: string, data: any) => Promise<Response<any>> = async (id, data) => {
         try {
             const response = await fetcher(`${VEHICLES_ROUTE}/${id}`, {
                 method: 'PATCH',
