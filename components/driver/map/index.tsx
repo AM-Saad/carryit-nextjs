@@ -60,8 +60,8 @@ const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
 
 
 
-    const hasError = (erro: any) => {
-        console.log(erro)
+    const hasError = (error: any) => {
+        console.log(error)
     }
 
 

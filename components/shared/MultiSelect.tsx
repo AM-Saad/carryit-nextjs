@@ -107,7 +107,7 @@ const MultiSelect: React.FC<Props> = ({ options, multiple, closeOnSelect, placeh
         document.addEventListener('mousedown', closeList)
 
         return () => document.removeEventListener('mousedown', closeList)
-    }, [refresh]);
+    }, [preSelected]);
 
 
     return (
