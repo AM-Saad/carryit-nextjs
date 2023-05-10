@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import Link from 'next/link';
 import Image from "next/image";
 import { useSession } from "next-auth/react";
@@ -14,14 +14,11 @@ import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
 const Shipments = () => {
   const { data: session } = useSession()
 
-
   const { fetcher, fetchMeta, currentItems } = useContext(AdminContext);
   const { loading, error } = fetchMeta
 
   const fetch_data = async () => {
-
     await fetcher(shipmentRepository.fetch_shipments(), true)
-
   }
   useEffect(() => {
     if (session) {

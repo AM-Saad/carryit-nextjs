@@ -11,9 +11,10 @@ interface Props {
     handleBlur?: any,
     hasError?: boolean | undefined | any,
     error?: string
+    defaultValue?: string
 }
 
-const Input: React.FC<Props> = ({ label, id, onChange, type, placeholder, value, handleBlur, hasError, error, onKeydown }) => {
+const Input: React.FC<Props> = ({ label, id, onChange, type, placeholder, value, handleBlur, hasError, error, onKeydown,defaultValue }) => {
 
     return (
         <div className="my-2 w-full">
@@ -27,6 +28,7 @@ const Input: React.FC<Props> = ({ label, id, onChange, type, placeholder, value,
                 value={value}
                 onBlur={handleBlur}
                 type={type ? type : 'text'}
+                defaultValue={defaultValue}
 
             />
             {hasError &&

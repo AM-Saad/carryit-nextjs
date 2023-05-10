@@ -16,7 +16,8 @@ const Shipment = () => {
     const { loading, error } = fetchMeta
 
     const fetch_data = async () => {
-        await fetcher(shipmentRepository.fetch_shipment(id), false)
+        const res = await fetcher(shipmentRepository.fetch_shipment(id), false)
+       
     }
 
 
@@ -26,6 +27,13 @@ const Shipment = () => {
         }
     }, [id]);
 
+    useEffect(() => {
+        if (currentItem) {
+            if(currentItem.status === ShipmentStatus.Shipped){
+                router.push(`/driver/shipments/trip/${id}`)
+            }
+        }
+    }, [currentItem]);
 
     return (
         <Layout>
@@ -41,7 +49,7 @@ const Shipment = () => {
                         </div>
                         <div className='flex items-center gap-3'>
                             <button className='btn btn-primary'>Print</button>
-                            <Button title='Start Trip' disabled={currentItem.status !== ShipmentStatus.Ready} onClick={() => { router.push(`/driver/shipments/trip/${id}`)  }} />
+                            <Button title='Start Trip' disabled={currentItem.status !== ShipmentStatus.Ready} onClick={() => { router.push(`/driver/shipments/trip/${id}`) }} />
                         </div>
                     </div>
                     <div className='grid grid-cols-3 gap-5 my-5'>
