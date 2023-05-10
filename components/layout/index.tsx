@@ -43,11 +43,13 @@ const Layout = ({ meta, children }: Props) => {
 
   useEffect(() => {
     const token = localStorage.getItem('uidjwt')
-    if (!token) {
+    if (!token && !router.pathname.includes('user')) {
       router.push('/')
       return
     }
-    getAdmin();
+    if(token){
+      getAdmin();
+    }
   }, []);
   return (
     <>
@@ -91,8 +93,8 @@ const Layout = ({ meta, children }: Props) => {
       </div>
       {/*  Main content goes here */}
       <main className="sm:flex gap-10 min-h-[93vh] pt-32 w-full">
-        <div className="bg-gray-50 sm:w-40 p-3 my-1">
-          {admin &&
+      {admin && router.pathname.includes('admin') && <div className="bg-gray-50 sm:w-40 p-3 my-1">
+         
             <ul className="flex sm:flex-col gap-5 justify-between">
               {links.map((link: any) =>
                 <>
@@ -102,9 +104,8 @@ const Layout = ({ meta, children }: Props) => {
                 </>
               )}
             </ul>
-          }
-        </div>
-        <div className='rounded md:w-8/12 w-full p-3 xl:p-5 h-full'>
+        </div>}
+        <div className='rounded  w-full p-3 xl:p-5 h-full'>
 
           {children}
         </div>

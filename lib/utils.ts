@@ -1,12 +1,12 @@
 import ms from "ms";
-  
+import timeZoneCityToCountry from "./countries.json";
+
 
 
 export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
   if (!timestamp) return "never";
-  return `${ms(Date.now() - new Date(timestamp).getTime())}${
-    timeOnly ? "" : " ago"
-  }`;
+  return `${ms(Date.now() - new Date(timestamp).getTime())}${timeOnly ? "" : " ago"
+    }`;
 };
 
 export async function fetcher<JSON = any>(
@@ -19,7 +19,7 @@ export async function fetcher<JSON = any>(
     const json = await res.json();
     if (json.error) {
       console.log(json)
-      const error = new Error(json.error) as Error & { status: number;};
+      const error = new Error(json.error) as Error & { status: number; };
       error.status = res.status;
       throw error;
     } else {
@@ -65,7 +65,7 @@ export const truncate = (str: string, length: number) => {
 
 
 
-export function setCookie(name:string, value:string, days:number) {
+export function setCookie(name: string, value: string, days: number) {
   var expires = "";
   if (days) {
     var date = new Date();
@@ -75,7 +75,7 @@ export function setCookie(name:string, value:string, days:number) {
   document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 
-export function getCookie(name:string) {
+export function getCookie(name: string) {
   var nameEQ = name + "=";
   var ca = document.cookie.split(';');
   for (var i = 0; i < ca.length; i++) {
@@ -84,4 +84,21 @@ export function getCookie(name:string) {
     if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
   }
 }
-  
+
+
+export function userLocationInfo() {
+  let userRegion:any
+  let userCity:string
+  let userCountry:any
+  let userTimeZone:any
+
+  if (Intl) {
+    userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    let tzArr = userTimeZone.split("/");
+    userRegion = tzArr[0];
+    userCity = tzArr[tzArr.length - 1];
+    userCountry = timeZoneCityToCountry[userCity];
+  }
+
+  return { userRegion, userCity, userCountry, userTimeZone }
+}

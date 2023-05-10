@@ -26,6 +26,7 @@ interface Props {
 
 const Layout = ({ meta, children }: Props) => {
   const scrolled = useScroll(50);
+  const router = useRouter()
 
   const { driver, driverMeta } = useContext(DriverContext)
 
@@ -71,8 +72,8 @@ const Layout = ({ meta, children }: Props) => {
       </div>
       {/*  Main content goes here */}
       <main className="sm:flex gap-10 min-h-[93vh] pt-32 w-full">
-        <div className="bg-gray-50 sm:w-40 p-3 my-1">
-          {driver &&
+        {(driver && !router.pathname.includes('trip')) &&
+          <div className="bg-gray-50 sm:w-40 p-3 my-1">
             <ul className="flex sm:flex-col gap-5 justify-between">
               {links.map((link: any) =>
                 <>
@@ -82,12 +83,13 @@ const Layout = ({ meta, children }: Props) => {
                 </>
               )}
             </ul>
-          }
-        </div>
+          </div>
+        }
+
         <div className='rounded md:w-8/12 w-full p-3 xl:p-5 h-full'>
-            <div>
-              {children}
-            </div>
+          <div>
+            {children}
+          </div>
         </div>
       </main>
 
