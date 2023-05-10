@@ -111,7 +111,7 @@ const Layout = ({ meta, children }: Props) => {
         </div>
       </main>
 
-      <div className="absolute w-full border-t border-gray-200 bg-white py-5 text-center">
+      <div className="absolute w-full border-t border-gray-200 bg-white py-3 text-center">
         <p className="text-gray-500">
           Provided by{" "}
           <a
