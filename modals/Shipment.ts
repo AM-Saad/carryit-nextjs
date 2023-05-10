@@ -15,7 +15,7 @@ export interface ShipmentPayload {
         is_villa?: boolean
 
     };
-    items: { itemId: string, name: string, price: number, quantity: number }[]
+    items?: { itemId?: string, name?: string, price?: number, quantity?: number }[]
     quantity: number;
     is_fragile: boolean;
     is_liquid: boolean;
@@ -27,8 +27,8 @@ export interface ShipmentPayload {
     driverId?: string,
     status?: ShipmentStatus,
     shipmentNo?: string,
-    total_cost: number,
-    discount: number
+    total_cost?: number,
+    discount?: number
     canceled?: { status: boolean, reason: string },
 
 }

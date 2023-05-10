@@ -3,6 +3,7 @@
   "author": "Abdelrahman Saad",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,8 +11,9 @@
     "format": "prettier \"**/*.{css,js,json,jsx,ts,tsx}\"",
     "start": "next start",
     "prebuild": "prisma generate",
-    "predev": "prisma generate",
-    "lint": "next lint"
+    "lint": "eslint",
+    "lint:fix": "yarn lint -- --fix",
+    "prepare-husky": "husky install"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.13",
@@ -70,6 +72,7 @@
     "autoprefixer": "^10.4.13",
     "commitizen": "^4.3.0",
     "concurrently": "^7.6.0",
+    "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
     "postcss": "^8.4.21",
     "prettier": "^2.8.8",

@@ -81,7 +81,7 @@ const Create: React.FC = () => {
         const response = await shipmentRepository.create_shipment(payload)
         setLoading(false)
         if (response.status === Status.SUCCESS) {
-            return router.push(`${INTERNAL_SHIPMENTS_ROUTE}/${response.items.id}`)
+            return router.push(`${INTERNAL_SHIPMENTS_ROUTE}/${response.items}`)
         }
         toast.error(response.message)
 
