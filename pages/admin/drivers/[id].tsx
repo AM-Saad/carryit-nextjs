@@ -1,8 +1,8 @@
 import Layout from '@/components/layout'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect,useCallback  } from 'react'
 import { useRouter } from 'next/router'
 import DriverFrom from '@/components/admin/driver'
-import  { Status } from '@/shared/modals/Response'
+import { Status } from '@/shared/modals/Response'
 import { driverRepository } from '@/lib/repositries/admin'
 import FetchError from '@/components/shared/Error'
 import Loading from '@/components/shared/Loading'
@@ -13,13 +13,13 @@ import { INTERNAL_DRIVERS_ROUTE } from '@/lib/constants'
 const Driver = () => {
   const router = useRouter()
   const { id } = router.query as { id: string }
-  const { fetcher, fetchMeta, currentItem,updater, updateMeta, remover } = useContext(AdminContext);
+  const { fetcher, fetchMeta, currentItem, updater, updateMeta, remover } = useContext(AdminContext);
   const { loading, error } = fetchMeta
 
 
-  const fetch_data = async () => {
+  const fetch_data = useCallback(async () => {
     await fetcher(driverRepository.fetch_driver(id), false)
-  }
+  },[])
 
 
   const update_partial_driver = async (data: any) => {
@@ -38,7 +38,7 @@ const Driver = () => {
   useEffect(() => {
     if (id)
       fetch_data()
-  }, [id])
+  }, [id, fetch_data])
 
   return (
     <Layout>
