@@ -11,6 +11,11 @@ import Loading from '@/components/shared/Loading';
 import AdminContext from '@/stores/admin';
 import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
 
+
+
+const imageLoader = ({ src, width, quality }: any) => {
+  return `https://carryit-nextjs.vercel.app/${src}?w=${width}&q=${quality || 75}`;
+};
 const Shipments = () => {
   const { data: session } = useSession()
 
@@ -38,10 +43,11 @@ const Shipments = () => {
           <>
             <h1 className='text-xl font-medium mb-5 flex items-center gap-3'>
               <Image
+                loader={imageLoader}
                 src='/package.png '
                 alt='Shipments'
-                width='20'
-                height='20'
+                width={20}
+                height={20}
               />
               Your Shipments
             </h1>
