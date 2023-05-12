@@ -1,12 +1,10 @@
 import Layout from '@/components/layout'
-import React, { useContext, useEffect,useCallback  } from 'react'
+import React, { useContext, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import DriverFrom from '@/components/admin/driver'
-import { Status } from '@/shared/modals/Response'
 import { driverRepository } from '@/lib/repositries/admin'
 import FetchError from '@/components/shared/Error'
 import Loading from '@/components/shared/Loading'
-import { toast } from "react-toastify";
 import AdminContext from '@/stores/admin'
 import { INTERNAL_DRIVERS_ROUTE } from '@/lib/constants'
 
@@ -19,7 +17,7 @@ const Driver = () => {
 
   const fetch_data = useCallback(async () => {
     await fetcher(driverRepository.fetch_driver(id), false)
-  },[])
+  }, [])
 
 
   const update_partial_driver = async (data: any) => {
@@ -43,15 +41,17 @@ const Driver = () => {
   return (
     <Layout>
 
-      {loading && <Loading />}
-      {error && !loading && <FetchError reload={fetch_data} error={error} />}
+      {(loading && !error) && <Loading />}
+      {(error && !loading )&& <FetchError reload={fetch_data} error={error} />}
 
-      {!loading && currentItem && <DriverFrom
-        driver={currentItem}
-        onUpdate={update_partial_driver}
-        loading={updateMeta.loading}
-        onDelete={delete_driver}
-      />}
+      {(!loading && currentItem) &&
+        <DriverFrom
+          driver={currentItem}
+          onUpdate={update_partial_driver}
+          loading={updateMeta.loading}
+          onDelete={delete_driver}
+        />
+        }
 
     </Layout>
   )

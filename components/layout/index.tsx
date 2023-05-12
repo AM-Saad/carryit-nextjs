@@ -47,9 +47,8 @@ const Layout = ({ meta, children }: Props) => {
       router.push('/')
       return
     }
-    if(token){
-      getAdmin();
-    }
+    token && getAdmin();
+
   }, []);
   return (
     <>
@@ -92,20 +91,20 @@ const Layout = ({ meta, children }: Props) => {
         </div>
       </div>
       {/*  Main content goes here */}
-      <main className="sm:flex gap-10 min-h-[93vh] pt-32 w-full">
-      {admin && router.pathname.includes('admin') && <div className="bg-gray-50 sm:w-40 p-3 my-1">
-         
-            <ul className="flex sm:flex-col gap-5 justify-between">
-              {links.map((link: any) =>
-                <>
-                  <li className="sm:mb-5">
-                    <Link href={link.href}>{link.name}</Link>
-                  </li>
-                </>
-              )}
-            </ul>
+      <main className="sm:flex gap-5 min-h-[93vh] pt-20 w-full">
+        {admin && router.pathname.includes('admin') && <div className=" p-3 my-1 mb-5 sm:mb-0 border rounded-tr-lg w-40">
+
+          <ul className="flex sm:flex-col gap-5 justify-between">
+            {links.map((link: any) =>
+              <>
+                <li className="sm:mb-5">
+                  <Link href={link.href}>{link.name}</Link>
+                </li>
+              </>
+            )}
+          </ul>
         </div>}
-        <div className='rounded  w-full p-3 xl:p-5 h-full'>
+        <div className='rounded w-full xl:p-5 h-full'>
 
           {children}
         </div>

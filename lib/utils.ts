@@ -1,5 +1,5 @@
 import ms from "ms";
-import timeZoneCityToCountry from "./countries.json";
+import timeZoneCityToCountry  from "./countries.json"
 
 
 
@@ -88,16 +88,17 @@ export function getCookie(name: string) {
 
 export function userLocationInfo() {
   let userRegion:any
-  let userCity:string
+  let userCity:any
   let userCountry:any
   let userTimeZone:any
+  const countries:any = timeZoneCityToCountry
 
   if (Intl) {
     userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     let tzArr = userTimeZone.split("/");
     userRegion = tzArr[0];
     userCity = tzArr[tzArr.length - 1];
-    userCountry = timeZoneCityToCountry[userCity];
+    userCountry = countries[userCity];
   }
 
   return { userRegion, userCity, userCountry, userTimeZone }

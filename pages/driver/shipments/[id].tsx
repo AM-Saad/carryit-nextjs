@@ -73,12 +73,12 @@ const Shipment = () => {
                                 <p>Is Fragile: : {currentItem.is_fragile ? 'Yes' : 'No'}</p>
                             </div>
                             <div className='flex flex-col gap-3'>
-                                {currentItem.items.map(item =>
+                                {currentItem.items?.map(item =>
                                     <div key={item.itemId} className='p-2 bg-gray-50 rounded text-xs'>
                                         <p className='mb-2'>Item Name: {item.name}</p>
                                         <p className='mb-2'>Item Price: {item.price}$</p>
                                         <p className='mb-3'>Item Quantity: {item.quantity}</p>
-                                        <p className='font-medium'>Total: {item.price * item.quantity}$</p>
+                                        <p className='font-medium'>Total: {(item.price || 0) * (item.quantity || 0)}$</p>
                                     </div>
                                 )}
 
@@ -91,11 +91,11 @@ const Shipment = () => {
                     <div className='mt-4'>
                         <h2 className='mb-4 font-medium'>Shipping Info</h2>
                         <div className='flex flex-col gap-3 text-xs'>
-                            <p>Total: {currentItem.total_cost - currentItem.shipping_cost}$</p>
+                            <p>Total: {(currentItem.total_cost || 0 - currentItem.shipping_cost)}$</p>
                             <p>Discount: {currentItem.discount}$</p>
                             <p>Shipping Cost: {currentItem.shipping_cost}$</p>
 
-                            <p className='font-medium text-md'>Grand Total: {currentItem.total_cost - currentItem.discount}$</p>
+                            <p className='font-medium text-md'>Grand Total: {(currentItem.total_cost || 0) -( currentItem.discount || 0)}$</p>
 
 
 

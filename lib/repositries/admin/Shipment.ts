@@ -76,9 +76,9 @@ export default class ShipmentRepository {
         }
     }
 
-    create_shipment: (data: any) => Promise<Shipment> = async (data) => {
+    create_shipment: (data: any) => Promise<Response<Shipment>> = async (data) => {
         try {
-            const response = await fetcher(`${SHIPMENTS_ROUTE}/create`, {
+            const response:Response<Shipment> = await fetcher(`${SHIPMENTS_ROUTE}/create`, {
                 method: 'POST',
                 body: JSON.stringify({ values: data }),
                 headers: {
