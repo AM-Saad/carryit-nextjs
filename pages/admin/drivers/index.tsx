@@ -38,7 +38,7 @@ const Drivers = () => {
           <>
             <h1 className='text-xl font-medium mb-5 flex items-center gap-3'>
               <Image
-                src='/driver.png '
+                src='/driver.png'
                 alt='Drivers'
                 width='35'
                 height='35'

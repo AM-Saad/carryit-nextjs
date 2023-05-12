@@ -9,7 +9,7 @@ import { DRIVER_SHIPMENTS_ROUTE } from "@/lib/constants";
 
 const AnyReactComponent = ({ text }: any) => <>
     <Image
-        src='/convertiblecar.png '
+        src='/convertiblecar.png'
         alt='Drivers'
         width='45'
         height='45'

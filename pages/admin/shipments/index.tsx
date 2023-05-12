@@ -44,7 +44,7 @@ const Shipments = () => {
             <h1 className='text-xl font-medium mb-5 flex items-center gap-3'>
               <Image
                 loader={imageLoader}
-                src='/package.png '
+                src='/package.png'
                 alt='Shipments'
                 width={20}
                 height={20}
