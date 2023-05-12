@@ -1,5 +1,7 @@
 // API key from: https://console.cloud.google.com/google/maps-apis
-const API_KEY =  process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!
+
+const API_KEY =  process.env.NEXT_PUBLIC_GOOGLE_KEY!
+
 const CALLBACK_NAME = "gmapsCallback";
 
 

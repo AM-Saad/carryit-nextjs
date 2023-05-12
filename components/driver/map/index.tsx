@@ -126,6 +126,7 @@ const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
                     {!marker && <div className="mt-3 p-2 text-blue-500"> Getting location...</div>}
                     {marker && <GoogleMapReact
                     bootstrapURLKeys={{ key:  process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY! }}
+
                         defaultCenter={marker}
                         defaultZoom={defaultProps.zoom}
 
