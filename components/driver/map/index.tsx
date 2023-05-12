@@ -9,7 +9,7 @@ import { DRIVER_SHIPMENTS_ROUTE } from "@/lib/constants";
 
 const AnyReactComponent = ({ text }: any) => <>
     <Image
-        src='/driver.png '
+        src='/convertiblecar.png '
         alt='Drivers'
         width='45'
         height='45'
@@ -125,7 +125,7 @@ const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
                 <>
                     {!marker && <div className="mt-3 p-2 text-blue-500"> Getting location...</div>}
                     {marker && <GoogleMapReact
-                    bootstrapURLKeys={{ key:  process.env.NEXT_PUBLIC_GOOGLE_KEY! }}
+                    bootstrapURLKeys={{ key:  process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY! }}
                         defaultCenter={marker}
                         defaultZoom={defaultProps.zoom}
 
