@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
 import loadable from "@loadable/component"
+import GooglePlacesAutocomplete from '@/components/shared/PlaceAutoComplete'
 
 const ToggleBtn = loadable(() => import("@/components/shared/ToggleBtn"))
 const Input = loadable(() => import("@/components/shared/Input"))
@@ -30,7 +31,7 @@ const Create: React.FC = () => {
             name: '',
             phone: '',
         },
-        quantity: 0,
+        quantity: 1,
         is_fragile: false,
         is_liquid: false,
         notes: '',
@@ -58,14 +59,19 @@ const Create: React.FC = () => {
 
         }).required("All Receiver info is required"),
         quantity: Yup.number()
-            .required("Quantity is required"),
+            .required("Quantity is required")
+            .min(1, "Quantity must be at least 1"),
         is_fragile: Yup.boolean(),
         is_liquid: Yup.boolean(),
         notes: Yup.string(),
         price: Yup.number()
-            .required("Price is required"),
+            .required("Price is required")
+            .min(0, "Price must be positive")
+        ,
         shipping_cost: Yup.number()
-            .required("Shipping cost is required"),
+            .required("Shipping cost is required")
+            .min(0, "Shipping cost must be positive")
+        ,
         date: Yup.date()
             .default(() => new Date()),
         delivery_date: Yup.date()
@@ -84,6 +90,82 @@ const Create: React.FC = () => {
 
     }
 
+
+    const placeChanged = (place: {
+        lat: number;
+        lng: number;
+        address_components: google.maps.GeocoderAddressComponent[] | undefined;
+    }) => {
+        const componentsToRetrieve = {
+            street_number: "short_name",
+            route: "long_name",
+            locality: "long_name",
+            country: "long_name",
+            postal_code: "short_name",
+        };
+        const result = {
+            street_number: "",
+            route: "",
+            locality: "",
+            country: "",
+            postal_code: "",
+        };
+        if (place.address_components) {
+            for (let i = 0; i < place.address_components.length; i++) {
+                const addressType = place.address_components[i].types[0];
+                if ((componentsToRetrieve as any)[addressType]) {
+                    (result as any)[addressType] = (place.address_components[i] as any)[
+                        (componentsToRetrieve as any)[addressType]
+                    ];
+                }
+            }
+        }
+        const shippingAddress = {
+            streetAddress: `${result.street_number} ${result.route}`,
+            streetAddressBis: "",
+            postalCode: result.postal_code,
+            city: result.locality,
+            // name: this.form.shippingAddress.name,
+        };
+        const autoCompleteAddress = place
+        console.log(shippingAddress)
+        console.log(autoCompleteAddress)
+
+        // this.form.autoCompleteAddress = place;
+    }
+
+    const setCurrentAddress = (val: string) => {
+        const completeAddress = val;
+        console.log(completeAddress)
+    }
+
+    const addressInputChanged = (val: string) => {
+        if (!val || val == "") {
+
+            // this.validation.autoCompleteAddress = true;
+            // this.form.completeAddress = null;
+            // this.form.shippingAddress = {
+            //     streetAddress: "",
+            //     streetAddressBis: "",
+            //     city: "",
+            //     postalCode: "",
+            //     name: this.form.shippingAddress.name,
+            // };
+        }
+
+        const completeAddress = null
+        const autoCompleteAddress = true
+        const shippingAddress = {
+            streetAddress: "",
+            streetAddressBis: "",
+            city: "",
+            postalCode: "",
+            // name: this.form.shippingAddress.name,
+        };
+        console.log(completeAddress)
+        console.log(autoCompleteAddress)
+        console.log(shippingAddress)
+    }
 
     return (
         <Layout>
@@ -119,7 +201,18 @@ const Create: React.FC = () => {
                             <FormikInput label="Shipping Cost" name="shipping_cost" type="number" />
                             <FormikInput label="Quantity" name="quantity" type="number" />
                             <div className='grid md:grid-cols-3 gap-3'>
-                                <FormikInput label="Address" name="receiver.address" />
+                                <div className='my-2'>
+                                    <label htmlFor={"Address"} className='block font-medium text-xs text-gray-700 mb-1'>Address</label>
+
+                                    <GooglePlacesAutocomplete
+                                        onChange={addressInputChanged}
+                                        onInput={placeChanged}
+                                        onCurrentAddress={setCurrentAddress}
+                                        onInit={(e: any) => { console.log(e) }}
+                                    />
+
+                                </div>
+                                {/* <FormikInput label="Address" name="receiver.address" /> */}
                                 <FormikInput label="Building Number" name="receiver.building" type="number" />
                                 <FormikInput label="Floor Number" name="receiver.floor" type="number" />
                                 <FormikInput label="Apartment Number" name="receiver.apartment" type="number" />
@@ -136,6 +229,8 @@ const Create: React.FC = () => {
                                 hasError={errors.notes && touched.notes}
                                 error={errors.notes}
                             />
+
+
                             {/* <div className='mt-3 mb-2'>
                                     <label htmlFor="vehicle_type" className='text-xs font-medium text-gray-600 mr-3 editable-input_label'>Vehicles Type</label>
                                     <MultiSelect

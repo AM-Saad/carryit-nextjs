@@ -117,8 +117,6 @@ const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
 
 
 
-
-
     return (
         // Important! Always set the container height explicitly
         <div style={{ height: '100vh', width: '100%' }}>
@@ -127,7 +125,7 @@ const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
                 <>
                     {!marker && <div className="mt-3 p-2 text-blue-500"> Getting location...</div>}
                     {marker && <GoogleMapReact
-                        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY! }}
+                    bootstrapURLKeys={{ key:  process.env.NEXT_PUBLIC_GOOGLE_KEY! }}
                         defaultCenter={marker}
                         defaultZoom={defaultProps.zoom}
 

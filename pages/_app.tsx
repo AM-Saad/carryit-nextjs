@@ -24,12 +24,9 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-export default function MyApp({
-  Component,
-  pageProps: { session, ...pageProps },
-}: AppProps<{ session: Session }>) {
+export default function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps<{ session: Session }>) {
   const router = useRouter();
- 
+
 
   let contextProvider = (
     <>
