@@ -61,7 +61,7 @@ const Layout = ({ meta, children }: Props) => {
           } z-30 transition-all`}
       >
         <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
-          <Link href="/" className="flex items-center font-display text-2xl">
+          <Link href="/" className="flex items-center font-display text-xl">
             <Image
               src="/logo.png"
               alt="Precedent logo"
@@ -69,7 +69,7 @@ const Layout = ({ meta, children }: Props) => {
               height="30"
               className="mr-2 rounded-sm"
             ></Image>
-            <p>Carry it</p>
+            <p>Karry</p>
           </Link>
 
 
