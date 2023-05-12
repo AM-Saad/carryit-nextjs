@@ -54,7 +54,8 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
 
             localStorage.removeItem('uidjwt')
             localStorage.setItem('didjwt', response.items.token)
-            return window.location.href = '/driver/shipments'
+             window.location.href = '/driver/shipments'
+             return
 
 
         } catch (error) {
