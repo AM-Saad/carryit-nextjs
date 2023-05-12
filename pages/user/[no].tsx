@@ -8,7 +8,7 @@ import Response, { Error, Status } from '@/shared/modals/Response'
 import { userLocationInfo } from "@/lib/utils";
 const AnyReactComponent = ({ text }: any) => <>
     <Image
-        src='/driver.png '
+        src='/convertiblecar.png'
         alt='Drivers'
         width='45'
         height='45'
