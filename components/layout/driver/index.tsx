@@ -57,7 +57,7 @@ const Layout = ({ meta, children }: Props) => {
             <AnimatePresence>
               {!driver ? (
                 <motion.button
-                  className="rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
+                  className="rounded-full border border-black  p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
                   onClick={() => { }}
                   {...FADE_IN_ANIMATION_SETTINGS}
                 >
@@ -73,7 +73,7 @@ const Layout = ({ meta, children }: Props) => {
       {/*  Main content goes here */}
       <main className="sm:flex gap-10 min-h-[93vh] pt-32 w-full">
         {(driver && !router.pathname.includes('trip')) &&
-          <div className="bg-gray-50 sm:w-40 p-3 my-1">
+          <div className="p-3 my-1 mb-5 sm:mb-0 border rounded-tr-lg w-40">
             <ul className="flex sm:flex-col gap-5 justify-between">
               {links.map((link: any) =>
                 <>

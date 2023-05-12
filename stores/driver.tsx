@@ -52,11 +52,11 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
 
             }
 
-            localStorage.setItem('didjwt', response.items.token)
             localStorage.removeItem('uidjwt')
-            router.push('/driver/dashboard')
+            localStorage.setItem('didjwt', response.items.token)
+            return window.location.href = '/driver/shipments'
 
-            return
+
         } catch (error) {
             toast.error('Something went wrong')
         }
@@ -72,7 +72,7 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
                 setDriverMeta({ loading: false, error: { message: response.message, code: response.status } })
                 toast[response.status != Status.UNEXPECTED_ERROR ? 'info' : 'error'](response.message)
                 router.push('/driver/login')
-                
+
                 return
             }
             setDriverMeta({ loading: false, error: null })
@@ -130,10 +130,10 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
 
     useEffect(() => {
         const token = localStorage.getItem('didjwt')
-        if(!token){
+        if (!token) {
             router.push(('/driver/login'))
         }
-        if(token){
+        if (token) {
             fetch_driver()
         }
     }, []);

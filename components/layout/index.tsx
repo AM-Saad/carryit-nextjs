@@ -64,12 +64,11 @@ const Layout = ({ meta, children }: Props) => {
           <Link href="/" className="flex items-center font-display text-xl">
             <Image
               src="/logo.png"
-              alt="Precedent logo"
+              alt="Karry logo"
               width="30"
               height="30"
               className="mr-2 rounded-sm"
             ></Image>
-            <p>Karry</p>
           </Link>
 
 
@@ -77,7 +76,7 @@ const Layout = ({ meta, children }: Props) => {
             <AnimatePresence>
               {!admin ? (
                 <motion.button
-                  className="rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
+                  className="rounded-full border border-black  p-1.5 px-4 text-sm  transition-all hover:bg-black hover:text-white "
                   onClick={() => setShowSignInModal(true)}
                   {...FADE_IN_ANIMATION_SETTINGS}
                 >
@@ -92,25 +91,25 @@ const Layout = ({ meta, children }: Props) => {
       </div>
       {/*  Main content goes here */}
       <main className="sm:flex gap-5 min-h-[93vh] pt-20 w-full">
-        {admin && router.pathname.includes('admin') && <div className=" p-3 my-1 mb-5 sm:mb-0 border rounded-tr-lg w-40">
+        {admin && router.pathname.includes('admin') &&
+          <div className="p-3 my-1 mb-5 sm:mb-0 border rounded-tr-lg w-40">
 
-          <ul className="flex sm:flex-col gap-5 justify-between">
-            {links.map((link: any) =>
-              <>
-                <li className="sm:mb-5">
-                  <Link href={link.href}>{link.name}</Link>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>}
+            <ul className="flex sm:flex-col gap-5 justify-between">
+              {links.map((link: any) =>
+                <>
+                  <li className="sm:mb-5">
+                    <Link href={link.href}>{link.name}</Link>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>}
         <div className='rounded w-full xl:p-5 h-full'>
-
           {children}
         </div>
       </main>
 
-      <div className="absolute w-full border-t border-gray-200 bg-white py-3 text-center">
+      <div className="absolute bottom-0 w-full border-t border-gray-200 bg-white py-3 text-center text-sm">
         <p className="text-gray-500">
           Provided by{" "}
           <a

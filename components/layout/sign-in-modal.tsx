@@ -15,15 +15,15 @@ import Image from "next/image";
 
 const SignInModal = ({ showSignInModal, setShowSignInModal, }: { showSignInModal: boolean; setShowSignInModal: Dispatch<SetStateAction<boolean>>; }) => {
   const [signInClicked, setSignInClicked] = useState(false);
+  const [asAdmin, setAsAdmin] = useState(true);
 
   const handleSignIn = async () => {
-
     setSignInClicked(true);
     await signIn("google",
       {
-        redirect:true,
+        redirect: true,
         callbackUrl: "/sso",
-        
+
       }
     );
   }
@@ -31,23 +31,17 @@ const SignInModal = ({ showSignInModal, setShowSignInModal, }: { showSignInModal
     <Modal showModal={showSignInModal} setShowModal={setShowSignInModal}>
       <div className="w-full overflow-hidden shadow-xl md:max-w-md md:rounded-2xl md:border md:border-gray-200">
         <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center md:px-16">
-          <a href="https://precedent.dev">
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              className="h-10 w-10 rounded-full"
-              width={20}
-              height={20}
-            />
-          </a>
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            className="h-10 w-10 rounded-full"
+            width={20}
+            height={20}
+          />
           <h3 className="font-display text-2xl font-bold">Sign In</h3>
           <p className="text-sm text-gray-500">
-            This is strictly for demo purposes - only your email and profile
-            picture will be stored.
+            You're one step away from controlling your fleet.
           </p>
-        </div>
-
-        <div className="flex flex-col space-y-4 bg-gray-50 px-4 py-8 md:px-16">
           <button
             disabled={signInClicked}
             className={`${signInClicked
@@ -61,10 +55,16 @@ const SignInModal = ({ showSignInModal, setShowSignInModal, }: { showSignInModal
             ) : (
               <>
                 <Google className="h-5 w-5" />
-                <p>Sign In with Google</p>
+                <p>Go With Google</p>
+
               </>
             )}
           </button>
+        </div>
+
+        <div className="flex flex-col space-y-4 bg-gray-50 p-4 md:px-16">
+     
+          <a href="/driver/login" className="text-xs">Are you a driver ?</a>
         </div>
       </div>
     </Modal>
