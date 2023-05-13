@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   images: {
-    domains: ["lh3.googleusercontent.com", "carryit-nextjs.vercel.app"],
+    domains: ["lh3.googleusercontent.com", "carryit-nextjs.vercel.app", "karry.live"],
   },
   async redirects() {
     return [
