@@ -41,9 +41,11 @@ const Shipments = () => {
 
         {currentItems && currentItems.length > 0 &&
           <>
+
           <div className='flex items-center justify-between mb-5'>
 
             <h1 className='text-md font-medium flex items-center gap-2'>
+
               <Image
                 loader={imageLoader}
                 src='/package.png'
@@ -53,6 +55,7 @@ const Shipments = () => {
               />
               Your Shipments
             </h1>
+
             <Link href={`${INTERNAL_SHIPMENTS_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>
           </div>
 

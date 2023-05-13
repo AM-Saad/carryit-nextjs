@@ -36,6 +36,7 @@ const Vehicles = () => {
         {error && !loading && <FetchError reload={fetch_data} error={{ message: 'Vehicle not found', code: Status.DATA_NOT_FOUND }} />}
         {(!loading && currentItems.length > 0) &&
           <>
+
           <div className='flex items-center justify-between mb-5'>
 
             <h1 className='text-md font-medium flex items-center gap-2'>
@@ -47,8 +48,10 @@ const Vehicles = () => {
               />
               Your Vehicles
             </h1>
+
                     <Link href={`${INTERNAL_VEHICLES_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>
           </div>
+
             <div className='bg-white rounded h-full'>
               {currentItems.map((item: any) => (
                 <Link href={`/admin/vehicles/${item.id}`} key={item.id} className='text-black bg-white p-2 border-b flex items-center gap-3 relative group'>
