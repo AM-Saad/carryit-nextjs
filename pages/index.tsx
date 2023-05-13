@@ -8,9 +8,16 @@ import WebVitals from "@/components/home/web-vitals";
 import ComponentGrid from "@/components/home/component-grid";
 import Image from "next/image";
 
- const Home = () => {
+const Home = () => {
   return (
-    <Layout>
+    <Layout
+      meta={{
+        title: "Karry",
+        description: "Welcome to the ultimate logistics solution for brands! Our powerful SaaS platform makes it easy to manage your shipments and drivers, assign deliveries with just a few clicks, and track your packages in real-time. Our system offers unparalleled transparency and visibility to both you and your customers, ensuring that everyone knows exactly where their package is at all times. With our automated driver assignment system and smart routing algorithms, deliveries are faster and more efficient than ever before. Say goodbye to headaches and delays, and hello to seamless logistics management with our app. Sign up today and streamline your logistics operations like never before!",
+        keywords: "Karry, Track Shipment, Shipment Tracking, Track Shipment Online, Driver tracking, Delivery tracking ,Real-time location tracking, Order status, Package delivery tracking,  Restaurant delivery tracking "
+
+      }}
+    >
       <motion.div
         className="px-5 xl:px-0"
         initial="hidden"
@@ -33,7 +40,14 @@ import Image from "next/image";
         >
 
           <Balancer>Karry</Balancer>
+        </motion.h1>
+        <motion.h1
+          className="bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center font-display text-3xl font-bold tracking-[-0.02em] text-transparent drop-shadow-sm md:text-5xl md:leading-[5rem]"
+          variants={FADE_DOWN_ANIMATION_VARIANTS}
+        >
+
           <Balancer>Let Em Track!</Balancer>
+
         </motion.h1>
         <motion.p
           className="mt-6 text-center text-gray-500 md:text-xl"
@@ -53,7 +67,7 @@ import Image from "next/image";
             target="_blank"
             rel="noopener noreferrer"
           >
-           
+
             <p>Get Started</p>
           </a>
           <a

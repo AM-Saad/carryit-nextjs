@@ -20,6 +20,7 @@ interface Props {
     title?: string;
     description?: string;
     image?: string;
+    keywords?: string;
   };
   children: ReactNode;
 }
@@ -73,7 +74,7 @@ const Layout = ({ meta, children }: Props) => {
       {/*  Main content goes here */}
       <main className="sm:flex gap-10 min-h-[93vh] pt-32 w-full">
         {(driver && !router.pathname.includes('trip')) &&
-          <div className="p-3 my-1 mb-5 sm:mb-0 border rounded-tr-lg w-40">
+          <div className="p-3 my-1 mb-5 sm:mb-0 border rounded-tr-lg sm:w-40 w-full">
             <ul className="flex sm:flex-col gap-5 justify-between">
               {links.map((link: any) =>
                 <>
