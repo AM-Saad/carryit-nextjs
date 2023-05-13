@@ -14,7 +14,7 @@ const links = [
   { href: INTERNAL_DRIVERS_ROUTE, name: 'Drivers', icon: '' },
   { href: INTERNAL_VEHICLES_ROUTE, name: 'Vehicles', icon: '' },
   { href: INTERNAL_SHIPMENTS_ROUTE, name: 'Shipments', icon: '' },
-  { href: '/admin/settings', name: 'Setting', icon: '' }
+  { href: '/admin/settings', name: 'Settings', icon: '' }
 ]
 
 interface Props {
@@ -22,6 +22,7 @@ interface Props {
     title?: string;
     description?: string;
     image?: string;
+    keywords?: string;
   };
   children: ReactNode;
 }
@@ -90,9 +91,9 @@ const Layout = ({ meta, children }: Props) => {
         </div>
       </div>
       {/*  Main content goes here */}
-      <main className="sm:flex gap-5 min-h-[93vh] pt-20 w-full">
+      <main className="sm:flex gap-5 h-[100dvh] p-2 pt-20 w-full">
         {admin && router.pathname.includes('admin') &&
-          <div className="p-3 my-1 mb-5 sm:mb-0 border rounded-tr-lg w-40">
+          <div className="p-3 sm:my-1 border rounded-t-md sm:rounded-tr-lg w-full sm:w-40 sm:bg-white bg-gray-50">
 
             <ul className="flex sm:flex-col gap-5 justify-between">
               {links.map((link: any) =>
@@ -104,12 +105,12 @@ const Layout = ({ meta, children }: Props) => {
               )}
             </ul>
           </div>}
-        <div className='rounded w-full xl:p-5 h-full'>
+        <div className='border sm:border-0 h-full p-2 pt-4 w-full xl:pt-0 xl:p-5 '>
           {children}
         </div>
       </main>
 
-      <div className="absolute bottom-0 w-full border-t border-gray-200 bg-white py-3 text-center text-sm">
+      <div className="fixed bottom-0 w-full border-t border-gray-200 bg-white py-3 text-center text-sm">
         <p className="text-gray-500">
           Provided by{" "}
           <a

@@ -36,16 +36,16 @@ const Drivers = () => {
 
         {currentItems.length > 0 &&
           <>
-            <h1 className='text-xl font-medium mb-5 flex items-center gap-3'>
+            <h1 className='text-md font-medium mb-5 flex items-center gap-2'>
               <Image
                 src='/driver.png'
                 alt='Drivers'
-                width='35'
-                height='35'
+                width='25'
+                height='25'
               />
               Your Drivers
             </h1>
-            <div className='bg-white rounded shadow px-5 xl:px-0 h-full'>
+            <div className='bg-white rounded h-full'>
               {currentItems.map((driver: any) => (
                 <Link href={`${INTERNAL_DRIVERS_ROUTE}/${driver.id}`} key={driver.id} className='text-black bg-white p-2 border-b flex items-center gap-3 relative group'>
                   <TriangleRightIcon className='w-5 h-5 relative block transform transition-all duration-300 group-hover:translate-x-2' />

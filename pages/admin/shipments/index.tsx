@@ -41,7 +41,7 @@ const Shipments = () => {
 
         {currentItems && currentItems.length > 0 &&
           <>
-            <h1 className='text-xl font-medium mb-5 flex items-center gap-3'>
+            <h1 className='text-md font-medium mb-5 flex items-center gap-2'>
               <Image
                 loader={imageLoader}
                 src='/package.png'
@@ -51,7 +51,7 @@ const Shipments = () => {
               />
               Your Shipments
             </h1>
-            <div className='bg-white rounded shadow px-5 xl:px-0 h-full '>
+            <div className='bg-white rounded h-full '>
 
               {currentItems.map((shipment: any) => (
                 <Link href={`${INTERNAL_SHIPMENTS_ROUTE}/${shipment.id}`} key={shipment.id} className='text-black bg-white p-2 border-b flex group items-center gap-3 relative'>

@@ -36,20 +36,19 @@ const Vehicles = () => {
         {error && !loading && <FetchError reload={fetch_data} error={{ message: 'Vehicle not found', code: Status.DATA_NOT_FOUND }} />}
         {(!loading && currentItems.length > 0) &&
           <>
-            <h1 className='text-xl font-medium mb-5 flex items-center gap-3'>
+            <h1 className='text-md font-medium mb-5 flex items-center gap-2'>
               <Image
                 src='/driver.png'
                 alt='Drivers'
-                width='35'
-                height='35'
+                width='25'
+                height='25'
               />
               Your Vehicles
             </h1>
-            <div className='bg-white rounded shadow px-5 xl:px-0 h-full'>
+            <div className='bg-white rounded h-full'>
               {currentItems.map((item: any) => (
                 <Link href={`/admin/vehicles/${item.id}`} key={item.id} className='text-black bg-white p-2 border-b flex items-center gap-3 relative group'>
                   <TriangleRightIcon className='w-5 h-5 relative block transform transition-all duration-300 group-hover:translate-x-2' />
-
                   <p>{item.name}</p>
                 </Link>
               ))

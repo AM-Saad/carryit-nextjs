@@ -3,7 +3,7 @@ import Head from "next/head";
 const DOMAIN = "https://precedent.dev";
 
 export default function Meta({
-  title = "Carry it, let'em track",
+  title = "Karry, let'em track",
   description = "Track your orders in real-time, every step of the way",
   // image = `${DOMAIN}/api/og`,
 }: {
