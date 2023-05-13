@@ -77,7 +77,7 @@ const Layout = ({ meta, children }: Props) => {
             <AnimatePresence>
               {!admin ? (
                 <motion.button
-                  className="rounded-full border border-black  p-1.5 px-4 text-sm  transition-all hover:bg-black hover:text-white "
+                  className="rounded-full border border-black p-1.5 px-4 text-sm transition-all hover:bg-black hover:text-white "
                   onClick={() => setShowSignInModal(true)}
                   {...FADE_IN_ANIMATION_SETTINGS}
                 >
@@ -98,8 +98,8 @@ const Layout = ({ meta, children }: Props) => {
             <ul className="flex sm:flex-col gap-5 justify-between">
               {links.map((link: any) =>
                 <>
-                  <li className="sm:mb-5">
-                    <Link href={link.href}>{link.name}</Link>
+                  <li className="sm:mb-5 ">
+                    <Link href={link.href} className="block">{link.name}</Link>
                   </li>
                 </>
               )}
