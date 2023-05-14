@@ -129,6 +129,26 @@ model Admin {
   zones     Zone[]
   company   Company?   @relation(fields: [companyId], references: [id])
   companyId String?    @map("company") @db.ObjectId
+
+  branchId String? @map("branch") @db.ObjectId
+
+}
+
+model Branch {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  notes String?
+
+  adminId String? @map("admin") @db.ObjectId
+
+  company     Company? @relation(fields: [companyId], references: [id])
+  companyId   String?  @map("company") @db.ObjectId
+  drivers     String[]
+  address     String?
+  phone       String?
+  governorate String?
+  city        String?
+  state       String?
 }
 
 model Bills {
@@ -178,6 +198,7 @@ model Driver {
   adminId   String?  @map("admin") @db.ObjectId
   company   Company? @relation(fields: [companyId], references: [id])
   companyId String?  @map("company") @db.ObjectId
+  branchId  String?  @map("branch") @db.ObjectId
 }
 
 type ShipmentsPickup {
@@ -325,6 +346,7 @@ model Company {
   Product      Product[]
   Zone         Zone[]
   User         User[]
+  Branch       Branch[]
 }
 
 type CompaniesRoles {

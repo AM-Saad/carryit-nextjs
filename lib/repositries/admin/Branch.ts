@@ -1,7 +1,8 @@
 import { fetcher } from "@/lib/utils";
 import Response, { Status } from "@/shared/modals/Response";
 
-import { DRIVERS_ROUTE } from '@/lib/constants'
+import { BRANCHES_ROUTE } from '@/lib/constants'
+import Branch from "@/modals/Branch";
 export default class DriverRepository {
     constructor() {
 
@@ -10,9 +11,9 @@ export default class DriverRepository {
         return window.localStorage.getItem('uidjwt')
         
     }
-    fetch_drivers: () => Promise<Response<any>> = async () => {
+    fetch_branches: () => Promise<Response<any>> = async () => {
         try {
-            const response = await fetcher(DRIVERS_ROUTE, {
+            const response = await fetcher(BRANCHES_ROUTE, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${this.getToken()}`,
@@ -30,9 +31,9 @@ export default class DriverRepository {
 
         }
     }
-    fetch_driver: (id: string) => Promise<Response<any>> = async (id) => {
+    fetch_branch: (id: string) => Promise<Response<any>> = async (id) => {
         try {
-            const response = await fetcher(`${DRIVERS_ROUTE}/${id}`, {
+            const response = await fetcher(`${BRANCHES_ROUTE}/${id}`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${this.getToken()}`,
@@ -52,49 +53,11 @@ export default class DriverRepository {
 
         }
     }
-    update_partial_driver: (id: string, data: any) => Promise<Response<any>> = async (id, data) => {
+
+        create_branch: (data: string) => Promise<Response<Branch>> = async (data: string) => {
+
         try {
-            const response = await fetcher(`${DRIVERS_ROUTE}/${id}`, {
-                method: 'PATCH',
-                body: JSON.stringify(data),
-                headers: {
-                    Authorization: `Bearer ${this.getToken()}`,
-                    "Content-Type": "application/json"
-                }
-            });
-
-            return response
-        } catch (error: any) {
-            return {
-                message: error.message, status: Status.UNEXPECTED_ERROR, items: []
-            }
-
-        }
-    }
-
-    delete_driver: (id: string) => Promise<Response<any>> = async (id) => {
-        try {
-            const response = await fetcher(`${DRIVERS_ROUTE}/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    Authorization: `Bearer ${this.getToken()}`,
-                    "Content-Type": "application/json"
-                }
-            });
-
-            return response
-        } catch (error: any) {
-            return {
-                message: error.message, status: Status.UNEXPECTED_ERROR, items: []
-            }
-
-        }
-    }
-
-
-    create_driver: (data: any) => Promise<Response<any>> = async (data) => {
-        try {
-            const response = await fetcher(`${DRIVERS_ROUTE}/create`, {
+            const response:Response<Branch> = await fetcher(`${BRANCHES_ROUTE}/create`, {
                 method: 'POST',
                 body: JSON.stringify({ values: data }),
                 headers: {
@@ -112,18 +75,58 @@ export default class DriverRepository {
             }
 
         }
-
     }
-
-
-    assign_vehicle: (id: string, vehicleId: string | null) => Promise<Response<any>> = async (id, vehicleId) => {
+    update_partial_branch: (id: string, data: any) => Promise<Response<any>> = async (id, data) => {
         try {
-            const response = await fetcher(`${DRIVERS_ROUTE}/assign/${id}?vehicleId=${vehicleId}`, {
-                method: 'PUT',
+            const response = await fetcher(`${BRANCHES_ROUTE}/${id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(data),
                 headers: {
                     Authorization: `Bearer ${this.getToken()}`,
                     "Content-Type": "application/json"
                 }
+            });
+
+            return response
+        } catch (error: any) {
+            return {
+                message: error.message, status: Status.UNEXPECTED_ERROR, items: []
+            }
+
+        }
+    }
+
+    delete_branch: (id: string) => Promise<Response<any>> = async (id) => {
+        try {
+            const response = await fetcher(`${BRANCHES_ROUTE}/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            return response
+        } catch (error: any) {
+            return {
+                message: error.message, status: Status.UNEXPECTED_ERROR, items: []
+            }
+
+        }
+    }
+
+
+
+    update_drivers: (id: string, drivers: string[]) => Promise<Response<any>> = async (id, drivers) => {
+        try {
+            const response = await fetcher(`${BRANCHES_ROUTE}/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify({ drivers }),
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+
             });
             return response
 
