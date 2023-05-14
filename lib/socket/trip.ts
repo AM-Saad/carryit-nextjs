@@ -1,5 +1,5 @@
 import { io } from "socket.io-client"
-const socket = io('http://localhost:8000/tracking',{
+const socket = io(`${process.env.NEXT_PUBLIC_BASE_URL}/tracking`,{
     // autoConnect: false,
 })
 

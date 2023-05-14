@@ -1,4 +1,4 @@
-import { FADE_IN_ANIMATION_SETTINGS, INTERNAL_DRIVERS_ROUTE, INTERNAL_SHIPMENTS_ROUTE, INTERNAL_VEHICLES_ROUTE } from "@/lib/constants";
+import { FADE_IN_ANIMATION_SETTINGS, INTERNAL_BRANCHES_ROUTE, INTERNAL_DRIVERS_ROUTE, INTERNAL_SHIPMENTS_ROUTE, INTERNAL_VEHICLES_ROUTE } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import UserDropdown from "./user-dropdown";
 import { useRouter } from "next/router";
 
 const links = [
+  { href: INTERNAL_BRANCHES_ROUTE, name: 'Branches', icon: '' },
   { href: INTERNAL_DRIVERS_ROUTE, name: 'Drivers', icon: '' },
   { href: INTERNAL_VEHICLES_ROUTE, name: 'Vehicles', icon: '' },
   { href: INTERNAL_SHIPMENTS_ROUTE, name: 'Shipments', icon: '' },

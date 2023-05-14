@@ -5,47 +5,45 @@ import Layout from '@/components/layout'
 import FormikInput from '@/components/shared/FormikInput';
 import Button from '@/components/shared/Button';
 import { useRouter } from 'next/router';
-import { driverRepository } from '@/lib/repositries/admin'
-import { Status } from '@/shared/modals/Response';
+import { branchRepository } from '@/lib/repositries/admin'
+import Response, { Status } from '@/shared/modals/Response';
 import { toast } from 'react-toastify';
 import { INTERNAL_DRIVERS_ROUTE } from '@/lib/constants';
+import Branch from '@/modals/Branch';
 
 
-const DriverForm = () => {
+const BranchForm = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const router = useRouter()
 
     const initialValues = {
-        id: '',
-        address: '',
-        commission: [],
-        image: '',
-        mobile: '',
         name: '',
-        password: '',
-        salary: { base_salary: 0, commission: 0 },
-        shipments: [],
-        vehicle: null,
-        documents: []
+        address: '',
+        phone: '',
+        city: '',
+        governorate: '',
+        state: '',
+        drivers: [],
+        notes: '',
     };
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Required'),
-        mobile: Yup.string().required('Required'),
         address: Yup.string().required('Required'),
-        password: Yup.string().required('Required'),
-        salary: Yup.object().shape({
-            base_salary: Yup.number().required('Required'),
-            commission: Yup.number().required('Required')
-        })
+        phone: Yup.string().required('Required'),
+        city: Yup.string().required('Required'),
+        governorate: Yup.string().required('Required'),
+        state: Yup.string().required('Required'),
+        notes: Yup.string().required('Required'),
+
     });
 
     const onSubmit = async (values: any) => {
         setLoading(true);
-        const response = await driverRepository.create_driver(values)
+        const response:Response<Branch> = await branchRepository.create_branch(values)
         setLoading(false);
         if (response.status === Status.SUCCESS) {
-            return router.push(`${INTERNAL_DRIVERS_ROUTE}/${response.items.id}`)
+            // return router.push(`${INTERNAL_DRIVERS_ROUTE}/${response.items?.id}`)
         }
         toast.error(response.message)
 
@@ -58,11 +56,13 @@ const DriverForm = () => {
                 {({ errors, touched }) => (
                     <Form>
                         <FormikInput label="Name" name="name" />
-                        <FormikInput label="Mobile" name="mobile" />
                         <FormikInput label="Address" name="address" />
-                        <FormikInput label="Password" name="password" type="password" />
-                        <FormikInput label="Base Salary" name="salary.base_salary" type="number" />
-                        <FormikInput label="Commission" name="salary.commission" type="number" />
+                        <FormikInput label="City" name="city" />
+                        <FormikInput label="Governorate" name="governorate" />
+                        <FormikInput label="State" name="state" />
+                        <FormikInput label="Notes" name="notes" />
+                        <FormikInput label="Phone" name="phone" />
+
 
                         <Button
                             title='Create'
@@ -78,4 +78,4 @@ const DriverForm = () => {
     );
 };
 
-export default DriverForm;
+export default BranchForm;
