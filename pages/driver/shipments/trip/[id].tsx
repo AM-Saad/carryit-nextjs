@@ -11,7 +11,7 @@ const Trip = () => {
   const router = useRouter()
   const { id } = router.query as { id: string }
 
-  const { fetcher, fetchMeta, currentItem } = useContext(DriverContext);
+  const { fetcher, fetchMeta, currentItem, driver } = useContext(DriverContext);
   const { loading, error } = fetchMeta
 
   const fetch_data = async () => {
@@ -33,12 +33,12 @@ const Trip = () => {
       {(!loading && currentItem) &&
         <>
           <h1 className="text-lg font-bold text-gray-500 my-2">Trip For {currentItem.shipmentNo} Started</h1>
-          <div className='pb-10 rounded-md overflow-hidden '>
-          <Map shipmentId={currentItem.id} />
+          <div  style={{ height: '83vh', width: '100%' }} className='mb-10 rounded-md overflow-hidden shadow-md'>
+            <Map shipmentId={currentItem.id} shipment={currentItem} driver={driver} />
           </div>
           <div tabIndex={0} className='w-full bg-white p-2 fixed left-0 bottom-0 flex items-center gap-x-3 border-t-2'>
-            <CancelModel shipmentId={currentItem.id}/>
-            <button className='bg-green-500 text-white p-2 rounded-md w-full' onClick={() =>{}}>Delivered</button>
+            <CancelModel shipmentId={currentItem.id} />
+            <button className='bg-green-500 text-white p-2 rounded-md w-full' onClick={() => { }}>Delivered</button>
 
 
           </div>

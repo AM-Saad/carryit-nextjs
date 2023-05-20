@@ -20,6 +20,10 @@ const FormikInput = loadable(() => import("@/components/shared/FormikInput"))
 const Create: React.FC = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
+    const [completeAddress, setCompleteAddress] = useState<string>("")
+    const [currentLocation, setCurrentLocation] = useState<{ lat: number, lng: number }>({ lat: 0, lng: 0 })
+    const [shippingAddress, setShippingAddress] = useState<any>(null)
+    const [autoCompleteAddress, setAutoCompleteAddress] = useState<any>(null)
     const router = useRouter()
 
     const initialValues = {
@@ -30,6 +34,8 @@ const Create: React.FC = () => {
             floor: '',
             name: '',
             phone: '',
+            autoCompleteAddress: null,
+            shippingAddress: null,
         },
         quantity: 1,
         is_fragile: false,
@@ -45,8 +51,7 @@ const Create: React.FC = () => {
     const validationScheme = Yup.object({
 
         receiver: Yup.object({
-            address: Yup.string()
-                .required("Address is required"),
+            address: Yup.string(),
             apartment: Yup.string(),
             building: Yup.string()
                 .required("Building number is required"),
@@ -102,69 +107,59 @@ const Create: React.FC = () => {
             locality: "long_name",
             country: "long_name",
             postal_code: "short_name",
+            administrative_area_level_1: "long_name",
+            administrative_area_level_2: "long_name",
         };
-        const result = {
+        const result:any = {
             street_number: "",
             route: "",
             locality: "",
             country: "",
             postal_code: "",
+            administrative_area_level_1: "",
+            administrative_area_level_2: "",
         };
+         
+        console.log(place.address_components)
         if (place.address_components) {
             for (let i = 0; i < place.address_components.length; i++) {
-                const addressType = place.address_components[i].types[0];
-                if ((componentsToRetrieve as any)[addressType]) {
-                    (result as any)[addressType] = (place.address_components[i] as any)[
-                        (componentsToRetrieve as any)[addressType]
-                    ];
+                const addressType:any = place.address_components[i].types[0]!
+                if (addressType in componentsToRetrieve) {
+                    result[addressType] = place.address_components[i].long_name
                 }
             }
         }
-        const shippingAddress = {
+        console.log(result)
+        const shippingAddresss = {
             streetAddress: `${result.street_number} ${result.route}`,
             streetAddressBis: "",
             postalCode: result.postal_code,
             city: result.locality,
-            // name: this.form.shippingAddress.name,
+            // name: shippingAddress.name || "",
         };
-        const autoCompleteAddress = place
-        console.log(shippingAddress)
-        console.log(autoCompleteAddress)
+        setAutoCompleteAddress(place)
+        setShippingAddress(shippingAddresss)
 
-        // this.form.autoCompleteAddress = place;
+
     }
 
-    const setCurrentAddress = (val: string) => {
-        const completeAddress = val;
-        console.log(completeAddress)
+    const onCurrentAddress = (val: string) => {
+        setCompleteAddress(val)
     }
 
     const addressInputChanged = (val: string) => {
         if (!val || val == "") {
 
-            // this.validation.autoCompleteAddress = true;
-            // this.form.completeAddress = null;
-            // this.form.shippingAddress = {
-            //     streetAddress: "",
-            //     streetAddressBis: "",
-            //     city: "",
-            //     postalCode: "",
-            //     name: this.form.shippingAddress.name,
-            // };
-        }
 
-        const completeAddress = null
-        const autoCompleteAddress = true
-        const shippingAddress = {
-            streetAddress: "",
-            streetAddressBis: "",
-            city: "",
-            postalCode: "",
-            // name: this.form.shippingAddress.name,
-        };
-        console.log(completeAddress)
-        console.log(autoCompleteAddress)
-        console.log(shippingAddress)
+            const shippingAddresss = {
+                streetAddress: "",
+                streetAddressBis: "",
+                city: "",
+                postalCode: "",
+                name: shippingAddress ? shippingAddress.name : "" || "",
+            };
+            setShippingAddress(shippingAddresss)
+        }
     }
 
     return (
@@ -173,7 +168,7 @@ const Create: React.FC = () => {
                 initialValues={initialValues}
                 validationSchema={validationScheme}
                 onSubmit={(values, { setSubmitting }) => {
-                    createShipment(values)
+                    createShipment({ ...values, receiver: { ...values.receiver, address: completeAddress, autoCompleteBillingAddress: autoCompleteAddress, shippingAddress: shippingAddress } })
                     setSubmitting(false)
                 }}
             >
@@ -207,7 +202,7 @@ const Create: React.FC = () => {
                                     <GooglePlacesAutocomplete
                                         onChange={addressInputChanged}
                                         onInput={placeChanged}
-                                        onCurrentAddress={setCurrentAddress}
+                                        onCurrentAddress={onCurrentAddress}
                                         onInit={(e: any) => { console.log(e) }}
                                     />
 

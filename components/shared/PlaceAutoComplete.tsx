@@ -35,11 +35,6 @@ const GooglePlacesAutocomplete: React.FC<GooglePlacesAutocompleteProps> = ({
 
     const autocompleteRef = useRef<any>(null);
 
-    const setAutocompleteValue = () => {
-        autocompleteRef.current!.value = currentAddress;
-        onCurrentAddress(currentAddress);
-
-    };
 
     const geocode = (address: any) => {
         if (!geocoder || !address) return;
@@ -105,8 +100,9 @@ const GooglePlacesAutocomplete: React.FC<GooglePlacesAutocompleteProps> = ({
             setCurrentLocation(location);
             setCurrentAddress(tempAddress);
 
-            setAutocompleteValue();
-        }
+            autocompleteRef.current!.value = tempAddress;
+            onCurrentAddress(tempAddress);       
+         }
 
         if (address) {
             const results = await geocode(address) as any;
@@ -119,7 +115,8 @@ const GooglePlacesAutocomplete: React.FC<GooglePlacesAutocompleteProps> = ({
 
             setCurrentAddress(tempAddress);
 
-            setAutocompleteValue();
+            autocompleteRef.current!.value = tempAddress;
+            onCurrentAddress(tempAddress);       
         }
         console.log(tempAddress, tempLocation)
 
@@ -133,7 +130,6 @@ const GooglePlacesAutocomplete: React.FC<GooglePlacesAutocompleteProps> = ({
         autocomplete.addListener("place_changed", () => {
             console.log('place changed')
             const place = autocomplete?.getPlace();
-            console.log(place)
             const location = {
                 lat: place?.geometry?.location.lat(),
                 lng: place?.geometry?.location.lng(),
@@ -141,9 +137,10 @@ const GooglePlacesAutocomplete: React.FC<GooglePlacesAutocompleteProps> = ({
             setCurrentLocation(location)
 
             setCurrentAddress(place?.formatted_address || '');
+            
+            autocompleteRef.current!.value = place?.formatted_address || '';
+            onCurrentAddress(place?.formatted_address || '');
 
-
-            setAutocompleteValue();
             onInput({
                 ...location,
                 address_components: place?.address_components,

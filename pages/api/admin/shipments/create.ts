@@ -28,6 +28,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                 floor: values.receiver.floor.toString() || null,
                 building: values.receiver.building.toString() || null,
                 is_villa: false,
+                shippingAddress: values.receiver.shippingAddress || null,
+                autoCompleteBillingAddress: values.receiver.autoCompleteBillingAddress || null,
             }
         };
         const payload = {

@@ -14,7 +14,7 @@ import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
 
 
 const imageLoader = ({ src, width, quality }: any) => {
-  return `https://carryit-nextjs.vercel.app/${src}?w=${width}&q=${quality || 75}`;
+  return `https://karry.live/${src}?w=${width}&q=${quality || 75}`;
 };
 const Shipments = () => {
   const { data: session } = useSession()
@@ -42,22 +42,22 @@ const Shipments = () => {
         {currentItems && currentItems.length > 0 &&
           <>
 
-          <div className='flex items-center justify-between mb-5'>
+            <div className='flex items-center justify-between mb-5'>
 
-            <h1 className='text-md font-medium flex items-center gap-2'>
+              <h1 className='text-md font-medium flex items-center gap-2'>
+                Your Shipments
 
-              <Image
-                loader={imageLoader}
-                src='/package.png'
-                alt='Shipments'
-                width={20}
-                height={20}
-              />
-              Your Shipments
-            </h1>
+                <Image
+                  // loader={imageLoader}
+                  src='/icons/shipment_list.jpeg'
+                  alt='Shipments'
+                  width={20}
+                  height={20}
+                />
+              </h1>
 
-            <Link href={`${INTERNAL_SHIPMENTS_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>
-          </div>
+              <Link href={`${INTERNAL_SHIPMENTS_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>
+            </div>
 
             <div className='bg-white rounded h-full '>
 

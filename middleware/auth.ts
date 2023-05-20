@@ -15,14 +15,17 @@ export const authMiddleware = (handler: (req: NextApiRequest, res: NextApiRespon
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json(refineResponse(Status.TOKEN_NOT_FOUND, 'Unauthorized..'));
+      return res.status(401).json(refineResponse(Status.TOKEN_NOT_FOUND, 'Unauthorized'));
     }
 
     const token = authHeader.split(' ')[1];
     if (!token || token === 'null' || token === 'undefined') {
-      return res.status(401).json(refineResponse(Status.TOKEN_NOT_FOUND, 'Unauthorized..'));
+      return res.status(401).json(refineResponse(Status.TOKEN_NOT_FOUND, 'Token expired'));
     }
-    const decoded = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET!) as any
+    const decoded = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET!) as any;
+    if (decoded === jwt.TokenExpiredError) {
+      return res.status(401).json(refineResponse(Status.TOKEN_NOT_FOUND, 'Unauthorized'));
+    }
     return handler(req, res, { adminId: decoded.adminId, companyId: decoded.companyId, driverId: decoded.driverId || null, isAdmin: decoded.isAdmin, isDriver: decoded.isDriver });
   } catch (error) {
     console.error(error);

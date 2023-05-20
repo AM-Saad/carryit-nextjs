@@ -37,20 +37,19 @@ const Branches = () => {
         {currentItems.length > 0 &&
           <>
 
-          <div className='flex items-center justify-between mb-5'>
-            <h1 className='text-md font-medium flex items-center gap-2'>
+            <div className='flex items-center justify-between mb-5'>
+              <h1 className='text-md font-medium flex items-center gap-2'>
+                Your Branches
+                <Image
+                  src='/icons/branch_list.jpeg'
+                  alt='Drivers'
+                  width='25'
+                  height='25'
+                />
+              </h1>
 
-              <Image
-                src='/driver.png'
-                alt='Drivers'
-                width='25'
-                height='25'
-              />
-              Your Branches
-            </h1>
-
-            <Link href={`${INTERNAL_BRANCHES_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>
-          </div>
+              <Link href={`${INTERNAL_BRANCHES_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>
+            </div>
             <div className='bg-white rounded h-full'>
               {currentItems.map((item: any) => (
                 <Link href={`${INTERNAL_BRANCHES_ROUTE}/${item.id}`} key={item.id} className='text-black bg-white p-2 border-b flex items-center gap-3 relative group'>
