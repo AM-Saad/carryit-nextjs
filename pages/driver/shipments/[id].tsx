@@ -36,7 +36,7 @@ const Shipment = () => {
     }, [currentItem]);
 
     return (
-        <Layout>
+        <Layout >
 
             {loading && <Loading />}
             {error && !loading && <FetchError reload={fetch_data} error={error} />}

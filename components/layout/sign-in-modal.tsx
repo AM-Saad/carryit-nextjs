@@ -15,7 +15,6 @@ import Image from "next/image";
 
 const SignInModal = ({ showSignInModal, setShowSignInModal, }: { showSignInModal: boolean; setShowSignInModal: Dispatch<SetStateAction<boolean>>; }) => {
   const [signInClicked, setSignInClicked] = useState(false);
-  const [asAdmin, setAsAdmin] = useState(true);
 
   const handleSignIn = async () => {
     setSignInClicked(true);

@@ -6,10 +6,7 @@ import { Status } from '@/shared/modals/Response';
 import { authMiddleware, Token } from '@/middleware/auth';
 
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
-    const session = await getSession({ req });
-    if (!session) {
-        return res.status(401).json(refineResponse(Status.TOKEN_EXPIRED, 'Unauthorized'));
-    }
+
     if (req.method == 'GET') {
         try {
             const vehicle = await prisma.vehicle.findMany({ where: { adminId: token.adminId } });
@@ -23,11 +20,9 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
         }
     }
     if (req.method == 'POST') {
-        console.log(req.body)
         const { values } = req.body
-        const admin = await prisma.admin.findFirst({ where: { email: session.user?.email as string } });
+        const admin = await prisma.admin.findFirst({ where: { id: token.adminId as string } });
 
-        console.log(values)
         const payload = {
             data: {
                 name: values.name,

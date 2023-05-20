@@ -3,6 +3,7 @@ import { getSession } from 'next-auth/react';
 import prisma from '../../../../lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
+import { Token, authMiddleware } from '@/middleware/auth';
 
 
 export const config = {
@@ -11,13 +12,10 @@ export const config = {
     },
 }
 
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-    const session = await getSession({ req });
-    if (!session) {
-        return res.status(401).json(refineResponse(Status.TOKEN_EXPIRED, 'Unauthorized'));
-    }
+export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
+    console.log('token', token)
     try {
-        const shipments = await prisma.shipment.findMany({});
+        const shipments = await prisma.shipment.findMany({where: {adminId: token.adminId}});
         if (!shipments) {
             return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Shipments not found'));
         }
@@ -27,4 +25,4 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message));
     }
 
-}
+})

@@ -5,17 +5,17 @@ import Link from "next/link";
 import { ReactNode, useEffect, useContext } from "react";
 import AdminContext from '@/stores/admin'
 import useScroll from "@/lib/hooks/use-scroll";
-import Meta from "./meta";
-import { useSignInModal } from "./sign-in-modal";
-import UserDropdown from "./user-dropdown";
+import Meta from "@/components/layout/meta";
+import { useSignInModal } from "@/components/layout/sign-in-modal";
+import UserDropdown from "@/components/layout/user-dropdown";
 import { useRouter } from "next/router";
 
 const links = [
-  { href: INTERNAL_BRANCHES_ROUTE, name: 'Branches', icon: '' },
-  { href: INTERNAL_DRIVERS_ROUTE, name: 'Drivers', icon: '' },
-  { href: INTERNAL_VEHICLES_ROUTE, name: 'Vehicles', icon: '' },
-  { href: INTERNAL_SHIPMENTS_ROUTE, name: 'Shipments', icon: '' },
-  { href: '/admin/settings', name: 'Settings', icon: '' }
+  { href: INTERNAL_BRANCHES_ROUTE, name: 'Branches', icon: '/icons/branch_list.jpeg' },
+  { href: INTERNAL_SHIPMENTS_ROUTE, name: 'Shipments', icon: '/icons/shipment_list.jpeg' },
+  { href: INTERNAL_DRIVERS_ROUTE, name: 'Drivers', icon: '/icons/driver_list.jpeg' },
+  { href: INTERNAL_VEHICLES_ROUTE, name: 'Vehicles', icon: '/icons/truck_list.jpeg' },
+  { href: '/admin/settings', name: 'Settings', icon: '/icons/settings_list.jpeg' }
 ]
 
 interface Props {
@@ -26,9 +26,10 @@ interface Props {
     keywords?: string;
   };
   children: ReactNode;
+  isSecured?: boolean;
 }
 
-const Layout = ({ meta, children }: Props) => {
+const Layout = ({ meta, children, isSecured = true }: Props) => {
   const { SignInModal, setShowSignInModal } = useSignInModal();
   const scrolled = useScroll(50);
 
@@ -44,6 +45,7 @@ const Layout = ({ meta, children }: Props) => {
 
 
   useEffect(() => {
+    if (!isSecured) return
     const token = localStorage.getItem('uidjwt')
     if (!token && !router.pathname.includes('user')) {
       router.push('/')
@@ -53,7 +55,7 @@ const Layout = ({ meta, children }: Props) => {
 
   }, []);
   return (
-    <>
+    <div className="pb-14">
       <Meta {...meta} />
       <SignInModal />
       <div
@@ -94,13 +96,22 @@ const Layout = ({ meta, children }: Props) => {
       {/*  Main content goes here */}
       <main className="sm:flex gap-5 h-[100dvh] p-2 pt-20 w-full">
         {admin && router.pathname.includes('admin') &&
-          <div className="p-3 sm:my-1 border rounded-t-md sm:rounded-tr-lg w-full sm:w-40 sm:bg-white bg-gray-50">
+          <div className="p-3 sm:my-1 border rounded-t-md sm:rounded-tr-lg w-full sm:w-44 sm:bg-white bg-gray-50 justify-between overflow-auto">
 
-            <ul className="flex sm:flex-col gap-5 justify-between">
+            <ul className="flex sm:flex-col gap-10 ">
               {links.map((link: any) =>
                 <>
                   <li className="sm:mb-5 ">
-                    <Link href={link.href} className="block">{link.name}</Link>
+                    <Link href={link.href} className="flex items-center gap-2 text-sm md:text-lg">
+                      <Image
+                        src={link.icon}
+                        width="25"
+                        height="25"
+                        alt={link.name}
+                         />
+                      {link.name}
+
+                    </Link>
                   </li>
                 </>
               )}
@@ -124,7 +135,7 @@ const Layout = ({ meta, children }: Props) => {
           </a>
         </p>
       </div>
-    </>
+    </div>
   );
 }
 export default Layout

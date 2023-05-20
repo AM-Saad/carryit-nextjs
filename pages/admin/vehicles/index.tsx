@@ -41,10 +41,10 @@ const Vehicles = () => {
 
             <h1 className='text-md font-medium flex items-center gap-2'>
               <Image
-                src='/driver.png'
+                src='/icons/truck_list.jpeg'
                 alt='Drivers'
-                width='25'
-                height='25'
+                width='40'
+                height='40'
               />
               Your Vehicles
             </h1>

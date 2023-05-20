@@ -221,6 +221,7 @@ type ShipmentsReceiver {
   name      String
   phone     String
   address   String
+  country   String?
   city      String?
   state     String?
   zip       String?
@@ -228,6 +229,8 @@ type ShipmentsReceiver {
   floor     String?
   building  String?
   is_villa  Boolean?
+  shippingAddress Json?
+  autoCompleteBillingAddress Json?
 }
 
 type Cancled {
@@ -258,6 +261,7 @@ model Shipment {
   company       Company?           @relation(fields: [companyId], references: [id])
   companyId     String?            @map("company") @db.ObjectId
   canceled      Cancled?
+
 }
 
 type Items {

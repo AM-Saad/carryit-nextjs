@@ -1,3 +1,5 @@
+import Vehicle from "./Vehicle"
+
 export default interface Driver {
     id: string
     address: string
@@ -8,6 +10,7 @@ export default interface Driver {
     password: string
     salary: {base_salary: number, commission:number}
     shipments: any[] // initally empty array
-    vehicle?: any // initally null
+    vehicle?: Vehicle | null // initally null
     documents: any[] // initally empty array
+    vehicleId?: string // initally null
 }
