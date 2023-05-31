@@ -103,3 +103,10 @@ export function userLocationInfo() {
 
   return { userRegion, userCity, userCountry, userTimeZone }
 }
+
+
+export function getCurrentPosition() {
+  return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 });
+  });
+}

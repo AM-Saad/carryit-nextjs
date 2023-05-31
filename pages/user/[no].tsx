@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
-import GoogleMapReact from 'google-map-react';
 import Image from "next/image";
 import socket from '@/lib/socket/trip'
 
 import { useRouter } from "next/router";
 import Response, { Error, Status } from '@/shared/modals/Response'
 import { userLocationInfo } from "@/lib/utils";
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+
+import Layout from '@/components/layout'
+
 const AnyReactComponent = ({ text }: any) => <>
     <Image
-        src='/convertiblecar.png'
+        src='/icons/car.png'
         alt='Drivers'
         width='45'
         height='45'
@@ -16,57 +19,37 @@ const AnyReactComponent = ({ text }: any) => <>
 </>
 
 
+type Libraries = 'geometry' | 'places'
+const libraries: Libraries[] = ['geometry', 'places']
+
+
 const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
     const [marker, setMarker] = useState<any>(null)
 
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
+    const { isLoaded, loadError } = useLoadScript({ googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!, libraries: libraries });
 
     const router = useRouter()
     const { no } = router.query as { no: string }
 
-    const getLocation = async () => {
-        console.log('get location...')
-        if (!navigator.geolocation) {
-            setError('Geolocation is not supported by your browser')
-            return;
 
-        }
-        const location = await navigator.permissions.query({ name: 'geolocation' })
-        if (location.state === 'granted') {
-            const data = userLocationInfo()
-            //    const respone = await fetch(`https://api.api-ninjas.com/v1/geocoding?city=${data.userCity}&&country=${data.userCountry}`, {
-            //         method: 'GET',
-            //         headers: {
-            //             'X-Api-Key': 'cvRcg41pYNnynfOCRNv+bQ==yYh4w5Xoj0PKaPga'
-            //         }
-            //     })
-            //     const data = await respone.json()
-            //     setMarker({ lat: data[0].latitude, lng: data[0].longitude })
-
-        }
-
-    }
 
 
     useEffect(() => {
-        console.log(no)
         if (no)
             socket.emit("watch", no, (data: any) => {
+                setError(null)
+
                 if (!data.ready) {
                     setError('Please wait for the driver to connect..')
-                } else {
-                    setError(null)
                 }
-                getLocation()
 
             });
 
         socket.on("readyToMove", (data: any) => {
             if (data) {
                 setError(null)
-                getLocation()
-
             }
         });
 
@@ -77,7 +60,6 @@ const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
         socket.on("move", (data: any) => {
             if (data) setError(null)
             setTimeout(() => {
-
                 setMarker({ lat: data.coords.lat, lng: data.coords.long })
             }, 4000)
         });
@@ -91,33 +73,47 @@ const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
         };
     }, [no])
 
- 
-
-
 
     return (
         // Important! Always set the container height explicitly
+        <Layout meta={
+            {
+                title: "Karry | Track Shipment",
+                description: "Welcome to the ultimate logistics solution for brands! Our powerful SaaS platform makes it easy to manage your shipments and drivers, assign deliveries with just a few clicks, and track your packages in real-time. Our system offers unparalleled transparency and visibility to both you and your customers, ensuring that everyone knows exactly where their package is at all times. With our automated driver assignment system and smart routing algorithms, deliveries are faster and more efficient than ever before. Say goodbye to headaches and delays, and hello to seamless logistics management with our app. Sign up today and streamline your logistics operations like never before!",
+                keywords: "Karry, Track Shipment, Shipment Tracking, Track Shipment Online, Driver tracking, Delivery tracking ,Real-time location tracking, Order status, Package delivery tracking,  Restaurant delivery tracking "
+            }
+        }>
         <div style={{ height: '100vh', width: '100%' }}>
             {loading && <div className="mt-3 p-2 text-blue-500"> Loading...</div>}
-            {(!error && !loading) &&
+            {(!error && !loading && !loadError) &&
                 <>
-                    {!marker &&
+                    {!isLoaded &&
                         <div className="mt-3 p-2 text-blue-500"> Getting location...</div>
                     }
-                    {marker &&
-                        <GoogleMapReact
-                            bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY! }}
-                            defaultZoom={17}
-                            debounced={true}
-                            shouldUnregisterMapOnUnmount={true}
-                            center={marker}
+                    {isLoaded &&
+                        <GoogleMap
+                            mapContainerClassName="h-96 w-full"
+                            options={{
+                                zoom: 19,
+                                center: marker,
+                                scaleControl: true,
+                                tilt: 45,
+                                heading: 180,
+                            }}
                         >
-                            <AnyReactComponent
-                                lat={marker.lat}
-                                lng={marker.lng}
 
-                            />
-                        </GoogleMapReact>
+                            {marker && <Marker
+                                position={marker}
+                                icon={{
+                                    url: '/icons/car.png',
+                                    scaledSize: new window.google.maps.Size(45, 45),
+                                    origin: new window.google.maps.Point(0, 0),
+                                    anchor: new window.google.maps.Point(15, 15),
+                                    
+                                }}
+                            />}
+                        </GoogleMap>
+
                     }
                 </>
 
@@ -126,6 +122,7 @@ const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
                 {error}
             </div>}
         </div>
+        </Layout>
     );
 }
 

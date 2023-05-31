@@ -56,8 +56,8 @@ const LoginForm: React.FC<Props> = ({ onSubmit, loading, error }) => {
                                 type="password"
                             />
                             <div className='flex items-center mt-2 gap-3 w-full text-xs'>
-                                <p>Pas encore de compte Hoptab ?</p>
-                                <a href='/client/register' className='text-blue-600 underline font-bold'>Inscrivez-vous </a>
+                                <p>You dont have an account yet!</p>
+                                <a href='/client/register' className='text-blue-600 underline font-bold'> Register </a>
                             </div>
                             <div className='flex justify-end w-full'>
 
