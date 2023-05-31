@@ -197,6 +197,7 @@ class MapClass {
         const request: any = {
             origin: this.markers[0].getPosition(),
             destination: this.endLatlng,
+            travelMode: google.maps.TravelMode.DRIVING,
         };
 
         this.directionsService?.route(request, (response, status) => {
