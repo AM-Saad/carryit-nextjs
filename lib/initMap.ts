@@ -19,7 +19,7 @@ class MapClass {
         this.startLatlng = startLatlng;
         this.endLatlng = endLatlng;
         this.markers = [];
-        this.zoomLevel = 18;
+        this.zoomLevel = 20;
         this.tilt = 20;
         this.duration = ''
         this.distance = ''
@@ -43,7 +43,7 @@ class MapClass {
             heading: 220,
             tilt: 89.5,
             mapId: "90f87356969d889c",
-            maxZoom: 19,
+            maxZoom: 20,
         };
 
 
@@ -125,14 +125,8 @@ class MapClass {
         // Create the icons for the markers
         const originIcon: google.maps.Icon = {
             url: '/icons/car.png', // Replace 'path_to_origin_icon' with the actual path to your origin marker icon image
-            scaledSize: new google.maps.Size(52, 52), // Adjust the size of the icon as needed
-            size: {
-                height: 60,
-                width: 60,
-                equals: () => {
-                    return false
-                }
-            }
+            scaledSize: new google.maps.Size(52, 72), // Adjust the size of the icon as needed
+      
 
         };
 
