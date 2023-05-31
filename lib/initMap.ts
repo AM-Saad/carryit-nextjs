@@ -162,15 +162,13 @@ class MapClass {
     }
     reset_scene() {
 
-        const center: any = this.map?.getCenter();
-        this.map?.setCenter(center)
+        this.map?.setCenter(this.startLatlng!)
         const heading = google.maps.geometry.spherical.computeHeading(this.startLatlng!, this.endLatlng!);
         this.map?.setZoom(19)
 
-        console.log(heading)
-        this.map?.setHeading(heading);
+        this.map?.setHeading(heading - 35);
 
-        setTimeout(() => this.map?.setTilt(26), 2000)
+        setTimeout(() => this.map?.setTilt(66), 2000)
 
     }
     adjustMap(mode: any, amount: any) {
