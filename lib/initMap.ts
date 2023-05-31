@@ -31,7 +31,6 @@ class MapClass {
         this.geocoder = new google.maps.Geocoder();
         this.directionsService = new google.maps.DirectionsService();
         this.directionsDisplay = new google.maps.DirectionsRenderer({
-            animation: google.maps.Animation.DROP,
             draggable: true,
             preserveViewport: true,
         });
@@ -198,7 +197,6 @@ class MapClass {
         const request: any = {
             origin: this.markers[0].getPosition(),
             destination: this.endLatlng,
-            travelMode: google.maps.DirectionsTravelMode.DRIVING,
         };
 
         this.directionsService?.route(request, (response, status) => {
