@@ -7,6 +7,7 @@ import MapClass from '@/lib/initMap';
 import socket from '@/lib/socket/trip'
 import { registerSocketEvents } from '@/lib/socket/socketHandler';
 import Info from '@/components/driver/map/Info';
+import Button from '@/components/shared/Button';
 
 type Libraries = 'geometry' | 'places'
 const libraries: Libraries[] = ['geometry', 'places']
@@ -18,10 +19,14 @@ const Map: React.FC<{ shipmentId: string, shipment: Shipment, driver: Driver }> 
     const [currentMap, setCurrentMap] = useState<any>(null);
     const [status, setStatus] = useState<any>('Fetching...')
     const [directionsPanel, setDirectionsPanel] = useState<boolean>(false)
-
+    const [allowLocation, setAllowLocation] = useState<boolean>(false)
     const init = useCallback(async () => {
+        setAllowLocation(false)
         const permission = await checkLocationPermission();
-        if (!permission) return
+        if (!permission) {
+            setAllowLocation(true)
+            return
+        }
 
         setStatus('Location access granted, initializing map...')
 
@@ -98,7 +103,13 @@ const Map: React.FC<{ shipmentId: string, shipment: Shipment, driver: Driver }> 
 
     }
 
-
+    const askForPermission = async () => {
+        try {
+            const position: any = await getCurrentPosition();
+        } catch (error: any) {
+            setError(error.message || 'Something went wrong. Please try again later')
+        }
+    }
 
     useEffect(() => {
         let interval: any
@@ -148,6 +159,13 @@ const Map: React.FC<{ shipmentId: string, shipment: Shipment, driver: Driver }> 
         <div style={{ height: '400px', width: '100%' }}>
             {loading && !error && <p className="text-gray-800 font-medium flex gap-[2px] items-center">{status}</p>}
             {error && <p className="text-red-500 font-medium flex gap-[2px] items-center">{error}</p>}
+            {allowLocation &&
+                <Button
+                    onClick={askForPermission}
+                    title='Allow Location'
+                    style='bg-theme block m-auto my-3 p-1 rounded-md shadow-md text-white'
+                />
+            }
             {isLoaded &&
                 <div className='relative'>
                     {currentMap && <Info currentMap={currentMap} />}
