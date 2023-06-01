@@ -16,8 +16,10 @@ const Driver = () => {
 
 
   const fetch_data = useCallback(async () => {
+    if(!id) return
+    console.log(id)
     await fetcher(driverRepository.fetch_driver(id), false)
-  }, [])
+  }, [id])
 
 
   const update_partial_driver = async (data: any) => {
@@ -34,15 +36,14 @@ const Driver = () => {
 
 
   useEffect(() => {
-    if (id)
-      fetch_data()
-  }, [id, fetch_data])
+    fetch_data()
+  }, [id])
 
   return (
     <Layout>
 
       {(loading && !error) && <Loading />}
-      {(error && !loading )&& <FetchError reload={fetch_data} error={error} />}
+      {(error && !loading) && <FetchError reload={fetch_data} error={error} />}
 
       {(!loading && currentItem) &&
         <DriverFrom
@@ -51,7 +52,7 @@ const Driver = () => {
           loading={updateMeta.loading}
           onDelete={delete_driver}
         />
-        }
+      }
 
     </Layout>
   )

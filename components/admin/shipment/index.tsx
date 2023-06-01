@@ -9,6 +9,8 @@ import { shipmentRepository } from '@/lib/repositries/admin'
 import MultiSelect from '@/components/shared/MultiSelect'
 import AdminContext from '@/stores/admin'
 import ChangeStatus from './ChangeStatus'
+import Fragile from '@/components/shared/icons/fragile'
+import Liquid from '@/components/shared/icons/liquid'
 
 interface Props {
   shipment: Shipment,
@@ -69,12 +71,14 @@ const ShipmentFrom: React.FC<Props> = ({ shipment, onUpdate, loading, onDelete }
 
   return (
     <>
-      <div className='flex gap-5 items-center justify-between lg:col-span-3'>
+      <div className='items-header'>
+        <div className='flex items-center gap-3'>
+          <h1 className='title'>{shipment.shipmentNo || 'n.c.'}</h1>
+          <ChangeStatus />
 
+        </div>
         <div className='flex items-center justify-between gap-5'>
 
-          <ToggleBtn value={shipment.is_fragile} onChange={(value: any) => update_partial_shipment({ is_fragile: value })} />
-          <ToggleBtn value={shipment.is_liquid} onChange={(value: any) => update_partial_shipment({ is_liquid: value })} />
           <Button
             onClick={() => setOpenConfirmDeleteModal(true)}
             title='Delete'
@@ -84,21 +88,26 @@ const ShipmentFrom: React.FC<Props> = ({ shipment, onUpdate, loading, onDelete }
           />
 
           <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
-            <ConfirmDeleteItem label='Shipment' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
+            <ConfirmDeleteItem label='shipment' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
           </Modal>
-          <ChangeStatus />
 
         </div>
 
+      </div>
+      <div className='flex items-center gap-2 my-3 justify-between'>
+        <div className='flex items-center gap-3 justify-between'>
+          <div className='flex items-center gap-1'>
+            <h1 className='text-xs font-medium text-gray-600 flex items-center'>Fragile</h1>
+            <ToggleBtn value={shipment.is_fragile} onChange={(value: any) => update_partial_shipment({ is_fragile: value })} />
+          </div>
+          <div className='flex items-center gap-1'>
+            <h1 className='text-xs font-medium text-gray-600 flex items-center'>Liquid</h1>
+            <ToggleBtn value={shipment.is_liquid} onChange={(value: any) => update_partial_shipment({ is_liquid: value })} />
+          </div>
+        </div>
 
       </div>
-      <div className="col-span-3">
-
-
-        {/* <EditProductCategory defaultVal={currentProduct!.category} loading={updatingMeta.loading} onSave={(value: any) => update_partial_product([{ category: value }])} /> */}
-
-      </div>
-      <div className="col-span-3">
+      <div className="grid sm:grid-cols-2  sm:gap-x-5">
         <EditableInput
           label='Name'
           inputType="text"
@@ -119,71 +128,69 @@ const ShipmentFrom: React.FC<Props> = ({ shipment, onUpdate, loading, onDelete }
           validationMessage={'Mobile is required'}
 
         />
-        <div className='grid grid-cols-2 gap-5'>
 
-          <EditableInput
-            label='Address'
-            inputType="text"
-            onSave={(value: string | number) => { update_partial_shipment({ 'receiver.address': value }) }}
-            defaultVal={shipment.receiver.address}
-            loading={loading}
-            required={true}
-            validationMessage={'Address is required'}
+        <EditableInput
+          label='Address'
+          inputType="text"
+          onSave={(value: string | number) => { update_partial_shipment({ 'receiver.address': value }) }}
+          defaultVal={shipment.receiver.address}
+          loading={loading}
+          required={true}
+          validationMessage={'Address is required'}
 
-          />
-          <EditableInput
-            label='Apartment'
-            inputType="number"
-            onSave={(value: string | number) => { update_partial_shipment({ 'receiver.apartment': value }) }}
-            defaultVal={shipment.receiver.apartment}
-            loading={loading}
-            required={true}
-            validationMessage={'Apartment is required'}
+        />
+        <EditableInput
+          label='Apartment'
+          inputType="number"
+          onSave={(value: string | number) => { update_partial_shipment({ 'receiver.apartment': value }) }}
+          defaultVal={shipment.receiver.apartment}
+          loading={loading}
+          required={true}
+          validationMessage={'Apartment is required'}
 
-          />
-          <EditableInput
-            label='Building'
-            inputType="number"
-            onSave={(value: string | number) => { update_partial_shipment({ 'receiver.building': value }) }}
-            defaultVal={shipment.receiver.building}
-            loading={loading}
-            required={true}
-            validationMessage={'Building is required'}
+        />
+        <EditableInput
+          label='Building'
+          inputType="number"
+          onSave={(value: string | number) => { update_partial_shipment({ 'receiver.building': value }) }}
+          defaultVal={shipment.receiver.building}
+          loading={loading}
+          required={true}
+          validationMessage={'Building is required'}
 
-          />
-          <EditableInput
-            label='City'
-            inputType="text"
-            onSave={(value: string | number) => { update_partial_shipment({ 'receiver.city': value }) }}
-            defaultVal={shipment.receiver.city || ''}
-            loading={loading}
-            required={false}
-            validationMessage={'City is required'}
+        />
+        <EditableInput
+          label='City'
+          inputType="text"
+          onSave={(value: string | number) => { update_partial_shipment({ 'receiver.city': value }) }}
+          defaultVal={shipment.receiver.city || ''}
+          loading={loading}
+          required={false}
+          validationMessage={'City is required'}
 
-          />
-          <EditableInput
-            label='State'
-            inputType="text"
-            onSave={(value: string | number) => { update_partial_shipment({ 'receiver.state': value }) }}
-            defaultVal={shipment.receiver.state || ''}
-            loading={loading}
-            required={false}
-            validationMessage={'State is required'}
+        />
+        <EditableInput
+          label='State'
+          inputType="text"
+          onSave={(value: string | number) => { update_partial_shipment({ 'receiver.state': value }) }}
+          defaultVal={shipment.receiver.state || ''}
+          loading={loading}
+          required={false}
+          validationMessage={'State is required'}
 
-          />
-          <EditableInput
-            label='Zip'
-            inputType="text"
-            onSave={(value: string | number) => { update_partial_shipment({ 'receiver.zip': value }) }}
-            defaultVal={shipment.receiver.zip || ''}
-            loading={loading}
-            required={false}
-            validationMessage={'Zip is required'}
+        />
+        <EditableInput
+          label='Zip'
+          inputType="text"
+          onSave={(value: string | number) => { update_partial_shipment({ 'receiver.zip': value }) }}
+          defaultVal={shipment.receiver.zip || ''}
+          loading={loading}
+          required={false}
+          validationMessage={'Zip is required'}
 
-          />
-        </div>
+        />
 
-        <div className='border mb-2 mt-3 pb-2 px-2 rounded-xl'>
+        <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
           <label htmlFor="assigned_vehicle" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>{shipment.driverId ? 'Assigned' : 'Assign'} Driver </label>
           {assignDriverError && <p className='text-red-500'>{assignDriverError}</p>}
           {drivers.length > 0 &&
@@ -206,7 +213,7 @@ const ShipmentFrom: React.FC<Props> = ({ shipment, onUpdate, loading, onDelete }
           }
         </div>
 
-        <ToggleBtn value={shipment.receiver.is_villa} onChange={(value: any) => update_partial_shipment({ 'receiver.is_villa': value })} />
+        {/* <ToggleBtn value={shipment.receiver.is_villa} onChange={(value: any) => update_partial_shipment({ 'receiver.is_villa': value })} /> */}
 
       </div>
 

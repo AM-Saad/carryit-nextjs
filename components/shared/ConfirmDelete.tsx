@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from './Button'
 
 interface Props {
     label: string,
@@ -16,8 +17,9 @@ const confirmDeleteItem: React.FC<Props> = ({ label, message, onConfirmDelete, c
             {message && <p className='mb-3 text-gray-500'>{message}</p>}
             {!message && <p className='mb-3 text-gray-500'>By deleting it you will never be able to undo it.</p>}
             <div className='flex items-center justify-around'>
-                <button onClick={cancel} disabled={loading} className=' py-2 px-4 text-sm bg-gray-400 rounded hover:opacity-70 text-white' > Cancel </button>
-                <button onClick={onConfirmDelete} disabled={loading} className=' py-2 px-4 text-sm bg-red-400 rounded hover:opacity-70 text-white' > {loading ? 'Delete..' : 'Delete'} </button>
+                <Button onClick={cancel} title='Cancel' style='bg-gray-400 text-white' loading={loading} disabled={loading} />
+
+                <Button onClick={onConfirmDelete} title='Delete' style='bg-red-500 text-white' loading={loading} disabled={loading} />
             </div>
 
         </div>

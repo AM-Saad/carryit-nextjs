@@ -2,15 +2,15 @@ import React, { useEffect, useContext } from 'react'
 import Link from 'next/link';
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { TriangleRightIcon, } from '@radix-ui/react-icons'
-
 import Layout from '@/components/layout'
 import { shipmentRepository } from '@/lib/repositries/admin'
 import FetchError from '@/components/shared/Error';
 import Loading from '@/components/shared/Loading';
 import AdminContext from '@/stores/admin';
 import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
-
+import Item from '@/components/shared/wrappers/items/item';
+import ItemsWrapper from '@/components/shared/wrappers/items';
+import { Shipment } from '@/modals/Shipment';
 
 
 const imageLoader = ({ src, width, quality }: any) => {
@@ -42,7 +42,7 @@ const Shipments = () => {
         {currentItems && currentItems.length > 0 &&
           <>
 
-            <div className='flex items-center justify-between mb-5'>
+            <div className='items-header'>
 
               <h1 className='text-md font-medium flex items-center gap-2'>
                 Your Shipments
@@ -59,15 +59,12 @@ const Shipments = () => {
               <Link href={`${INTERNAL_SHIPMENTS_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>
             </div>
 
-            <div className='bg-white rounded h-full '>
+            <ItemsWrapper>
 
-              {currentItems.map((shipment: any) => (
-                <Link href={`${INTERNAL_SHIPMENTS_ROUTE}/${shipment.id}`} key={shipment.id} className='text-black bg-white p-2 border-b flex group items-center gap-3 relative'>
-                  <TriangleRightIcon className='w-5 h-5 relative block transform transition-all duration-300 group-hover:translate-x-2' />
-                  <p>{shipment.shipmentNo}</p>
-                </Link>
+              {currentItems.map((shipment: Shipment) => (
+                <Item id={shipment.id} title={shipment.shipmentNo!} route={INTERNAL_SHIPMENTS_ROUTE} />
               ))}
-            </div>
+            </ItemsWrapper>
           </>
         }
 

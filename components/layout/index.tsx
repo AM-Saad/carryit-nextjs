@@ -1,4 +1,4 @@
-import { FADE_IN_ANIMATION_SETTINGS, INTERNAL_BRANCHES_ROUTE, INTERNAL_DRIVERS_ROUTE, INTERNAL_SHIPMENTS_ROUTE, INTERNAL_VEHICLES_ROUTE } from "@/lib/constants";
+import { FADE_IN_ANIMATION_SETTINGS, INTERNAL_MANAGERS_ROUTE, INTERNAL_BRANCHES_ROUTE, INTERNAL_DRIVERS_ROUTE, INTERNAL_SHIPMENTS_ROUTE, INTERNAL_VEHICLES_ROUTE } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,11 +10,14 @@ import { useSignInModal } from "@/components/layout/sign-in-modal";
 import UserDropdown from "@/components/layout/user-dropdown";
 import { useRouter } from "next/router";
 
+
+
 const links = [
   { href: INTERNAL_BRANCHES_ROUTE, name: 'Branches', icon: '/icons/branch_list.jpeg' },
   { href: INTERNAL_SHIPMENTS_ROUTE, name: 'Shipments', icon: '/icons/shipment_list.jpeg' },
   { href: INTERNAL_DRIVERS_ROUTE, name: 'Drivers', icon: '/icons/driver_list.jpeg' },
   { href: INTERNAL_VEHICLES_ROUTE, name: 'Vehicles', icon: '/icons/truck_list.jpeg' },
+  { href: INTERNAL_MANAGERS_ROUTE, name: 'Managers', icon: '/icons/admin_list.jpeg' },
   { href: '/admin/settings', name: 'Settings', icon: '/icons/settings_list.jpeg' }
 ]
 
@@ -55,7 +58,7 @@ const Layout = ({ meta, children, isSecured = true }: Props) => {
 
   }, []);
   return (
-    <div className="pb-14">
+    <div className="pb-8">
       <Meta {...meta} />
       <SignInModal />
       <div
@@ -94,21 +97,21 @@ const Layout = ({ meta, children, isSecured = true }: Props) => {
         </div>
       </div>
       {/*  Main content goes here */}
-      <main className="sm:flex gap-5 h-[100dvh] p-2 pt-20 w-full">
+      <main className="sm:flex gap-5 min-h-[100dvh] p-2 pt-20 w-full">
         {admin && router.pathname.includes('admin') &&
-          <div className="p-3 sm:my-1 border rounded-t-md sm:rounded-tr-lg w-full sm:w-44 sm:bg-white bg-gray-50 justify-between overflow-auto">
+          <div className="p-3 sm:my-1 border rounded-t-md sm:rounded-tr-lg w-full sm:w-44 sm:bg-white bg-gray-50 justify-between overflow-auto sm:min-h-screen">
 
-            <ul className="flex sm:flex-col gap-10 ">
+            <ul className="flex sm:flex-col gap-4 sm:gap-1 ">
               {links.map((link: any) =>
                 <>
-                  <li className="sm:mb-5 ">
-                    <Link href={link.href} className="flex items-center gap-2 text-sm md:text-lg">
+                  <li className="sm:mb-5 cursor-pointer block">
+                    <Link href={link.href} className=" items-center gap-2 text-xs md:text-sm text-gray-800 cursor-pointer flex">
                       <Image
                         src={link.icon}
                         width="25"
                         height="25"
                         alt={link.name}
-                         />
+                      />
                       {link.name}
 
                     </Link>
@@ -116,8 +119,9 @@ const Layout = ({ meta, children, isSecured = true }: Props) => {
                 </>
               )}
             </ul>
-          </div>}
-        <div className='border sm:border-0 h-full p-2 pt-4 w-full xl:pt-0 xl:p-5 '>
+          </div>
+        }
+        <div className='border sm:border-0 h-full w-full xl:p-5 '>
           {children}
         </div>
       </main>

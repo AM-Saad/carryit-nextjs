@@ -18,7 +18,7 @@ interface Props {
 
 
 
-const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading,onDelete }) => {
+const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading, onDelete }) => {
 
   const update_partial_vehicle = async (data: any) => onUpdate(data)
   const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState<boolean>(false)
@@ -26,16 +26,14 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading,onDelete }) =
 
 
   return (
-    <div>
-      <div className=' justify-between items-center'>
-        <div className='flex justify-end items-center gap-3'>
-          <div className="flex gap-2 items-center">
-            <ToggleBtn value={vehicle.active} onChange={(value: any) => update_partial_vehicle([{ active: value }])} />
-          </div>
-          <div>
+    <>
+      <div className='items-header'>
+        <h1 className='title'>{vehicle.name}</h1>
+
+        <div className='flex items-center justify-between gap-5'>
 
           <Button
-            onClick={()=>setOpenConfirmDeleteModal(true)}
+            onClick={() => setOpenConfirmDeleteModal(true)}
             title='Delete'
             style='bg-red-500 text-white'
             loading={loading}
@@ -43,11 +41,14 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading,onDelete }) =
           />
 
           <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
-            <ConfirmDeleteItem label='Vehicle' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
+            <ConfirmDeleteItem label='driver' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
           </Modal>
-          </div>
-
         </div>
+
+
+      </div>
+      <div>
+
         <EditableInput
           label='Name'
           inputType="text"
@@ -63,7 +64,7 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading,onDelete }) =
       <div className=' '>
         <div className='w-full'>
 
-          <div className='border mb-2 mt-3 pb-2 px-2 rounded-xl'>
+          <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
             <label htmlFor="vehicle_type" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Vehicle Type</label>
             <MultiSelect
               label='label'
@@ -79,7 +80,7 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading,onDelete }) =
 
             />
           </div>
-          <div className='border mb-2 mt-3 pb-2 px-2 rounded-xl'>
+          <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
             <label htmlFor="fuel_type" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Fuel Type</label>
 
             <MultiSelect
@@ -103,7 +104,7 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading,onDelete }) =
               preSelected={[{ val: vehicle.fuel_type, label: vehicle.fuel_type }]}
             />
           </div>
-          <div className='border flex gap-5 items-center mb-2 p-2 rounded-xl'>
+          <div className='border flex gap-5 items-center mb-2 p-2 rounded-lg'>
             <EditableInput
               label='Full Tank Capacity'
               inputType="number"
@@ -115,7 +116,7 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading,onDelete }) =
                   }
                 }])
               }}
-              defaultVal={vehicle.fuel_tank?.full_capacity   || 0}
+              defaultVal={vehicle.fuel_tank?.full_capacity || 0}
               loading={loading}
               required={true}
               validationMessage={'Tank Capacity is required'}
@@ -141,18 +142,18 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading,onDelete }) =
 
             />
           </div>
-            {/* <EditProductCategory defaultVal={currentProduct!.category} loading={updatingMeta.loading} onSave={(value: any) => update_partial_product([{ category: value }])} /> */}
-
-          </div>
-          <DocumentsContainer 
-          item={vehicle}
-              context='vehicles'
-          />
+          {/* <EditProductCategory defaultVal={currentProduct!.category} loading={updatingMeta.loading} onSave={(value: any) => update_partial_product([{ category: value }])} /> */}
 
         </div>
+        <DocumentsContainer
+          item={vehicle}
+          context='vehicles'
+        />
 
       </div>
-      )
+
+    </>
+  )
 }
 
-      export default VehicleFrom
+export default VehicleFrom

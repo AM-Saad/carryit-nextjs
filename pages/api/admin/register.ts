@@ -41,6 +41,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       })
 
+      const payload = {
+        data: {
+          address: '',
+          name: 'Main Branch',
+          phone: '',
+          state: '',
+          city: '',
+          notes: '',
+          governorate: '',
+          adminId: admin!.id,
+          company: {
+            connect: {
+              id: admin!.companyId!
+            }
+          }
+
+        }
+      }
+
+      const branch = await prisma.branch.create(payload);
+      
       // Create JWT token
       const token = jwt.sign({ sub: admin.id, company: admin.companyId }, process.env.NEXT_PUBLIC_JWT_SECRET!, {
         expiresIn: '7d',

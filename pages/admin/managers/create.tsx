@@ -5,45 +5,39 @@ import Layout from '@/components/layout'
 import FormikInput from '@/components/shared/FormikInput';
 import Button from '@/components/shared/Button';
 import { useRouter } from 'next/router';
-import { branchRepository } from '@/lib/repositries/admin'
+import { managerRepository } from '@/lib/repositries/admin'
 import Response, { Status } from '@/shared/modals/Response';
 import { toast } from 'react-toastify';
-import { INTERNAL_BRANCHES_ROUTE } from '@/lib/constants';
+import Branch from '@/modals/Branch';
+import { INTERNAL_MANAGERS_ROUTE } from '@/lib/constants';
 
 
-const BranchForm = () => {
+const ManagerForm = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const router = useRouter()
 
     const initialValues = {
         name: '',
-        address: '',
-        phone: '',
-        city: '',
-        governorate: '',
-        state: '',
-        drivers: [],
+        mobile: '',
         notes: '',
+        email: '',
+
     };
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Required'),
-        address: Yup.string(),
-        phone: Yup.string(),
-        city: Yup.string(),
-        governorate: Yup.string(),
-        state: Yup.string(),
         notes: Yup.string(),
-
+        mobile: Yup.string().required('Required'),
+        email: Yup.string(),
     });
 
     const onSubmit = async (values: any) => {
         setLoading(true);
-        const response: Response<any> = await branchRepository.create_branch(values)
+        const response: Response<any> = await managerRepository.create_manager(values)
         setLoading(false);
         if (response.status === Status.SUCCESS) {
-            router.push(`${INTERNAL_BRANCHES_ROUTE}/${response.items?.id}`)
-            return toast.success(response.message)
+            router.push(`${INTERNAL_MANAGERS_ROUTE}/${response.items?.id}`)
+            return
         }
         toast.error(response.message)
 
@@ -56,12 +50,11 @@ const BranchForm = () => {
                 {({ errors, touched }) => (
                     <Form>
                         <FormikInput label="Name" name="name" />
-                        <FormikInput label="Address" name="address" />
-                        <FormikInput label="City" name="city" />
-                        <FormikInput label="Governorate" name="governorate" />
-                        <FormikInput label="State" name="state" />
+                        <FormikInput label="Mobile" name="mobile" />
+
+                        <FormikInput label="Email" name="email" />
                         <FormikInput label="Notes" name="notes" />
-                        <FormikInput label="Phone" name="phone" />
+
 
 
                         <Button
@@ -78,4 +71,4 @@ const BranchForm = () => {
     );
 };
 
-export default BranchForm;
+export default ManagerForm;

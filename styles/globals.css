@@ -4,81 +4,89 @@
 
 
 .MenubarRoot {
-    @apply flex bg-white p-1 rounded-md shadow
-  }
-  
-  .MenubarTrigger {
-    @apply py-1 px-3 outline-none select-none font-medium text-[#4d2c5e] text-sm flex items-center justify-between rounded-md;
-  }
-  
-  .MenubarTrigger[data-highlighted],
-  .MenubarTrigger[data-state='open'] {
-    @apply bg-[#f4f0f4];
-  }
-  
-  .MenubarContent,
-  .MenubarSubContent {
-    @apply min-w-[220px] bg-white rounded-md p-3 shadow-lg duration-[400ms] ;
-  }
-  
-  .MenubarItem,
-  .MenubarSubTrigger,
-  .MenubarCheckboxItem,
-  .MenubarRadioItem {
-    @apply text-sm text-[#4d2c5e] rounded-sm flex items-center h-10 px-4 relative select-none;
-  }
-  
-  .MenubarItem.inset,
-  .MenubarSubTrigger.inset,
-  .MenubarCheckboxItem.inset,
-  .MenubarRadioItem.inset {
-    @apply pl-6;
-  }
-  
-  .MenubarItem[data-state='open'],
-  .MenubarSubTrigger[data-state='open'] {
-    @apply bg-[#f4f0f4] text-[#4d2c5e];
-  }
-  
-  .MenubarItem[data-highlighted],
-  .MenubarSubTrigger[data-highlighted],
-  .MenubarCheckboxItem[data-highlighted],
-  .MenubarRadioItem[data-highlighted] {
-    @apply bg-gradient-to-br from-[#7e5d8b] to-[#6f4c7e] text-[#563c5c];
-  }
-  
-  .MenubarItem[data-disabled],
-  .MenubarSubTrigger[data-disabled],
-  .MenubarCheckboxItem[data-disabled],
-  .MenubarRadioItem[data-disabled] {
-    @apply text-[#9e9e9e] pointer-events-none;
-  }
-  
-  .MenubarItemIndicator {
-    @apply absolute left-0 w-5 flex items-center justify-center;
-  }
-  
-  .MenubarSeparator {
-    @apply h-[1px] bg-[#c8c1cc] m-1;
-  }
-  
-  .RightSlot {
-    @apply ml-auto pl-20 text-[#7d7d7d];
-  }
-  
-  [data-highlighted]>.RightSlot {
-    @apply text-white;
-  }
-  
-  [data-disabled]>.RightSlot {
-    @apply text-[#9e9e9e];
-  }
-      
-  .map-container{
-    overflow: visible !important;
-    position: static !important;
-  }
+  @apply flex bg-white p-1 rounded-md shadow
+}
 
-  .orientation {
-    @apply  bg-white p-1 rounded-md shadow w-28 h-10 m-1
-  }
+.MenubarTrigger {
+  @apply py-1 px-3 outline-none select-none font-medium text-[#4d2c5e] text-sm flex items-center justify-between rounded-md;
+}
+
+.MenubarTrigger[data-highlighted],
+.MenubarTrigger[data-state='open'] {
+  @apply bg-[#f4f0f4];
+}
+
+.MenubarContent,
+.MenubarSubContent {
+  @apply min-w-[220px] bg-white rounded-md p-3 shadow-lg duration-[400ms];
+}
+
+.MenubarItem,
+.MenubarSubTrigger,
+.MenubarCheckboxItem,
+.MenubarRadioItem {
+  @apply text-sm text-[#4d2c5e] rounded-sm flex items-center h-10 px-4 relative select-none;
+}
+
+.MenubarItem.inset,
+.MenubarSubTrigger.inset,
+.MenubarCheckboxItem.inset,
+.MenubarRadioItem.inset {
+  @apply pl-6;
+}
+
+.MenubarItem[data-state='open'],
+.MenubarSubTrigger[data-state='open'] {
+  @apply bg-[#f4f0f4] text-[#4d2c5e];
+}
+
+.MenubarItem[data-highlighted],
+.MenubarSubTrigger[data-highlighted],
+.MenubarCheckboxItem[data-highlighted],
+.MenubarRadioItem[data-highlighted] {
+  @apply bg-gradient-to-br from-[#7e5d8b] to-[#6f4c7e] text-[#563c5c];
+}
+
+.MenubarItem[data-disabled],
+.MenubarSubTrigger[data-disabled],
+.MenubarCheckboxItem[data-disabled],
+.MenubarRadioItem[data-disabled] {
+  @apply text-[#9e9e9e] pointer-events-none;
+}
+
+.MenubarItemIndicator {
+  @apply absolute left-0 w-5 flex items-center justify-center;
+}
+
+.MenubarSeparator {
+  @apply h-[1px] bg-[#c8c1cc] m-1;
+}
+
+.RightSlot {
+  @apply ml-auto pl-20 text-[#7d7d7d];
+}
+
+[data-highlighted]>.RightSlot {
+  @apply text-white;
+}
+
+[data-disabled]>.RightSlot {
+  @apply text-[#9e9e9e];
+}
+
+.map-container {
+  overflow: visible !important;
+  position: static !important;
+}
+
+.items-header {
+  @apply flex gap-5 items-center justify-between lg:col-span-3 border-b mb-5 border-gray-300 px-1.5 pb-1 mt-3 sm:mt-0
+}
+
+.title {
+  @apply font-medium 
+}
+
+.orientation {
+  @apply bg-white p-1 rounded-md shadow w-28 h-10 m-1
+}
