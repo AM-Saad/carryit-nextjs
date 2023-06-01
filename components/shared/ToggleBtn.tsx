@@ -16,7 +16,7 @@ const ToggleBtn:React.FC<Props> = ({value, onChange}) => {
             onChange={onChange}
             className={classNames(
                 value ? 'bg-theme' : 'bg-gray-200',
-                'relative inline-flex flex-shrink-0 h-4 w-8 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-gray-500'
+                'relative inline-flex flex-shrink-0 h-4 w-8 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-gray-500 z-[-1]'
             )}
         >
             <span className="sr-only">Toggle</span>

@@ -20,9 +20,7 @@ export default function Popover({
   return (
     <>
       {isMobile && children}
-      {openPopover && isMobile && (
-        <Leaflet setShow={setOpenPopover}>{content}</Leaflet>
-      )}
+      {openPopover && isMobile && <Leaflet setShow={setOpenPopover}>{content}</Leaflet> }
       {isDesktop && (
         <PopoverPrimitive.Root>
           <PopoverPrimitive.Trigger className="inline-flex" asChild>
@@ -31,7 +29,7 @@ export default function Popover({
           <PopoverPrimitive.Content
             sideOffset={4}
             align={align}
-            className="z-20 animate-slide-up-fade items-center rounded-md border border-gray-200 bg-white drop-shadow-lg"
+            className="z-90 animate-slide-up-fade items-center rounded-md border border-gray-200 bg-white drop-shadow-lg"
           >
             {content}
           </PopoverPrimitive.Content>

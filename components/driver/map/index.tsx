@@ -8,7 +8,7 @@ import socket from '@/lib/socket/trip'
 import { registerSocketEvents } from '@/lib/socket/socketHandler';
 import Info from '@/components/driver/map/Info';
 
-type Libraries =  'geometry' | 'places'
+type Libraries = 'geometry' | 'places'
 const libraries: Libraries[] = ['geometry', 'places']
 const Map: React.FC<{ shipmentId: string, shipment: Shipment, driver: Driver }> = ({ shipmentId, shipment, driver }) => {
 
@@ -146,8 +146,8 @@ const Map: React.FC<{ shipmentId: string, shipment: Shipment, driver: Driver }> 
 
     return (
         <div style={{ height: '400px', width: '100%' }}>
-            {loading && <p className="text-gray-800 font-medium flex gap-[2px] items-center">{status}</p>}
-
+            {loading && !error && <p className="text-gray-800 font-medium flex gap-[2px] items-center">{status}</p>}
+            {error && <p className="text-red-500 font-medium flex gap-[2px] items-center">{error}</p>}
             {isLoaded &&
                 <div className='relative'>
                     {currentMap && <Info currentMap={currentMap} />}
