@@ -1,12 +1,8 @@
 import { useEffect, useRef, ReactNode, Dispatch, SetStateAction } from "react";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 
-export default function Leaflet({
-  setShow,
-  children,
-}: {
-  setShow: Dispatch<SetStateAction<boolean>>;
-  children: ReactNode;
+export default function Leaflet({ setShow, children }: {
+  setShow: Dispatch<SetStateAction<boolean>>; children: ReactNode;
 }) {
   const leafletRef = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
