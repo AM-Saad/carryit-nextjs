@@ -99,31 +99,29 @@ const Layout = ({ meta, children, isSecured = true }: Props) => {
       {/*  Main content goes here */}
       <main className="sm:flex gap-5 min-h-[100dvh] p-2 pt-20 w-full">
         {admin && router.pathname.includes('admin') &&
-          <div className="p-3 sm:my-1 border rounded-t-md sm:rounded-tr-lg w-full sm:w-44 sm:bg-white bg-gray-50 justify-between overflow-auto sm:min-h-screen">
 
-            <ul className="flex sm:flex-col gap-4 sm:gap-1 ">
-              {links.map((link: any) =>
-                <>
-                  <li className="sm:mb-5 cursor-pointer block">
-                    <Link href={link.href} className=" items-center gap-2 text-xs md:text-sm text-gray-800 cursor-pointer flex">
-                      <Image
-                        src={link.icon}
-                        width="25"
-                        height="25"
-                        alt={link.name}
-                      />
-                      {link.name}
+          <ul className="flex sm:flex-col gap-4 sm:gap-3 p-2 sm:my-1 border rounded-t-md sm:rounded-tr-lg w-full sm:w-44 sm:bg-white bg-gray-50 overflow-auto sm:min-h-screen">
+            {links.map((link: any) =>
+              <li className="sm:mb-5 cursor-pointer block min-w-[120px]">
+                <Link href={link.href} className="flex items-center sm:gap-1 justify-center text-xs md:text-sm text-gray-800 cursor-pointer  min-w-full">
+                  <Image
+                    src={link.icon}
+                    width="25"
+                    height="25"
+                    alt={link.name}
+                  />
+                  {link.name}
 
-                    </Link>
-                  </li>
-                </>
-              )}
-            </ul>
-          </div>
+                </Link>
+              </li>
+            )}
+          </ul>
         }
-        <div className='border sm:border-0 h-full w-full xl:p-5 '>
+
+        <div className=' h-full w-full xl:p-5 '>
           {children}
         </div>
+
       </main>
 
       <div className="fixed bottom-0 w-full border-t border-gray-200 bg-white py-3 text-center text-sm">
