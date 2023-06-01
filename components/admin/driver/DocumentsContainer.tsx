@@ -125,7 +125,7 @@ const DocumentsContainer: React.FC<{ item: Vehicle | any, context: string }> = (
     }, [previewDocs])
 
     return (
-        <div className='border p-2 rounded-xl bg-gray-100'>
+        <div className='border p-2 rounded-lg bg-gray-100'>
             <h3 className='text-md font-semibold'>Documents</h3>
             {addNew &&
                 <>

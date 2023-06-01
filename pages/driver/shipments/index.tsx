@@ -44,7 +44,7 @@ const Shipments = () => {
               />
               Your Shipments
             </h1>
-            <div className='bg-white rounded shadow px-5 xl:px-0 h-full '>
+            <div className='bg-white rounded shadow h-full '>
 
               {currentItems.map((shipment: any) => (
                 <Link href={`${INTERNAL_DRIVER_SHIPMENTS_ROUTE}/${shipment.id}`} key={shipment.id} className='text-black bg-white p-2 border-b flex group items-center gap-3 relative'>

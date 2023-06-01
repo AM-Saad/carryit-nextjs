@@ -71,7 +71,24 @@ const BranchFrom: React.FC<Props> = ({ branch, onUpdate, loading, onDelete }) =>
 
   return (
     <>
-      <div className='flex gap-5 items-center justify-between lg:col-span-3'>
+      <div className='items-header'>
+        <h1 className='title'>{branch.name || 'n.c.'}</h1>
+        <div className='flex items-center justify-between gap-5'>
+          <Button
+            onClick={() => setOpenConfirmDeleteModal(true)}
+            title='Delete'
+            style='bg-red-500 text-white'
+            loading={loading}
+            disabled={loading}
+          />
+          <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
+            <ConfirmDeleteItem label='branch' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
+          </Modal>
+        </div>
+
+      </div>
+
+      <div className="col-span-3">
         <EditableInput
           label='Name'
           inputType="text"
@@ -82,25 +99,6 @@ const BranchFrom: React.FC<Props> = ({ branch, onUpdate, loading, onDelete }) =>
           validationMessage={'Name is required'}
 
         />
-        <div className='flex items-center justify-between gap-5'>
-
-          <Button
-            onClick={() => setOpenConfirmDeleteModal(true)}
-            title='Delete'
-            style='bg-red-500 text-white'
-            loading={loading}
-            disabled={loading}
-          />
-
-          <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
-            <ConfirmDeleteItem label='Branch' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
-          </Modal>
-        </div>
-
-
-      </div>
-
-      <div className="col-span-3">
         <EditableInput
           label='Phone'
           inputType="number"
@@ -159,7 +157,7 @@ const BranchFrom: React.FC<Props> = ({ branch, onUpdate, loading, onDelete }) =>
 
 
 
-      <div className='border mb-2 mt-3 pb-2 px-2 rounded-xl'>
+      <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
         <label htmlFor="drivers" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Drivers </label>
         {assignDriversError && <p className='text-red-500'>{assignDriversError}</p>}
         {vehicles.length > 0 &&

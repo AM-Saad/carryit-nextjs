@@ -5,7 +5,7 @@ import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
 import { } from '.prisma/client';
 import { ObjectId } from 'bson'
-import { authMiddleware , Token} from '@/middleware/auth';
+import { authMiddleware, Token } from '@/middleware/auth';
 
 export const config = {
     api: {
@@ -13,26 +13,20 @@ export const config = {
     },
 }
 
-export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token:Token) => {
+export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
-    // create a new branch
+    // Create new manager
     if (req.method == 'POST') {
         const { values } = req.body
         const admin = await prisma.admin.findFirst({ where: { id: token.adminId as string } });
-        const id = new ObjectId();
-
         const payload = {
             data: {
-                address: values.address,
                 name: values.name,
-                phone: values.mobile,
-                state: values.state,
-                city: values.city,
-                notes: values.notes,
-                governorate: values.governorate,
-                adminId: admin!.id,
-                company:{
-                    connect:{
+                mobile: values.mobile,
+                password: '123456',
+                isSuper: false,
+                company: {
+                    connect: {
                         id: admin!.companyId!
                     }
                 }
@@ -40,8 +34,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
             }
         }
         try {
-            const branch = await prisma.branch.create(payload);
-            return res.status(200).json(refineResponse(Status.SUCCESS, 'Branch Created Successfully', branch));
+            const admin = await prisma.admin.create(payload);
+            return res.status(200).json(refineResponse(Status.SUCCESS, 'Manager created successfully', admin));
         }
         catch (error: any) {
             console.log(error);

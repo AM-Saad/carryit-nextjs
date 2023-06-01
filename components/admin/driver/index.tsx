@@ -29,7 +29,7 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
 
   const assign_vehicle = async (vehicleId: string | null) => {
 
-      await updater(driverRepository.assign_vehicle(driver.id, vehicleId), false)
+    await updater(driverRepository.assign_vehicle(driver.id, vehicleId), false)
   }
 
 
@@ -66,7 +66,30 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
 
   return (
     <>
-      <div className='flex gap-5 items-center justify-between lg:col-span-3'>
+      <div className='items-header'>
+        <h1 className='title'>{driver.name || 'n.c.'}</h1>
+
+        <div className='flex items-center justify-between gap-5'>
+
+          <Button
+            onClick={() => setOpenConfirmDeleteModal(true)}
+            title='Delete'
+            style='bg-red-500 text-white'
+            loading={loading}
+            disabled={loading}
+          />
+
+          <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
+            <ConfirmDeleteItem label='driver' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
+          </Modal>
+        </div>
+
+
+      </div>
+
+      <div className="col-span-3">
+        {/* <ToggleBtn value={driver.active} onChange={(value: any) => update_partial_driver({ active: value })} /> */}
+
         <EditableInput
           label='Name'
           inputType="text"
@@ -77,26 +100,6 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
           validationMessage={'Name is required'}
 
         />
-        <div className='flex items-center justify-between gap-5'>
-
-          <ToggleBtn value={driver.active} onChange={(value: any) => update_partial_driver({ active: value })} />
-          <Button
-            onClick={() => setOpenConfirmDeleteModal(true)}
-            title='Delete'
-            style='bg-red-500 text-white'
-            loading={loading}
-            disabled={loading}
-          />
-
-          <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
-            <ConfirmDeleteItem label='Driver' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
-          </Modal>
-        </div>
-
-
-      </div>
-
-      <div className="col-span-3">
         <EditableInput
           label='Mobile'
           inputType="number"
@@ -144,7 +147,7 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
         required={false}
       />
 
-      <div className='border mb-2 mt-3 pb-2 px-2 rounded-xl'>
+      <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
         <label htmlFor="assigned_vehicle" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Assigned Vehicle </label>
         {assignVehicleError && <p className='text-red-500'>{assignVehicleError}</p>}
         {vehicles.length > 0 &&

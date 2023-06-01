@@ -2,26 +2,33 @@ import { Switch } from '@headlessui/react'
 function classNames(...classes:any) {
     return classes.filter(Boolean).join(' ')
 }
-const ToggleBtn = (props:any) => {
+
+interface Props {
+    value: boolean,
+    onChange: (value: boolean) => void
+}
+const ToggleBtn:React.FC<Props> = ({value, onChange}) => {
+
+
     return (
         <Switch
-            checked={props.value}
-            onChange={props.onChange}
+            checked={value}
+            onChange={onChange}
             className={classNames(
-                props.value ? 'bg-theme' : 'bg-gray-200',
-                'relative inline-flex flex-shrink-0 h-5 w-10 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500'
+                value ? 'bg-theme' : 'bg-gray-200',
+                'relative inline-flex flex-shrink-0 h-4 w-8 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-gray-500'
             )}
         >
             <span className="sr-only">Toggle</span>
             <span
                 className={classNames(
-                    props.value ? 'translate-x-5' : 'translate-x-0',
-                    'pointer-events-none relative inline-block h-4 w-4 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200'
+                    value ? 'translate-x-4' : 'translate-x-0',
+                    'pointer-events-none relative inline-block h-3 w-3 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200'
                 )}
             >
                 <span
                     className={classNames(
-                        props.value ? 'opacity-0 ease-out duration-100' : 'opacity-100 ease-in duration-200',
+                        value ? 'opacity-0 ease-out duration-100' : 'opacity-100 ease-in duration-200',
                         'absolute inset-0 h-full w-full flex items-center justify-center transition-opacity'
                     )}
                     aria-hidden="true"
@@ -30,7 +37,7 @@ const ToggleBtn = (props:any) => {
                         <path
                             d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2"
                             stroke="currentColor"
-                            strokeWidth={2}
+                            strokeWidth={1}
                             strokeLinecap="round"
                             strokeLinejoin="round"
                         />
@@ -38,7 +45,7 @@ const ToggleBtn = (props:any) => {
                 </span>
                 <span
                     className={classNames(
-                        props.value ? 'opacity-100 ease-in duration-200' : 'opacity-0 ease-out duration-100',
+                        value ? 'opacity-100 ease-in duration-200' : 'opacity-0 ease-out duration-100',
                         'absolute inset-0 h-full w-full flex items-center justify-center transition-opacity'
                     )}
                     aria-hidden="true"

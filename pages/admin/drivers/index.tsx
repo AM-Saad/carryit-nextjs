@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useSession } from "next-auth/react";
 import Link from 'next/link';
 import Image from "next/image";
 import Layout from '@/components/layout'
 import { driverRepository } from '@/lib/repositries/admin';
-import { Status, Error } from '@/shared/modals/Response';
 import Loading from '@/components/shared/Loading';
 import FetchError from '@/components/shared/Error';
-import { TriangleRightIcon } from '@radix-ui/react-icons';
 import AdminContext from '@/stores/admin';
 import { INTERNAL_DRIVERS_ROUTE } from '@/lib/constants'
+import Item from '@/components/shared/wrappers/items/item';
+import ItemsWrapper from '@/components/shared/wrappers/items';
 
 const Drivers = () => {
   const { data: session } = useSession()
@@ -37,7 +37,7 @@ const Drivers = () => {
         {currentItems.length > 0 &&
           <>
 
-            <div className='flex items-center justify-between mb-5'>
+            <div className='items-header'>
               <h1 className='text-md font-medium flex items-center gap-1'>
                 Your Drivers
                 <Image
@@ -47,19 +47,17 @@ const Drivers = () => {
                   height='40'
                 />
               </h1>
-
               <Link href={`${INTERNAL_DRIVERS_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>
             </div>
-            <div className='bg-white rounded h-full'>
+            <ItemsWrapper >
               {currentItems.map((driver: any) => (
-                <Link href={`${INTERNAL_DRIVERS_ROUTE}/${driver.id}`} key={driver.id} className='text-black bg-white p-2 border-b flex items-center gap-3 relative group'>
-                  <TriangleRightIcon className='w-5 h-5 relative block transform transition-all duration-300 group-hover:translate-x-2' />
-
-                  <p>{driver.name}</p>
-                </Link>
-              ))
-              }
-            </div>
+                <Item
+                  title={driver.name}
+                  id={driver.id}
+                  route={INTERNAL_DRIVERS_ROUTE}
+                />
+              ))}
+            </ItemsWrapper>
           </>
         }
 
