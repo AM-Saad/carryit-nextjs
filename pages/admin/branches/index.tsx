@@ -12,6 +12,7 @@ import AdminContext from '@/stores/admin';
 import { INTERNAL_BRANCHES_ROUTE } from '@/lib/constants'
 import Item from '@/components/shared/wrappers/items/item';
 import ItemsWrapper from '@/components/shared/wrappers/items';
+import withAuth from '@/components/shared/auth';
 
 const Branches = () => {
   const { data: session } = useSession()
@@ -43,7 +44,7 @@ const Branches = () => {
               <h1 className='text-md font-medium flex items-center gap-2'>
                 Your Branches
                 <Image
-                  src='/icons/branch_list.jpeg'
+                  src='/icons/branch_list.png'
                   alt='Drivers'
                   width='25'
                   height='25'
@@ -80,4 +81,5 @@ const Branches = () => {
   )
 }
 
-export default Branches  
+
+export default withAuth(Branches)

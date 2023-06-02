@@ -8,6 +8,8 @@ import Loading from '@/components/shared/Loading'
 import FetchError from '@/components/shared/Error'
 import ShipmentFrom from '@/components/admin/shipment'
 import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
+import withAuth from '@/components/shared/auth';
+
 
 const Shipment = () => {
   const router = useRouter()
@@ -45,4 +47,4 @@ const Shipment = () => {
   )
 }
 
-export default Shipment
+export default withAuth(Shipment)

@@ -11,6 +11,7 @@ import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
 import Item from '@/components/shared/wrappers/items/item';
 import ItemsWrapper from '@/components/shared/wrappers/items';
 import { Shipment } from '@/modals/Shipment';
+import withAuth from '@/components/shared/auth';
 
 
 const imageLoader = ({ src, width, quality }: any) => {
@@ -49,7 +50,7 @@ const Shipments = () => {
 
                 <Image
                   // loader={imageLoader}
-                  src='/icons/shipment_list.jpeg'
+                  src='/icons/shipment_list.png'
                   alt='Shipments'
                   width={20}
                   height={20}
@@ -87,4 +88,4 @@ const Shipments = () => {
   )
 }
 
-export default Shipments  
+export default withAuth(Shipments)

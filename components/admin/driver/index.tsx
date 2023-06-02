@@ -87,7 +87,7 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
 
       </div>
 
-      <div className="col-span-3">
+      <div className="form-body">
         {/* <ToggleBtn value={driver.active} onChange={(value: any) => update_partial_driver({ active: value })} /> */}
 
         <EditableInput
@@ -111,69 +111,70 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
 
         />
 
-      </div>
 
-      <EditableInput
-        label='Base Salary'
-        inputType="number"
-        onSave={(value: string | number) => {
-          console.log(value)
-          update_partial_driver({
-            salary: {
-              ...driver.salary,
-              base_salary: Number(value),
-            }
-          })
-        }}
-        defaultVal={driver.salary.base_salary || 0}
-        loading={loading}
-        required={false}
-      />
-      <EditableInput
-        label='Commission'
-        inputType="number"
-        onSave={(value: string | number) => {
-          update_partial_driver(
-            {
+        <EditableInput
+          label='Base Salary'
+          inputType="number"
+          onSave={(value: string | number) => {
+            console.log(value)
+            update_partial_driver({
               salary: {
                 ...driver.salary,
-                commission: Number(value),
+                base_salary: Number(value),
               }
-            }
-          )
-        }}
-        defaultVal={driver.salary.commission}
-        loading={loading}
-        required={false}
-      />
+            })
+          }}
+          defaultVal={driver.salary.base_salary || 0}
+          loading={loading}
+          required={false}
+        />
+        <EditableInput
+          label='Commission'
+          inputType="number"
+          onSave={(value: string | number) => {
+            update_partial_driver(
+              {
+                salary: {
+                  ...driver.salary,
+                  commission: Number(value),
+                }
+              }
+            )
+          }}
+          defaultVal={driver.salary.commission}
+          loading={loading}
+          required={false}
+        />
 
-      <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
-        <label htmlFor="assigned_vehicle" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Assigned Vehicle </label>
-        {assignVehicleError && <p className='text-red-500'>{assignVehicleError}</p>}
-        {vehicles.length > 0 &&
-          <MultiSelect
-            label='label'
-            multiple={false}
-            trackBy="value"
-            closeOnSelect={true}
-            input={(props: any) => {
-              props[0] && assign_vehicle(props[0].value)
+        <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
+          <label htmlFor="assigned_vehicle" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Assigned Vehicle </label>
+          {assignVehicleError && <p className='text-red-500'>{assignVehicleError}</p>}
+          {vehicles.length > 0 &&
+            <MultiSelect
+              label='label'
+              multiple={false}
+              trackBy="value"
+              closeOnSelect={true}
+              input={(props: any) => {
+                props[0] && assign_vehicle(props[0].value)
 
-            }}
+              }}
 
-            id='assigned_vehicle'
-            options={vehiclesToAssign}
-            placeholder={'Assigned Vehicle'}
-            disabled={loading}
-            preSelected={selectedVehicles}
-          />
-        }
+              id='assigned_vehicle'
+              options={vehiclesToAssign}
+              placeholder={'Assigned Vehicle'}
+              disabled={loading}
+              preSelected={selectedVehicles}
+            />
+          }
+        </div>
+
+        <DocumentsContainer
+          item={driver}
+          context='drivers'
+        />
       </div>
 
-      <DocumentsContainer
-        item={driver}
-        context='drivers'
-      />
 
 
     </>

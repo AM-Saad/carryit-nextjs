@@ -10,6 +10,7 @@ import AdminContext from '@/stores/admin';
 import { INTERNAL_MANAGERS_ROUTE } from '@/lib/constants'
 import Item from '@/components/shared/wrappers/items/item';
 import ItemsWrapper from '@/components/shared/wrappers/items';
+import withAuth from '@/components/shared/auth';
 
 const Admins = () => {
   const { data: session } = useSession()
@@ -41,7 +42,7 @@ const Admins = () => {
               <h1 className='text-md font-medium flex items-center gap-2'>
                 Your Managers
                 <Image
-                  src='/icons/admin_list.jpeg'
+                  src='/icons/admin_list.png'
                   alt='Drivers'
                   width='25'
                   height='25'
@@ -78,4 +79,4 @@ const Admins = () => {
   )
 }
 
-export default Admins  
+export default withAuth(Admins)

@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import Branch from '@/modals/Branch';
 import { INTERNAL_MANAGERS_ROUTE } from '@/lib/constants';
 
+import withAuth from '@/components/shared/auth';
 
 const ManagerForm = () => {
     const [loading, setLoading] = useState<boolean>(false)
@@ -45,30 +46,33 @@ const ManagerForm = () => {
 
     return (
         <Layout>
+            <div className='form-body'>
 
-            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-                {({ errors, touched }) => (
-                    <Form>
-                        <FormikInput label="Name" name="name" />
-                        <FormikInput label="Mobile" name="mobile" />
+                <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+                    {({ errors, touched }) => (
+                        <Form>
+                            <FormikInput label="Name" name="name" />
+                            <FormikInput label="Mobile" name="mobile" />
 
-                        <FormikInput label="Email" name="email" />
-                        <FormikInput label="Notes" name="notes" />
+                            <FormikInput label="Email" name="email" />
+                            <FormikInput label="Notes" name="notes" />
 
 
 
-                        <Button
-                            title='Create'
-                            style='bg-theme text-white'
-                            type='submit'
-                            onClick={() => { }}
-                            loading={loading}
-                            disabled={loading} />
-                    </Form>
-                )}
-            </Formik>
+                            <Button
+                                title='Create'
+                                style='bg-theme text-white'
+                                type='submit'
+                                onClick={() => { }}
+                                loading={loading}
+                                disabled={loading} />
+                        </Form>
+                    )}
+                </Formik>
+            </div>
+
         </Layout>
     );
 };
 
-export default ManagerForm;
+export default withAuth(ManagerForm)

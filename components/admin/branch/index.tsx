@@ -88,7 +88,7 @@ const BranchFrom: React.FC<Props> = ({ branch, onUpdate, loading, onDelete }) =>
 
       </div>
 
-      <div className="col-span-3">
+      <div className="form-body">
         <EditableInput
           label='Name'
           inputType="text"
@@ -153,30 +153,30 @@ const BranchFrom: React.FC<Props> = ({ branch, onUpdate, loading, onDelete }) =>
 
         />
 
+        <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
+          <label htmlFor="drivers" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Drivers </label>
+          {assignDriversError && <p className='text-red-500'>{assignDriversError}</p>}
+          {vehicles.length > 0 &&
+            <MultiSelect
+              label='label'
+              multiple={true}
+              trackBy="value"
+              closeOnSelect={false}
+              input={(props: any) => {
+                update_drivers(props)
+              }}
+              id='drivers'
+              options={driversToAssign}
+              placeholder={'Branch Drivers'}
+              disabled={loading}
+              preSelected={selectedDrivers}
+            />
+          }
+        </div>
       </div>
 
 
 
-      <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
-        <label htmlFor="drivers" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Drivers </label>
-        {assignDriversError && <p className='text-red-500'>{assignDriversError}</p>}
-        {vehicles.length > 0 &&
-          <MultiSelect
-            label='label'
-            multiple={true}
-            trackBy="value"
-            closeOnSelect={false}
-            input={(props: any) => {
-              update_drivers(props)
-            }}
-            id='drivers'
-            options={driversToAssign}
-            placeholder={'Branch Drivers'}
-            disabled={loading}
-            preSelected={selectedDrivers}
-          />
-        }
-      </div>
 
 
 
