@@ -57,12 +57,12 @@ const Map: React.FC<Props> = ({ shipmentId, shipment, driver, ready }) => {
         try {
             const res = await navigator.permissions.query({ name: 'geolocation' })
             if (res.state === 'denied') {
-                setError('Location access denied<br/> <span class="text-xs flex text-gray-400 mt-1">Please allow location access in your browser settings and refresh the page to continue</span>')
+                setError('Location access denied<br/> <span class="text-xs flex text-gray-400 mt-1 justify-center">Please allow location access in your browser settings and refresh the page to continue</span>')
                 return false
             }
             if (res.state === 'prompt') {
                 setError(`
-                Allow location permission to start <span class="text-xs flex text-gray-400 mt-1">
+                Allow location permission to start <span class="text-xs flex text-gray-400 mt-1 justify-center">
                 if the popup does not show up asking for your permission, make sure you have enabled GPS in your device settings and the browser location access</span>`)
                 return false
             }
