@@ -160,7 +160,7 @@ class MapClass {
         const heading = google.maps.geometry.spherical.computeHeading(this.startLatlng!, this.endLatlng!);
         this.map?.setZoom(19)
 
-        this.map?.setHeading(heading - 35);
+        this.map?.setHeading(heading);
 
         setTimeout(() => this.map?.setTilt(66), 2000)
 

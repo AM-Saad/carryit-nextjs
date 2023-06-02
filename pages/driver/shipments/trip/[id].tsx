@@ -13,6 +13,7 @@ const Trip = () => {
 
   const { fetcher, fetchMeta, currentItem, driver } = useContext(DriverContext);
   const { loading, error } = fetchMeta
+  const [isReady, setIsReady] = React.useState<boolean>(false)
 
   const fetch_data = async () => {
     await fetcher(shipmentRepository.fetch_shipment(id), false)
@@ -32,16 +33,15 @@ const Trip = () => {
       {error && !loading && <FetchError reload={fetch_data} error={error} />}
       {(!loading && currentItem) &&
         <>
-          <h1 className="text-lg font-bold text-gray-500 my-2">Trip For {currentItem.shipmentNo} Started</h1>
-          <div  style={{ height: '83vh', width: '100%' }} className='mb-10 rounded-md overflow-hidden shadow-md'>
-            <Map shipmentId={currentItem.id} shipment={currentItem} driver={driver} />
+          <h1 className="text-lg font-bold text-gray-500 my-2"> {currentItem.shipmentNo} </h1>
+          <div style={{ height: '83vh', width: '100%' }} className='mb-10 rounded-md overflow-hidden shadow-md'>
+            <Map shipmentId={currentItem.id} shipment={currentItem} driver={driver} ready={() => setIsReady(true)} />
           </div>
-          <div tabIndex={0} className='w-full bg-white p-2 fixed left-0 bottom-0 flex items-center gap-x-3 border-t-2'>
+          {isReady && <div tabIndex={0} className='w-full bg-white p-2 fixed left-0 bottom-0 flex items-center gap-x-3 border-t-2'>
             <CancelModel shipmentId={currentItem.id} />
             <button className='bg-green-500 text-white p-2 rounded-md w-full' onClick={() => { }}>Delivered</button>
 
-
-          </div>
+          </div>}
         </>
       }
     </div>
