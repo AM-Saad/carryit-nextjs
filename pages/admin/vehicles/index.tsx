@@ -42,13 +42,14 @@ const Vehicles = () => {
             <div className='items-header'>
 
               <h1 className='text-md font-medium flex items-center gap-2'>
+              Your Vehicles
                 <Image
                   src='/icons/truck_list.png'
                   alt='Drivers'
-                  width='40'
-                  height='40'
+                  width='25'
+                  height='25'
                 />
-                Your Vehicles
+          
               </h1>
 
               <Link href={`${INTERNAL_VEHICLES_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>

@@ -44,8 +44,8 @@ const Drivers = () => {
                 <Image
                   src='/icons/driver_list.png'
                   alt='Drivers'
-                  width='40'
-                  height='40'
+                  width='25'
+                  height='25'
                 />
               </h1>
               <Link href={`${INTERNAL_DRIVERS_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>
