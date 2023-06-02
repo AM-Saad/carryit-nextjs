@@ -44,8 +44,8 @@ const Admins = () => {
                 <Image
                   src='/icons/admin_list.png'
                   alt='Drivers'
-                  width='25'
-                  height='25'
+                  width='20'
+                  height='20'
                 />
               </h1>
 

@@ -52,8 +52,8 @@ const Shipments = () => {
                   // loader={imageLoader}
                   src='/icons/shipment_list.png'
                   alt='Shipments'
-                  width={20}
-                  height={20}
+                  width='20'
+                  height='20'
                 />
               </h1>
 

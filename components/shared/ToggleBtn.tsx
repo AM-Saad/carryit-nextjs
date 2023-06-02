@@ -1,5 +1,5 @@
 import { Switch } from '@headlessui/react'
-function classNames(...classes:any) {
+function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
 }
 
@@ -7,7 +7,7 @@ interface Props {
     value: boolean,
     onChange: (value: boolean) => void
 }
-const ToggleBtn:React.FC<Props> = ({value, onChange}) => {
+const ToggleBtn: React.FC<Props> = ({ value, onChange }) => {
 
 
     return (
@@ -16,16 +16,11 @@ const ToggleBtn:React.FC<Props> = ({value, onChange}) => {
             onChange={onChange}
             className={classNames(
                 value ? 'bg-theme' : 'bg-gray-200',
-                'relative inline-flex flex-shrink-0 h-4 w-8 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-gray-500 z-[-1]'
+                'relative inline-flex flex-shrink-0 h-4 w-8 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-gray-500 z-[0]'
             )}
         >
             <span className="sr-only">Toggle</span>
-            <span
-                className={classNames(
-                    value ? 'translate-x-4' : 'translate-x-0',
-                    'pointer-events-none relative inline-block h-3 w-3 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200'
-                )}
-            >
+            <span className={classNames(value ? 'translate-x-4' : 'translate-x-0', 'pointer-events-none relative inline-block h-3 w-3 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200')}>
                 <span
                     className={classNames(
                         value ? 'opacity-0 ease-out duration-100' : 'opacity-100 ease-in duration-200',
@@ -44,10 +39,7 @@ const ToggleBtn:React.FC<Props> = ({value, onChange}) => {
                     </svg>
                 </span>
                 <span
-                    className={classNames(
-                        value ? 'opacity-100 ease-in duration-200' : 'opacity-0 ease-out duration-100',
-                        'absolute inset-0 h-full w-full flex items-center justify-center transition-opacity'
-                    )}
+                    className={classNames(value ? 'opacity-100 ease-in duration-200' : 'opacity-0 ease-out duration-100', 'absolute inset-0 h-full w-full flex items-center justify-center transition-opacity')}
                     aria-hidden="true"
                 >
                     <svg className="h-3 w-3 main-text-color" fill="currentColor" viewBox="0 0 12 12">

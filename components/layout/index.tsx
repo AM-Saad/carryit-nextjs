@@ -9,14 +9,15 @@ import Meta from "@/components/layout/meta";
 import { useSignInModal } from "@/components/layout/sign-in-modal";
 import UserDropdown from "@/components/layout/user-dropdown";
 import { useRouter } from "next/router";
+import Sidemenu from "./sidemenu";
 
 
 
 const links = [
   { href: INTERNAL_BRANCHES_ROUTE, name: 'Branches', icon: '/icons/branch_list.png' },
-  { href: INTERNAL_SHIPMENTS_ROUTE, name: 'Shipments', icon: '/icons/shipment_list.png' },
   { href: INTERNAL_DRIVERS_ROUTE, name: 'Drivers', icon: '/icons/driver_list.png' },
   { href: INTERNAL_VEHICLES_ROUTE, name: 'Vehicles', icon: '/icons/truck_list.png' },
+  { href: INTERNAL_SHIPMENTS_ROUTE, name: 'Shipments', icon: '/icons/shipment_list.png' },
   { href: INTERNAL_MANAGERS_ROUTE, name: 'Managers', icon: '/icons/admin_list.png' },
   { href: '/admin/settings', name: 'Settings', icon: '/icons/settings_list.png' }
 ]
@@ -97,27 +98,8 @@ const Layout = ({ meta, children, isSecured = true }: Props) => {
         </div>
       </div>
       {/*  Main content goes here */}
-      <main className="sm:flex gap-5 min-h-[100dvh] p-2 pt-20 w-full">
-        {admin && router.pathname.includes('admin') &&
-
-          <ul
-            className="flex sm:flex-col items-start gap-4 sm:gap-3 p-2 sm:my-1 border rounded-t-md sm:rounded-tr-lg w-full sm:w-44 sm:bg-white bg-gray-50 overflow-auto sm:min-h-screen">
-            {links.map((link: any) =>
-              <li className="sm:mb-5 cursor-pointer block min-w-[120px]">
-                <Link href={link.href} className="flex items-center sm:gap-1 justify-center sm:justify-start text-xs md:text-sm text-gray-800 cursor-pointer  min-w-full">
-                  <Image
-                    src={link.icon}
-                    width="25"
-                    height="25"
-                    alt={link.name}
-                  />
-                  {link.name}
-
-                </Link>
-              </li>
-            )}
-          </ul>
-        }
+      <main className="flex gap-3 sm:gap-5 min-h-[100dvh] p-2 pt-20 w-full">
+        {admin && router.pathname.includes('admin') && <Sidemenu links={links} />}
 
         <div className='min-h-[100vh] w-full rounded-md border'>
           {children}
