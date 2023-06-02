@@ -6,6 +6,7 @@ import FetchError from '@/components/shared/Error'
 import VehicleFrom from '@/components/admin/vehicle'
 import AdminContext from '@/stores/admin'
 import { INTERNAL_VEHICLES_ROUTE } from '@/lib/constants'
+import withAuth from '@/components/shared/auth';
 
 
 const Vehicle = () => {
@@ -56,4 +57,4 @@ const Vehicle = () => {
   )
 }
 
-export default Vehicle
+export default withAuth(Vehicle)

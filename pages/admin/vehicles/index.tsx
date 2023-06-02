@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import { INTERNAL_VEHICLES_ROUTE } from '@/lib/constants';
 import Item from '@/components/shared/wrappers/items/item';
 import ItemsWrapper from '@/components/shared/wrappers/items';
+import withAuth from '@/components/shared/auth';
 
 const Vehicles = () => {
   const { data: session } = useSession()
@@ -42,7 +43,7 @@ const Vehicles = () => {
 
               <h1 className='text-md font-medium flex items-center gap-2'>
                 <Image
-                  src='/icons/truck_list.jpeg'
+                  src='/icons/truck_list.png'
                   alt='Drivers'
                   width='40'
                   height='40'
@@ -80,4 +81,4 @@ const Vehicles = () => {
   )
 }
 
-export default Vehicles  
+export default withAuth(Vehicles)

@@ -47,7 +47,7 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading, onDelete }) 
 
 
       </div>
-      <div>
+      <div className='form-body'>
 
         <EditableInput
           label='Name'
@@ -59,9 +59,7 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading, onDelete }) 
           validationMessage={'Name is required'}
         />
 
-      </div>
-
-      <div className=' '>
+     
         <div className='w-full'>
 
           <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>

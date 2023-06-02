@@ -87,7 +87,7 @@ const ManagerFrom: React.FC<Props> = ({ manager, onUpdate, loading, onDelete }) 
 
       </div>
 
-      <div className="col-span-3">
+      <div className="form-body">
         <EditableInput
           label='Name'
           inputType="text"
@@ -111,32 +111,33 @@ const ManagerFrom: React.FC<Props> = ({ manager, onUpdate, loading, onDelete }) 
 
 
 
+
+
+
+        <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
+          <label htmlFor="assigned_branch" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Assigned Branch </label>
+          {assignError && <p className='text-red-500'>{assignError}</p>}
+          {branches.length > 0 &&
+            <MultiSelect
+              label='label'
+              multiple={false}
+              trackBy="value"
+              closeOnSelect={true}
+              input={(props: any) => {
+                props[0] && assign_branch(props[0].value)
+
+              }}
+
+              id='assigned_branch'
+              options={brancheToAssign}
+              placeholder={'Assigned Branch'}
+              disabled={loading}
+              preSelected={selectedBranch}
+            />
+          }
+        </div>
       </div>
 
-
-
-      <div className='border mb-2 mt-3 pb-2 px-2 rounded-lg'>
-        <label htmlFor="assigned_branch" className='text-sm font-medium text-gray-600 block mt-2 editable-input_label'>Assigned Branch </label>
-        {assignError && <p className='text-red-500'>{assignError}</p>}
-        {branches.length > 0 &&
-          <MultiSelect
-            label='label'
-            multiple={false}
-            trackBy="value"
-            closeOnSelect={true}
-            input={(props: any) => {
-              props[0] && assign_branch(props[0].value)
-
-            }}
-
-            id='assigned_branch'
-            options={brancheToAssign}
-            placeholder={'Assigned Branch'}
-            disabled={loading}
-            preSelected={selectedBranch}
-          />
-        }
-      </div>
 
 
     </>

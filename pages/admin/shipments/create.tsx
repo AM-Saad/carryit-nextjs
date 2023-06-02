@@ -10,6 +10,7 @@ import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
 import loadable from "@loadable/component"
 import GooglePlacesAutocomplete from '@/components/shared/PlaceAutoComplete'
 import { Status } from '@/shared/modals/Response'
+import withAuth from '@/components/shared/auth';
 
 const ToggleBtn = loadable(() => import("@/components/shared/ToggleBtn"))
 const Input = loadable(() => import("@/components/shared/Input"))
@@ -165,81 +166,84 @@ const Create: React.FC = () => {
 
     return (
         <Layout>
-            <Formik
-                initialValues={initialValues}
-                validationSchema={validationScheme}
-                onSubmit={(values, { setSubmitting }) => {
-                    createShipment({ ...values, receiver: { ...values.receiver, address: completeAddress, autoCompleteBillingAddress: autoCompleteAddress, shippingAddress: shippingAddress } })
-                    setSubmitting(false)
-                }}
-            >
-                {({ handleChange, handleBlur, submitForm, errors, touched, values }) => {
-                    { console.log(errors) }
-                    return (
-                        <>
-                        <h1 className='font-medium mb-5'>Create Shipment</h1>
-                            <div className='flex gap-5 items-center lg:col-span-3'>
-                                <div className="flex gap-2 items-center">
-                                    <span className=" text-gray-600 block">Fragile</span>
-                                    <ToggleBtn value={values.is_fragile}
-                                        onChange={(is_fragile: boolean) => handleChange({ target: { name: 'is_fragile', value: is_fragile } })}
-                                    />
+            <div className="form-body">
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationScheme}
+                    onSubmit={(values, { setSubmitting }) => {
+                        createShipment({ ...values, receiver: { ...values.receiver, address: completeAddress, autoCompleteBillingAddress: autoCompleteAddress, shippingAddress: shippingAddress } })
+                        setSubmitting(false)
+                    }}
+                >
+                    {({ handleChange, handleBlur, submitForm, errors, touched, values }) => {
+                        { console.log(errors) }
+                        return (
+                            <>
+                                <h1 className='font-medium mb-5'>Create Shipment</h1>
+                                <div className='flex gap-5 items-center lg:col-span-3'>
+                                    <div className="flex gap-2 items-center">
+                                        <span className=" text-gray-600 block">Fragile</span>
+                                        <ToggleBtn value={values.is_fragile}
+                                            onChange={(is_fragile: boolean) => handleChange({ target: { name: 'is_fragile', value: is_fragile } })}
+                                        />
+                                    </div>
+                                    <div className="flex gap-2 items-center">
+                                        <span className=" text-gray-600 block">Liquid </span>
+                                        <ToggleBtn value={values.is_liquid}
+                                            onChange={(is_liquid: boolean) => handleChange({ target: { name: 'is_liquid', value: is_liquid } })}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="flex gap-2 items-center">
-                                    <span className=" text-gray-600 block">Liquid </span>
-                                    <ToggleBtn value={values.is_liquid}
-                                        onChange={(is_liquid: boolean) => handleChange({ target: { name: 'is_liquid', value: is_liquid } })}
-                                    />
+                                <FormikInput label="Receiver Name" name="receiver.name" />
+                                <FormikInput label="Receiver Phone" name="receiver.phone" />
+                                <FormikInput label="Amount to be collected" name="price" type="number" />
+                                <FormikInput label="Shipping Cost" name="shipping_cost" type="number" />
+                                <FormikInput label="Quantity" name="quantity" type="number" />
+                                <div className='grid md:grid-cols-3 gap-3'>
+                                    <div className='my-2'>
+                                        <label htmlFor={"Address"} className='block font-medium text-xs text-gray-700 mb-1'>Address</label>
+
+                                        <GooglePlacesAutocomplete
+                                            onChange={addressInputChanged}
+                                            onInput={placeChanged}
+                                            onCurrentAddress={onCurrentAddress}
+                                            onInit={(e: any) => { console.log(e) }}
+                                        />
+
+                                    </div>
+                                    {/* <FormikInput label="Address" name="receiver.address" /> */}
+                                    <FormikInput label="Building Number" name="receiver.building" type="number" />
+                                    <FormikInput label="Floor Number" name="receiver.floor" type="number" />
+                                    <FormikInput label="Apartment Number" name="receiver.apartment" type="number" />
                                 </div>
-                            </div>
-                            <FormikInput label="Receiver Name" name="receiver.name" />
-                            <FormikInput label="Receiver Phone" name="receiver.phone" />
-                            <FormikInput label="Amount to be collected" name="price" type="number" />
-                            <FormikInput label="Shipping Cost" name="shipping_cost" type="number" />
-                            <FormikInput label="Quantity" name="quantity" type="number" />
-                            <div className='grid md:grid-cols-3 gap-3'>
-                                <div className='my-2'>
-                                    <label htmlFor={"Address"} className='block font-medium text-xs text-gray-700 mb-1'>Address</label>
 
-                                    <GooglePlacesAutocomplete
-                                        onChange={addressInputChanged}
-                                        onInput={placeChanged}
-                                        onCurrentAddress={onCurrentAddress}
-                                        onInit={(e: any) => { console.log(e) }}
-                                    />
+                                <Input
+                                    label="Additional Notes"
+                                    id="notes"
+                                    placeholder="Add Notes"
+                                    type='text'
+                                    onChange={handleChange('notes')}
+                                    value={values.notes}
+                                    handleBlur={handleBlur}
+                                    hasError={errors.notes && touched.notes}
+                                    error={errors.notes}
+                                />
 
-                                </div>
-                                {/* <FormikInput label="Address" name="receiver.address" /> */}
-                                <FormikInput label="Building Number" name="receiver.building" type="number" />
-                                <FormikInput label="Floor Number" name="receiver.floor" type="number" />
-                                <FormikInput label="Apartment Number" name="receiver.apartment" type="number" />
-                            </div>
-
-                            <Input
-                                label="Additional Notes"
-                                id="notes"
-                                placeholder="Add Notes"
-                                type='text'
-                                onChange={handleChange('notes')}
-                                value={values.notes}
-                                handleBlur={handleBlur}
-                                hasError={errors.notes && touched.notes}
-                                error={errors.notes}
-                            />
-
-                            <Button
-                                title='Create'
-                                style='bg-theme text-white'
-                                type='submit'
-                                onClick={submitForm}
-                                loading={loading}
-                                disabled={loading} />
-                        </>
-                    )
-                }}
-            </Formik>
-        </Layout >
+                                <Button
+                                    title='Create'
+                                    style='bg-theme text-white'
+                                    type='submit'
+                                    onClick={submitForm}
+                                    loading={loading}
+                                    disabled={loading} />
+                            </>
+                        )
+                    }}
+                </Formik>
+            </div>
+        </Layout>
     )
 }
 
-export default Create
+export default withAuth(Create)
+

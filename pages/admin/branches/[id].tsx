@@ -7,6 +7,7 @@ import FetchError from '@/components/shared/Error'
 import Loading from '@/components/shared/Loading'
 import AdminContext from '@/stores/admin'
 import { INTERNAL_BRANCHES_ROUTE } from '@/lib/constants'
+import withAuth from '@/components/shared/auth';
 
 const Branch = () => {
   const router = useRouter()
@@ -55,4 +56,4 @@ const Branch = () => {
   )
 }
 
-export default Branch
+export default withAuth(Branch)

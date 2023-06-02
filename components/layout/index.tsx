@@ -13,12 +13,12 @@ import { useRouter } from "next/router";
 
 
 const links = [
-  { href: INTERNAL_BRANCHES_ROUTE, name: 'Branches', icon: '/icons/branch_list.jpeg' },
-  { href: INTERNAL_SHIPMENTS_ROUTE, name: 'Shipments', icon: '/icons/shipment_list.jpeg' },
-  { href: INTERNAL_DRIVERS_ROUTE, name: 'Drivers', icon: '/icons/driver_list.jpeg' },
-  { href: INTERNAL_VEHICLES_ROUTE, name: 'Vehicles', icon: '/icons/truck_list.jpeg' },
-  { href: INTERNAL_MANAGERS_ROUTE, name: 'Managers', icon: '/icons/admin_list.jpeg' },
-  { href: '/admin/settings', name: 'Settings', icon: '/icons/settings_list.jpeg' }
+  { href: INTERNAL_BRANCHES_ROUTE, name: 'Branches', icon: '/icons/branch_list.png' },
+  { href: INTERNAL_SHIPMENTS_ROUTE, name: 'Shipments', icon: '/icons/shipment_list.png' },
+  { href: INTERNAL_DRIVERS_ROUTE, name: 'Drivers', icon: '/icons/driver_list.png' },
+  { href: INTERNAL_VEHICLES_ROUTE, name: 'Vehicles', icon: '/icons/truck_list.png' },
+  { href: INTERNAL_MANAGERS_ROUTE, name: 'Managers', icon: '/icons/admin_list.png' },
+  { href: '/admin/settings', name: 'Settings', icon: '/icons/settings_list.png' }
 ]
 
 interface Props {
@@ -48,12 +48,12 @@ const Layout = ({ meta, children, isSecured = true }: Props) => {
 
 
   useEffect(() => {
-    if (!isSecured) return
+    // if (!isSecured) return
     const token = localStorage.getItem('uidjwt')
-    if (!token && !router.pathname.includes('user')) {
-      router.push('/')
-      return
-    }
+    // if (!token && !router.pathname.includes('user')) {
+    //   router.push('/')
+    //   return
+    // }
     token && getAdmin();
 
   }, []);
@@ -100,10 +100,11 @@ const Layout = ({ meta, children, isSecured = true }: Props) => {
       <main className="sm:flex gap-5 min-h-[100dvh] p-2 pt-20 w-full">
         {admin && router.pathname.includes('admin') &&
 
-          <ul className="flex sm:flex-col gap-4 sm:gap-3 p-2 sm:my-1 border rounded-t-md sm:rounded-tr-lg w-full sm:w-44 sm:bg-white bg-gray-50 overflow-auto sm:min-h-screen">
+          <ul
+            className="flex sm:flex-col items-start gap-4 sm:gap-3 p-2 sm:my-1 border rounded-t-md sm:rounded-tr-lg w-full sm:w-44 sm:bg-white bg-gray-50 overflow-auto sm:min-h-screen">
             {links.map((link: any) =>
               <li className="sm:mb-5 cursor-pointer block min-w-[120px]">
-                <Link href={link.href} className="flex items-center sm:gap-1 justify-center text-xs md:text-sm text-gray-800 cursor-pointer  min-w-full">
+                <Link href={link.href} className="flex items-center sm:gap-1 justify-center sm:justify-start text-xs md:text-sm text-gray-800 cursor-pointer  min-w-full">
                   <Image
                     src={link.icon}
                     width="25"
@@ -118,7 +119,7 @@ const Layout = ({ meta, children, isSecured = true }: Props) => {
           </ul>
         }
 
-        <div className=' h-full w-full xl:p-5 '>
+        <div className='min-h-[100vh] w-full rounded-md border'>
           {children}
         </div>
 

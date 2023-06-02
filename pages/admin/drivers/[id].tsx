@@ -7,6 +7,7 @@ import FetchError from '@/components/shared/Error'
 import Loading from '@/components/shared/Loading'
 import AdminContext from '@/stores/admin'
 import { INTERNAL_DRIVERS_ROUTE } from '@/lib/constants'
+import withAuth from '@/components/shared/auth';
 
 const Driver = () => {
   const router = useRouter()
@@ -58,4 +59,4 @@ const Driver = () => {
   )
 }
 
-export default Driver
+export default withAuth(Driver)

@@ -9,11 +9,11 @@ import FetchError from '@/components/shared/Error';
 import Loading from '@/components/shared/Loading';
 import AdminContext from '@/stores/driver';
 import { INTERNAL_DRIVER_SHIPMENTS_ROUTE } from '@/lib/constants'
-
+import withAuth from '@/components/shared/auth';
 const Shipments = () => {
 
 
-  const { fetcher, fetchMeta, currentItems,driver } = useContext(AdminContext);
+  const { fetcher, fetchMeta, currentItems } = useContext(AdminContext);
   const { loading, error } = fetchMeta
 
   const fetch_data = async () => {
@@ -22,7 +22,7 @@ const Shipments = () => {
 
   }
   useEffect(() => {
-      fetch_data()
+    fetch_data()
   }, []);
 
   return (
@@ -32,7 +32,7 @@ const Shipments = () => {
         {loading && <Loading />}
         {error && !loading && <FetchError reload={fetch_data} error={error} />}
 
- 
+
         {currentItems && currentItems.length > 0 &&
           <>
             <h1 className='text-xl font-medium mb-5 flex items-center gap-3'>
@@ -74,4 +74,4 @@ const Shipments = () => {
   )
 }
 
-export default Shipments  
+export default withAuth(Shipments)  

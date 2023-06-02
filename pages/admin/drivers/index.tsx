@@ -10,6 +10,7 @@ import AdminContext from '@/stores/admin';
 import { INTERNAL_DRIVERS_ROUTE } from '@/lib/constants'
 import Item from '@/components/shared/wrappers/items/item';
 import ItemsWrapper from '@/components/shared/wrappers/items';
+import withAuth from '@/components/shared/auth';
 
 const Drivers = () => {
   const { data: session } = useSession()
@@ -41,7 +42,7 @@ const Drivers = () => {
               <h1 className='text-md font-medium flex items-center gap-1'>
                 Your Drivers
                 <Image
-                  src='/icons/driver_list.jpeg'
+                  src='/icons/driver_list.png'
                   alt='Drivers'
                   width='40'
                   height='40'
@@ -80,4 +81,4 @@ const Drivers = () => {
   )
 }
 
-export default Drivers  
+export default withAuth(Drivers)
