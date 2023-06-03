@@ -102,7 +102,7 @@ const Layout = ({ meta, children, isSecured = true }: Props) => {
         
         {admin && router.pathname.includes('admin') && <Sidemenu links={links} />}
 
-        <div className='min-h-[100vh] w-full rounded-md border'>
+        <div className='min-h-[100vh] w-full rounded-md border transition-all duration-1000 '>
           {children}
         </div>
 
