@@ -19,11 +19,11 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
 
         console.log(offset, velocity, width)
 
-        if ( velocity > 200) {
+        if (offset > width / 2 || velocity > 300) {
             await controls.start({ x: '0px', transition: transitionProps });
             setShow(false);
         } else {
-            controls.start({ x: '-75px', transition: transitionProps });
+            controls.start({ x: '-63%', transition: transitionProps });
         }
     }
 
