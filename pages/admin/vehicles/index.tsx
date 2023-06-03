@@ -33,7 +33,12 @@ const Vehicles = () => {
 
   return (
     <>
-      <Layout>
+      <Layout
+        meta={{
+          title: 'Vehicles | Admin',
+          description: 'Vehicles',
+        }}
+      >
         {loading && <Loading />}
         {error && !loading && <FetchError reload={fetch_data} error={{ message: 'Vehicle not found', code: Status.DATA_NOT_FOUND }} />}
         {(!loading && currentItems.length > 0) &&
@@ -42,14 +47,14 @@ const Vehicles = () => {
             <div className='items-header'>
 
               <h1 className='text-md font-medium flex items-center gap-2'>
-              Your Vehicles
+                Your Vehicles
                 <Image
                   src='/icons/truck_list.png'
                   alt='Drivers'
                   width='25'
                   height='25'
                 />
-          
+
               </h1>
 
               <Link href={`${INTERNAL_VEHICLES_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>

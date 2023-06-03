@@ -139,7 +139,7 @@ const DocumentsContainer: React.FC<{ item: Vehicle | any, context: string }> = (
                         <Button
                             title='Upload'
                             onClick={uploadDocuments}
-                            style='bg-green-500 hover:bg-green-400'
+                            style='bg-green-400 hover:bg-green-500'
                         />
 
                     </div>

@@ -41,7 +41,14 @@ const Driver = () => {
   }, [id])
 
   return (
-    <Layout>
+    <Layout
+      meta={{
+        title: `${currentItem ? currentItem.name : 'Driver'} | Admin`,
+
+        description: 'Driver page',
+
+      }}
+    >
 
       {(loading && !error) && <Loading />}
       {(error && !loading) && <FetchError reload={fetch_data} error={error} />}

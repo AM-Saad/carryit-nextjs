@@ -30,7 +30,12 @@ const Drivers = () => {
 
   return (
     <>
-      <Layout>
+      <Layout
+        meta={{
+          title: 'Drivers | Admin',
+          description: 'Drivers',
+        }}
+      >
 
         {loading && <Loading />}
         {error && !loading && <FetchError reload={fetch_data} error={error} />}

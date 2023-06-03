@@ -30,7 +30,12 @@ const Admins = () => {
 
   return (
     <>
-      <Layout>
+      <Layout
+        meta={{
+          title: 'Managers | Admin',
+          description: 'Managers',
+        }}
+      >
 
         {loading && <Loading />}
         {error && !loading && <FetchError reload={fetch_data} error={error} />}

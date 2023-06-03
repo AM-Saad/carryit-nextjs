@@ -38,7 +38,12 @@ const Shipment = () => {
 
 
   return (
-    <Layout>
+    <Layout
+      meta={{
+        title: `${currentItem ? currentItem.shipmentNo : 'Shipment'} | Admin`,
+        description: 'Shipment',
+      }}
+    >
 
       {loading && <Loading />}
       {error && !loading && <FetchError reload={fetch_data} error={error} />}

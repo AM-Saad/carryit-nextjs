@@ -78,7 +78,12 @@ const Create: React.FC = () => {
 
 
     return (
-        <Layout>
+        <Layout
+            meta={{
+                title: 'Create Vehicle | Admin',
+                description: 'Create Vehicle',
+            }}
+        >
             <div className='form-body'>
 
                 <Formik

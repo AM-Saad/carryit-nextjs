@@ -34,7 +34,12 @@ const Shipments = () => {
 
   return (
     <>
-      <Layout>
+      <Layout
+        meta={{
+          title: 'Shipments | Admin',
+          description: 'Shipments',
+        }}
+      >
 
         {loading && <Loading />}
         {error && !loading && <FetchError reload={fetch_data} error={error} />}

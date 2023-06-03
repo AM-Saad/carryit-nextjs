@@ -38,7 +38,12 @@ const Branch = () => {
   }, [id])
 
   return (
-    <Layout>
+    <Layout
+      meta={{
+        title: `${currentItem ? currentItem.name : 'Branch'} | Admin`,
+        description: 'Branch',
+      }}
+    >
 
       {(loading && !error) && <Loading />}
       {(error && !loading) && <FetchError reload={fetch_data} error={error} />}

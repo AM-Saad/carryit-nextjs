@@ -40,7 +40,12 @@ const Vehicle = () => {
   }, [id])
 
   return (
-    <Layout>
+    <Layout
+      meta={{
+        title: `${currentItem ? currentItem.name : 'Vehicle'} | Admin`,
+        description: 'Vehicle',
+      }}
+    >
 
       {(error && !loading) && <FetchError reload={fetch_data} error={error} />}
       {(loading && error) && <div>Loading...</div>}

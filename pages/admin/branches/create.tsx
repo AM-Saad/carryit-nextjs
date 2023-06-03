@@ -51,7 +51,12 @@ const BranchForm = () => {
     };
 
     return (
-        <Layout>
+        <Layout
+            meta={{
+                title: 'Create Branch | Admin',
+                description: 'Create Branch',
+            }}
+        >
             <div className='form-body'>
 
                 <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>

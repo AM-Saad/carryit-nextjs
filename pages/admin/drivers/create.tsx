@@ -53,7 +53,12 @@ const DriverForm = () => {
     };
 
     return (
-        <Layout>
+        <Layout
+            meta={{
+                title: 'Create Driver | Admin',
+                description: 'Create Driver',
+            }}
+        >
             <div className='form-body'>
                 <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                     {({ errors, touched }) => (
