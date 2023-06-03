@@ -98,7 +98,8 @@ const Layout = ({ meta, children, isSecured = true }: Props) => {
         </div>
       </div>
       {/*  Main content goes here */}
-      <main className="flex gap-3 sm:gap-5 min-h-[100dvh] p-2 pt-20 w-full">
+      <main className="flex gap-3 sm:gap-5 min-h-[100dvh] pr-2  pt-20 w-full">
+        
         {admin && router.pathname.includes('admin') && <Sidemenu links={links} />}
 
         <div className='min-h-[100vh] w-full rounded-md border'>
