@@ -165,7 +165,12 @@ const Create: React.FC = () => {
     }
 
     return (
-        <Layout>
+        <Layout
+            meta={{
+                title: "Create Shipment",
+                description: "Create Shipment",
+            }}
+        >
             <div className="form-body">
                 <Formik
                     initialValues={initialValues}

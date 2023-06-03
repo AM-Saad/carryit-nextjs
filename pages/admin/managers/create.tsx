@@ -45,7 +45,12 @@ const ManagerForm = () => {
     };
 
     return (
-        <Layout>
+        <Layout
+            meta={{
+                title: 'Create Manager | Admin',
+                description: 'Create Manager',
+            }}
+        >
             <div className='form-body'>
 
                 <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>

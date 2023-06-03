@@ -9,33 +9,50 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
     const leafletRef = useRef<HTMLUListElement>(null);
     const [show, setShow] = useState(false);
     const controls = useAnimation();
-    const transitionProps = { type: "spring", stiffness: 400, damping: 30 };
+    const transitionProps = { type: "spring", stiffness: 700, damping: 60, ease: "easeInOut" };
 
 
     async function handleDragEnd(_: any, info: any) {
         const offset = info.offset.x;
         const velocity = info.velocity.x;
         const width = leafletRef.current?.getBoundingClientRect().width || 0;
-
-        console.log(offset, velocity, width)
-
-        if (offset > width / 2 || velocity > 300) {
+        console.log(offset)
+        console.log(info.velocity.x)
+        if (offset > width / 4 || velocity > 400) {
             await controls.start({ x: '0px', transition: transitionProps });
             setShow(false);
         } else {
+            // console.log(velocity)
+            // if(velocity > 10){
             setShow(true);
+
             controls.start({ x: '-70%', transition: transitionProps });
+            // }
         }
     }
 
+    function handleDragStart(_: any, info: any) {
+        const offset = info.offset.x;
+        const velocity = info.velocity.x;
+        const width = leafletRef.current?.getBoundingClientRect().width || 0;
+        console.log(offset)
+
+        console.log('drag start')
+        // setShow(true);
+    }
 
     useEffect(() => {
         controls.start({
-            x: 0,
+            x: isMobile ? '-70%' : '0px',
             transition: transitionProps,
         });
+        if (isMobile) {
+            setShow(true)
+        } else {
+            setShow(false)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isMobile]);
     return (
         <div className={`${show ? 'w-14' : 'w-auto'} transition-all duration-1000 delay-100`}>
 
@@ -45,19 +62,30 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
                     ref={leafletRef}
                     key="leaflet"
                     className={`group cursor-grab pb-5 active:cursor-grabbing
-                flex flex-col items-start gap-4 sm:gap-3 p-2 border rounded-tr-lg  sm:bg-white bg-gray-50 min-h-screen overflow-hidden
-                transition-all duration-75
-                w-40
+                        flex flex-col items-start gap-4 sm:gap-3 p-2 border rounded-tr-lg  sm:bg-white bg-gray-50 min-h-screen overflow-hidden
+                        transition-all duration-75
+                        w-40
                     `}
-                    initial={{ x: "0" }}
+                    initial={{ x: isMobile ? '-70%' : '0px' }}
                     animate={controls}
-                    exit={{ x: "0" }}
+                    exit={{ x: isMobile ? '-70%' : '0px' }}
                     transition={transitionProps}
                     drag="x"
                     dragDirectionLock
                     onDragEnd={handleDragEnd}
                     dragElastic={{ top: 0, bottom: 1 }}
                     dragConstraints={{ top: 0, bottom: 0 }}
+                    onDragStart={handleDragStart}
+                    onDrag={(_, info) => {
+                        const offset = info.offset.x;
+                        const width = leafletRef.current?.getBoundingClientRect().width || 0;
+
+                        console.log(offset)
+                        if (offset > width / 6) {
+                            setShow(false);
+                        }
+                    }
+                    }
                 >
 
                     {links.map((link: any) =>

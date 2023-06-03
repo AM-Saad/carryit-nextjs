@@ -38,7 +38,12 @@ const Manager = () => {
   }, [id])
 
   return (
-    <Layout>
+    <Layout
+      meta={{
+        title: `${currentItem ? currentItem.name : 'Manager'} | Admin`,
+        description: 'Manager',
+      }}
+    >
 
       {(loading && !error) && <Loading />}
       {(error && !loading) && <FetchError reload={fetch_data} error={error} />}

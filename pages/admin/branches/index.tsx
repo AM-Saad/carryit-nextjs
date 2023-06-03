@@ -32,7 +32,13 @@ const Branches = () => {
 
   return (
     <>
-      <Layout>
+      <Layout
+      meta={{
+        title: 'Branches | Admin',
+        description: 'Branches',
+        
+      }}
+      >
 
         {loading && <Loading />}
         {error && !loading && <FetchError reload={fetch_data} error={error} />}
