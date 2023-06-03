@@ -23,7 +23,7 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
             await controls.start({ x: '0px', transition: transitionProps });
             setShow(false);
         } else {
-            controls.start({ x: '-63%', transition: transitionProps });
+            controls.start({ x: '-70%', transition: transitionProps });
         }
     }
 
@@ -52,16 +52,16 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
                 dragConstraints={{ top: 0, bottom: 0 }}
             >
                 <ul
-                    className="flex flex-col items-start gap-4 sm:gap-3 p-2 border rounded-t-md sm:rounded-tr-lg  sm:bg-white bg-gray-50 min-h-screen overflow-hidden">
+                    className="flex flex-col items-start gap-4 sm:gap-3 p-2 border rounded-t-md sm:rounded-tr-lg  sm:bg-white bg-gray-50 min-h-screen overflow-hidden ">
                     {links.map((link: any) =>
-                        <li className="sm:mb-5 cursor-pointer block w-full">
+                        <li className="sm:mb-5 cursor-pointer block w-28">
                             <Link href={link.href} className="flex items-center sm:gap-1 justify-between text-xs md:text-sm text-gray-800 cursor-pointer transition-all duration-300">
-                                <span>{link.name}</span>
+                                <span className='w-9/12 block'>{link.name}</span>
                                 <Image
                                     src={link.icon}
                                     width="20"
                                     height="20"
-                                    className="h-5 w-5 sm:h-7 sm:w-7 mr-1"
+                                    className="h-5 w-5"
                                     alt={link.name}
                                 />
 
