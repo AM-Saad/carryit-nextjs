@@ -6,10 +6,10 @@ import { AnimatePresence, motion, useAnimation } from "framer-motion";
 
 const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
     const { isMobile, isDesktop } = useWindowSize();
-    const leafletRef = useRef<HTMLDivElement>(null);
+    const leafletRef = useRef<HTMLUListElement>(null);
     const [show, setShow] = useState(false);
     const controls = useAnimation();
-    const transitionProps = { type: "spring", stiffness: 500, damping: 50 };
+    const transitionProps = { type: "spring", stiffness: 400, damping: 30 };
 
 
     async function handleDragEnd(_: any, info: any) {
@@ -23,11 +23,12 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
             await controls.start({ x: '0px', transition: transitionProps });
             setShow(false);
         } else {
+            setShow(true);
             controls.start({ x: '-70%', transition: transitionProps });
         }
     }
 
-    
+
     useEffect(() => {
         controls.start({
             x: 0,
@@ -36,26 +37,32 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
-        <AnimatePresence>
-            <motion.div
-                ref={leafletRef}
-                key="leaflet"
-                className="group z-40 cursor-grab pb-5 active:cursor-grabbing"
-                initial={{ x: "100%" }}
-                animate={controls}
-                exit={{ x: "100%" }}
-                transition={transitionProps}
-                drag="x"
-                dragDirectionLock
-                onDragEnd={handleDragEnd}
-                dragElastic={{ top: 0, bottom: 1 }}
-                dragConstraints={{ top: 0, bottom: 0 }}
-            >
-                <ul
-                    className="flex flex-col items-start gap-4 sm:gap-3 p-2 border rounded-t-md sm:rounded-tr-lg  sm:bg-white bg-gray-50 min-h-screen overflow-hidden ">
+        <div className={`${show ? 'w-14' : 'w-auto'} transition-all duration-1000 delay-100`}>
+
+            <AnimatePresence>
+
+                <motion.ul
+                    ref={leafletRef}
+                    key="leaflet"
+                    className={`group cursor-grab pb-5 active:cursor-grabbing
+                flex flex-col items-start gap-4 sm:gap-3 p-2 border rounded-tr-lg  sm:bg-white bg-gray-50 min-h-screen overflow-hidden
+                transition-all duration-75
+                w-40
+                    `}
+                    initial={{ x: "0" }}
+                    animate={controls}
+                    exit={{ x: "0" }}
+                    transition={transitionProps}
+                    drag="x"
+                    dragDirectionLock
+                    onDragEnd={handleDragEnd}
+                    dragElastic={{ top: 0, bottom: 1 }}
+                    dragConstraints={{ top: 0, bottom: 0 }}
+                >
+
                     {links.map((link: any) =>
-                        <li className="sm:mb-5 cursor-pointer block w-28">
-                            <Link href={link.href} className="flex items-center sm:gap-1 justify-between text-xs md:text-sm text-gray-800 cursor-pointer transition-all duration-300">
+                        <li className="sm:mb-5 cursor-pointer block w-full">
+                            <Link href={link.href} className="flex  sm:gap-1 justify-between text-xs md:text-sm w-full text-gray-800 cursor-pointer transition-all duration-300">
                                 <span className='w-9/12 block'>{link.name}</span>
                                 <Image
                                     src={link.icon}
@@ -68,17 +75,18 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
                             </Link>
                         </li>
                     )}
-                </ul>
-            </motion.div>
-            {show && <motion.div
+
+                </motion.ul>
+                {/* {show && <motion.div
                 key="leaflet-backdrop"
                 className="fixed inset-0 z-30 bg-gray-100 bg-opacity-40 backdrop-blur"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setShow(false)}
-            />}
-        </AnimatePresence>
+            />} */}
+            </AnimatePresence>
+        </div>
     )
 }
 
