@@ -13,9 +13,7 @@ export interface ShipmentPayload {
         city?: string;
         state?: string;
         is_villa?: boolean
-        shippingAddress?:any
-        autoCompleteBillingAddress?:any
-
+        shipping_address?:any
     };
     items?: { itemId?: string, name?: string, price?: number, quantity?: number }[]
     quantity: number;

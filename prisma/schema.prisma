@@ -229,8 +229,7 @@ type ShipmentsReceiver {
   floor     String?
   building  String?
   is_villa  Boolean?
-  shippingAddress Json?
-  autoCompleteBillingAddress Json?
+  shipping_address Json?
 }
 
 type Cancled {

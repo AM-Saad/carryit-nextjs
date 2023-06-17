@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
 import loadable from "@loadable/component"
-import GooglePlacesAutocomplete from '@/components/shared/PlaceAutoComplete'
+import PlacesAutocomplete from '@/components/shared/PlaceAutoComplete2'
 import { Status } from '@/shared/modals/Response'
 import withAuth from '@/components/shared/auth';
 
@@ -21,9 +21,7 @@ const FormikInput = loadable(() => import("@/components/shared/FormikInput"))
 const Create: React.FC = () => {
 
     const [loading, setLoading] = useState<boolean>(false)
-    const [completeAddress, setCompleteAddress] = useState<string>("")
     const [shippingAddress, setShippingAddress] = useState<any>(null)
-    const [autoCompleteAddress, setAutoCompleteAddress] = useState<any>(null)
     const router = useRouter()
 
     const initialValues = {
@@ -34,8 +32,7 @@ const Create: React.FC = () => {
             floor: '',
             name: '',
             phone: '',
-            autoCompleteAddress: null,
-            shippingAddress: null,
+            shipping_address: null,
         },
         quantity: 1,
         is_fragile: false,
@@ -97,73 +94,6 @@ const Create: React.FC = () => {
 
     }
 
-
-    const placeChanged = (place: {
-        lat: number;
-        lng: number;
-        address_components: google.maps.GeocoderAddressComponent[] | undefined;
-    }) => {
-        const componentsToRetrieve = {
-            street_number: "short_name",
-            route: "long_name",
-            locality: "long_name",
-            country: "long_name",
-            postal_code: "short_name",
-            administrative_area_level_1: "long_name",
-            administrative_area_level_2: "long_name",
-        };
-        const result: any = {
-            street_number: "",
-            route: "",
-            locality: "",
-            country: "",
-            postal_code: "",
-            administrative_area_level_1: "",
-            administrative_area_level_2: "",
-        };
-
-        console.log(place.address_components)
-        if (place.address_components) {
-            for (let i = 0; i < place.address_components.length; i++) {
-                const addressType: any = place.address_components[i].types[0]!
-                if (addressType in componentsToRetrieve) {
-                    result[addressType] = place.address_components[i].long_name
-                }
-            }
-        }
-        console.log(result)
-        const shippingAddresss = {
-            streetAddress: `${result.street_number} ${result.route}`,
-            streetAddressBis: "",
-            postalCode: result.postal_code,
-            city: result.locality,
-            // name: shippingAddress.name || "",
-        };
-        setAutoCompleteAddress(place)
-        setShippingAddress(shippingAddresss)
-
-
-    }
-
-    const onCurrentAddress = (val: string) => {
-        setCompleteAddress(val)
-    }
-
-    const addressInputChanged = (val: string) => {
-        if (!val || val == "") {
-
-
-            const shippingAddresss = {
-                streetAddress: "",
-                streetAddressBis: "",
-                city: "",
-                postalCode: "",
-                name: shippingAddress ? shippingAddress.name : "" || "",
-            };
-            setShippingAddress(shippingAddresss)
-        }
-    }
-
     return (
         <Layout
             meta={{
@@ -176,7 +106,7 @@ const Create: React.FC = () => {
                     initialValues={initialValues}
                     validationSchema={validationScheme}
                     onSubmit={(values, { setSubmitting }) => {
-                        createShipment({ ...values, receiver: { ...values.receiver, address: completeAddress, autoCompleteBillingAddress: autoCompleteAddress, shippingAddress: shippingAddress } })
+                        createShipment({ ...values, receiver: { ...values.receiver, address: shippingAddress.formatted_address, shipping_address: shippingAddress } })
                         setSubmitting(false)
                     }}
                 >
@@ -207,14 +137,7 @@ const Create: React.FC = () => {
                                 <div className='grid md:grid-cols-3 gap-3'>
                                     <div className='my-2'>
                                         <label htmlFor={"Address"} className='block font-medium text-xs text-gray-700 mb-1'>Address</label>
-
-                                        <GooglePlacesAutocomplete
-                                            onChange={addressInputChanged}
-                                            onInput={placeChanged}
-                                            onCurrentAddress={onCurrentAddress}
-                                            onInit={(e: any) => { console.log(e) }}
-                                        />
-
+                                        <PlacesAutocomplete setSelected={(e: any) => { setShippingAddress(e) }} />
                                     </div>
                                     {/* <FormikInput label="Address" name="receiver.address" /> */}
                                     <FormikInput label="Building Number" name="receiver.building" type="number" />

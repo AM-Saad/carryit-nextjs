@@ -46,8 +46,6 @@ class MapClass {
             maxZoom: 20,
         };
 
-
-
         this.map = new google.maps.Map(document.getElementById('map_canvas') as HTMLDivElement, myOptions);
         this.directionsDisplay.setMap(this.map);
         this.directionsDisplay.setPanel(document.getElementById('directionsPanel'));
@@ -176,7 +174,6 @@ class MapClass {
             default:
                 break;
         }
-
     }
 
     calc_route(options: any) {
@@ -217,20 +214,41 @@ class MapClass {
             }
         });
     }
-
     move_markers(newStartLatlng: any) {
-
-
-        // Update the start marker position
-        this.markers[0].setPosition(newStartLatlng);
-
+        const numDeltas = 100;  // Number of intermediate positions
+        let count = 0;
+        let deltaLat: number;
+        let deltaLng: number;
+    
+        const currentLatlng = this.markers[0].getPosition() as google.maps.LatLng;
+        const newLatlng = new google.maps.LatLng(newStartLatlng);
+    
+        // Calculate the lat, lng differences
+        deltaLat = (newLatlng.lat() - currentLatlng.lat()) / numDeltas;
+        deltaLng = (newLatlng.lng() - currentLatlng.lng()) / numDeltas;
+    
+        const moveMarker = () => {
+            const lat = currentLatlng.lat() + deltaLat * count;
+            const lng = currentLatlng.lng() + deltaLng * count;
+            const latlng = new google.maps.LatLng(lat, lng);
+    
+            this.markers[0].setPosition(latlng);
+            
+            if (count < numDeltas) {
+                count++;
+            } else {
+                // Clear the interval after the marker has reached the target location
+                clearInterval(interval);
+            }
+        }
+    
+        const interval = setInterval(moveMarker, 10); // Call moveMarker every 10 milliseconds
+    
         // Update the stored startLatlng value
         this.startLatlng = newStartLatlng;
-
+    
         // Recalculate the route with the updated origin, preserving the viewport
         this.calc_route({ preserveViewport: true });
-
-
     }
 
     getInfo() {

@@ -54,7 +54,7 @@ const CancelModel: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
             <button className='bg-red-500 text-white p-2 rounded-md w-full' onClick={() => setOpenConfirmDeleteModal(true)}>Cancel</button>
 
             <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
-                <h1>Cancel Trip</h1>
+                <h1>Cancel Trip?</h1>
                 <Input
                     label='Reason'
                     type="text"

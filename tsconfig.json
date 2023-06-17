@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext", "es6"],
     "allowJs": true,
     "skipLibCheck": true,
     "baseUrl": ".",
@@ -15,6 +15,7 @@
       "@/stores/*":["stores/*"],
       "@/middleware/*":["middleware/*"]
     },
+    "noImplicitAny": false,
     "strict": true,
     "alwaysStrict": true,
 		"strictNullChecks": true,
@@ -22,7 +23,7 @@
     "noEmit": false,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
