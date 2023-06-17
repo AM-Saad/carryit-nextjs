@@ -35,7 +35,7 @@ const Map: React.FC<Props> = ({ shipmentId, shipment, driver, ready }) => {
         const position: any = await getCurrentPosition();
         const map = new MapClass(
             new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-            new google.maps.LatLng(shipment.receiver.autoCompleteBillingAddress.lat, shipment.receiver.autoCompleteBillingAddress.lng),
+            new google.maps.LatLng(shipment.receiver.shipping_address.geometry.location.lat, shipment.receiver.shipping_address.geometry.location.lng),
         );
 
 

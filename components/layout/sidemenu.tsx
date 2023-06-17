@@ -9,6 +9,7 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
     const leafletRef = useRef<HTMLUListElement>(null);
     const [show, setShow] = useState(false);
     const controls = useAnimation();
+
     const transitionProps = { type: "spring", stiffness: 700, damping: 60, ease: "easeInOut" };
 
 
@@ -41,20 +42,19 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
         // setShow(true);
     }
 
+
     useEffect(() => {
-        controls.start({
-            x: isMobile ? '-70%' : '0px',
-            transition: transitionProps,
-        });
         if (isMobile) {
             setShow(true)
         } else {
             setShow(false)
         }
+        controls.start({ transition: transitionProps });
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isMobile]);
+    }, []);
     return (
-        <div className={`${show ? 'w-14' : 'w-auto'} transition-all duration-1000 delay-100`}>
+        <div className={`${show ? 'w-14' : 'w-auto'} transition-transform duration-1000 delay-100`}>
 
             <AnimatePresence>
 
@@ -62,15 +62,14 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
                     ref={leafletRef}
                     key="leaflet"
                     className={`group cursor-grab pb-5 active:cursor-grabbing
-                        flex flex-col items-start gap-4 sm:gap-3 p-2 border rounded-tr-lg  sm:bg-white bg-gray-50 min-h-screen overflow-hidden
+                        flex flex-col items-start gap-4 sm:gap-3 p-2 px-4 border rounded-tr-lg  sm:bg-white bg-gray-50 min-h-screen overflow-hidden
                         transition-all duration-75
                         w-40
                     `}
-                    initial={{ x: isMobile ? '-70%' : '0px' }}
                     animate={controls}
-                    exit={{ x: isMobile ? '-70%' : '0px' }}
                     transition={transitionProps}
                     drag="x"
+                    initial={{ x: '-70%' }}
                     dragDirectionLock
                     onDragEnd={handleDragEnd}
                     dragElastic={{ top: 0, bottom: 1 }}
