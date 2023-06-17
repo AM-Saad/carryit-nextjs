@@ -46,8 +46,6 @@ class MapClass {
             maxZoom: 20,
         };
 
-
-
         this.map = new google.maps.Map(document.getElementById('map_canvas') as HTMLDivElement, myOptions);
         this.directionsDisplay.setMap(this.map);
         this.directionsDisplay.setPanel(document.getElementById('directionsPanel'));
@@ -176,7 +174,6 @@ class MapClass {
             default:
                 break;
         }
-
     }
 
     calc_route(options: any) {
