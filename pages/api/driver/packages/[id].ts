@@ -13,13 +13,13 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
         return res.status(405).json(refineResponse(Status.METHOD_NOT_ALLOWED, 'Method not allowed'));
     }
     if (req.method === 'GET') {
-     const   package = await prisma.package.findFirst({ where: { id: id as string, driverId: token.driverId } });
+        const item = await prisma.package.findFirst({ where: { id: id as string, driverId: token.driverId } });
 
         try {
-            if (!package) {
-                return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'packages not found'));
+            if (!item) {
+                return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Packages not found'));
             }
-            return res.status(200).json(refineResponse(Status.SUCCESS, 'Package fetched successfully', package));
+            return res.status(200).json(refineResponse(Status.SUCCESS, 'Package fetched successfully', item));
         } catch (error: any) {
             return res.status(500).json({ error: error.message });
         }
@@ -27,10 +27,10 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
 
 
     if (req.method === 'PUT') {
-     const   package = await prisma.package.findFirst({ where: { id: id as string, driverId: token.driverId } });
+        const item = await prisma.package.findFirst({ where: { id: id as string, driverId: token.driverId } });
 
         try {
-            if (!package) {
+            if (!item) {
                 return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'packages not found'));
             }
             const { status } = req.body
