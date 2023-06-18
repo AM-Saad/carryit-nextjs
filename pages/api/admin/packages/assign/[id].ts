@@ -16,29 +16,29 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
     if (!id || !driverId) {
         return res.status(400).json(refineResponse(Status.INVALID_PARAMETER, 'Invalid parameter'));
     }
-    const package = await prisma.package.findFirst({ where: { id: id as string, managerId: token.managerId } });
+    const item = await prisma.package.findFirst({ where: { id: id as string, managerId: token.managerId } });
     const driver = await prisma.driver.findFirst({ where: { id: driverId as string, managerId: token.managerId } })
     try {
-        if (!package || !driver) {
+        if (!item || !driver) {
             return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Data not found'));
         }
 
-        if (package.status === PackageStatus.Delivered) {
+        if (item.status === PackageStatus.Delivered) {
             return res.status(400).json(refineResponse(Status.ALREADY_DONE, 'Package is already delivered'));
         }
 
         // Check if package is already assigned to this driver
-        if (package.driverId === driverId) {
+        if (item.driverId === driverId) {
             return res.status(400).json(refineResponse(Status.ALREADY_DONE, 'Package is already assigned to this driver'));
         }
 
 
         // Remove package from previous driver
-        if (package.driverId !== null) {
-            const currentDriver = await prisma.driver.findFirst({ where: { id: package.driverId as string, managerId: token.managerId } })
-            const driverPackages = currentDriver?.packages.filter(package => package.packageId !== id as string);
+        if (item.driverId !== null) {
+            const currentDriver = await prisma.driver.findFirst({ where: { id: item.driverId as string, managerId: token.managerId } })
+            const driverPackages = currentDriver?.packages.filter(i => i.packageId !== id as string);
             await prisma.driver.update({
-                where: { id: package.driverId as string },
+                where: { id: item.driverId as string },
                 data: {
                     packages: driverPackages
                 }
