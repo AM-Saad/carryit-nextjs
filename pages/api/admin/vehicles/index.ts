@@ -9,7 +9,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
 
     if (req.method == 'GET') {
         try {
-            const vehicle = await prisma.vehicle.findMany({ where: { adminId: token.adminId } });
+            const vehicle = await prisma.vehicle.findMany({ where: { managerId: token.managerId } });
             if (!vehicle) {
                 return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Vehicles not found'));
             }
@@ -21,7 +21,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
     }
     if (req.method == 'POST') {
         const { values } = req.body
-        const admin = await prisma.admin.findFirst({ where: { id: token.adminId as string } });
+        const manager = await prisma.manager.findFirst({ where: { id: token.managerId as string } });
 
         const payload = {
             data: {
@@ -40,15 +40,15 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                 model: values.model,
                 gas_history: [],
                 maintenance: [],
-                admin: {
+                manager: {
                     connect: {
-                        id: admin!.id
+                        id: manager!.id
                     }
                 },
                 company: {
                     connect: {
 
-                        id: admin?.companyId!
+                        id: manager?.companyId!
                     }
                 }
             }

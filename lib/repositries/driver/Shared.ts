@@ -46,8 +46,25 @@ export default class SharedRepository {
 
         }
     }
-   
- 
+    update_partial_driver: (data: any) => Promise<Response<any>> = async (data) => {
+        try {
+            const response = await fetcher(`/api/driver`, {
+                method: 'PATCH',
+                body: JSON.stringify(data),
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            return response
+        } catch (error: any) {
+            return {
+                message: error.message, status: Status.UNEXPECTED_ERROR, items: []
+            }
+
+        }
+    }
 
 
 

@@ -1,5 +1,5 @@
 import Meta from "@/shared/modals/meta";
-import { Shipment } from "./Shipment";
+import { Package } from "./Package";
 
 interface DriverContext {
 
@@ -7,8 +7,8 @@ interface DriverContext {
     fetch_driver: () => Promise<void>;
     driverMeta: Meta,
     fetcher: (callback: any, isList: boolean) => Promise<void | boolean>;
-    currentItem: Shipment | null;
-    currentItems: Shipment[]
+    currentItem: Package | null;
+    currentItems: Package[]
     fetchMeta: Meta
     updateMeta: Meta
     updater: (callback: any, data: any) => Promise<void | boolean>;

@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     console.log(driver)
     // Create JWT token
-    const token = jwt.sign({ driverId: driver.id, company: driver.companyId, adminId: driver.adminId, isAdmin:false, isDriver:true  }, process.env.NEXT_PUBLIC_JWT_SECRET!, {
+    const token = jwt.sign({ driverId: driver.id, company: driver.companyId, managerId: driver.managerId, isAdmin:false, isDriver:true  }, process.env.NEXT_PUBLIC_JWT_SECRET!, {
       expiresIn: '7d',
     });
 

@@ -2,12 +2,12 @@ import Button from '@/components/shared/Button'
 import Input from '@/components/shared/Input'
 import Modal from '@/components/shared/modal'
 import { DRIVER_SHIPMENTS_ROUTE } from '@/lib/constants'
-import { ShipmentStatus } from '@/modals/Shipment'
+import { PackageStatus } from '@/modals/Package'
 import Response, { Status } from '@/shared/modals/Response'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-const CancelModel: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
+const CancelModel: React.FC<{ packageId: string }> = ({ packageId }) => {
     const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState<boolean>(false)
     const [reason, setReason] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
@@ -21,13 +21,13 @@ const CancelModel: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
 
             setLoading(true)
 
-            const res = await fetch(`${DRIVER_SHIPMENTS_ROUTE}/${shipmentId}`, {
+            const res = await fetch(`${DRIVER_SHIPMENTS_ROUTE}/${packageId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${localStorage.getItem('didjwt')}`
                 },
-                body: JSON.stringify({ status: ShipmentStatus.Canceled, reason })
+                body: JSON.stringify({ status: PackageStatus.Canceled, reason })
             })
 
             const data: Response<any> = await res.json()
@@ -37,7 +37,7 @@ const CancelModel: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
                 setOpenConfirmDeleteModal(false)
                 toast.info('Trip canceled successfully')
                 setTimeout(() => {
-                router.push('/driver/shipments')
+                router.push('/driver/packages')
                 }, 1000)
                 return
             }

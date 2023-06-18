@@ -7,13 +7,16 @@ import { authMiddleware, Token } from '@/middleware/auth';
 
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
-    if (req.method == 'GET') {
+    if (req.method === 'POST' || req.method === 'PUT') return res.status(405).json(refineResponse(Status.METHOD_NOT_ALLOWED, 'Method not allowed'));
 
+
+    if (req.method == 'GET') {
+        let query: any = token.isSuper ? { companyId: token.companyId } : { where: { managerId: token.managerId } }
         try {
-            const branch = await prisma.branch.findFirst({ where: { id: req.query.id as string, adminId: token.adminId } });
-            if (!branch) {
-                return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Branch not found'));
-            }
+            const branch = await prisma.branch.findFirst({ where: { id: req.query.id as string, ...query } });
+            if (!branch) return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Branch not found'));
+
+
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Branch fetched successfully', branch));
         } catch (error: any) {
 
@@ -23,6 +26,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
 
 
     if (req.method == 'PATCH') {
+        if (!token.isSuper) return res.status(403).json(refineResponse(Status.USER_TYPE_UNAUTHORIZED, 'You are not allowed to perform this action'));
+
         try {
             const { values } = req.body
             let query: any = {}
@@ -34,19 +39,18 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                     query[keys[0]] = vals[0]
                 }
             })
-            const item = await prisma.branch.updateMany({ where: { id: req.query.id as string, adminId: token.adminId }, data: query })
-            const branch = await prisma.branch.findFirst({ where: { id: req.query.id as string, adminId: token.adminId } });
+            await prisma.branch.updateMany({ where: { id: req.query.id as string, managerId: token.managerId }, data: query })
+            const branch = await prisma.branch.findFirst({ where: { id: req.query.id as string, managerId: token.managerId } });
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Branch updated successfully', branch))
 
         } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))
         }
-
     }
 
     if (req.method == 'DELETE') {
         try {
-            const item = await prisma.branch.deleteMany({ where: { id: req.query.id as string, adminId: token.adminId } })
+            const item = await prisma.branch.deleteMany({ where: { id: req.query.id as string, managerId: token.managerId } })
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Branch deleted successfully', item))
         } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))

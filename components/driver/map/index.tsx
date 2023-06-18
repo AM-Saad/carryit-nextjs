@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { getCurrentPosition } from "@/lib/utils";
 import Driver from "@/modals/Driver";
-import { Shipment } from "@/modals/Shipment";
+import { Package } from "@/modals/Package";
 import MapClass from "@/lib/initMap";
 import socket from "@/lib/socket/trip";
 import { registerSocketEvents } from "@/lib/socket/socketHandler";
@@ -10,8 +10,8 @@ import Info from "@/components/driver/map/Info";
 import Button from "@/components/shared/Button";
 
 interface Props {
-  shipmentId: string;
-  shipment: Shipment;
+  packageId: string;
+  currentPackage: Package;
   driver: Driver;
   ready: () => void;
 }
@@ -19,7 +19,7 @@ interface Props {
 type Libraries = "geometry" | "places";
 const libraries: Libraries[] = ["geometry", "places"];
 
-const Map: React.FC<Props> = ({ shipmentId, shipment, driver, ready }) => {
+const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!,
     libraries: libraries,
@@ -49,8 +49,8 @@ const Map: React.FC<Props> = ({ shipmentId, shipment, driver, ready }) => {
         position.coords.longitude,
       ),
       new google.maps.LatLng(
-        shipment.receiver.shipping_address.geometry.location.lat,
-        shipment.receiver.shipping_address.geometry.location.lng,
+        currentPackage.receiver.shipping_address.geometry.location.lat,
+        currentPackage.receiver.shipping_address.geometry.location.lng,
       ),
     );
 
@@ -117,7 +117,7 @@ const Map: React.FC<Props> = ({ shipmentId, shipment, driver, ready }) => {
         lng: position.coords.longitude,
       });
       socket.emit("move", {
-        id: shipmentId,
+        id: packageId,
         coords: {
           lat: position.coords.latitude,
           long: position.coords.longitude,
@@ -164,9 +164,9 @@ const Map: React.FC<Props> = ({ shipmentId, shipment, driver, ready }) => {
   useEffect(() => {
     let cleanupSocketEvents: any;
 
-    if (shipmentId && !loading) {
+    if (packageId && !loading) {
       cleanupSocketEvents = registerSocketEvents(
-        shipmentId,
+        packageId,
         () => {
           setStatus("Go");
         },
@@ -179,7 +179,7 @@ const Map: React.FC<Props> = ({ shipmentId, shipment, driver, ready }) => {
         cleanupSocketEvents();
       }
     };
-  }, [shipmentId, loading]);
+  }, [packageId, loading]);
 
   return (
     <div style={{ height: "400px", width: "100%" }}>

@@ -3,9 +3,10 @@ export default interface Branch {
     id?: string
     name: string
     notes?: string
-    adminId?: string
+    managerId?: string
     companyId?: string
     drivers?: string[]
+    vehicles?: string[]
     address?: string
 
     phone?: string

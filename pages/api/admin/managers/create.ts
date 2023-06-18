@@ -15,32 +15,33 @@ export const config = {
 
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
-    // Create new manager
-    if (req.method == 'POST') {
-        const { values } = req.body
-        const admin = await prisma.admin.findFirst({ where: { id: token.adminId as string } });
-        const payload = {
-            data: {
-                name: values.name,
-                mobile: values.mobile,
-                password: '123456',
-                isSuper: false,
-                company: {
-                    connect: {
-                        id: admin!.companyId!
-                    }
-                }
+    if (req.method !== 'POST') return res.status(405).json(refineResponse(Status.METHOD_NOT_ALLOWED, 'Method not allowed'));
 
+
+    // Create new manager
+    const { values } = req.body
+    const manager = await prisma.manager.findFirst({ where: { id: token.managerId as string } });
+    const payload = {
+        data: {
+            name: values.name,
+            mobile: values.mobile,
+            password: '123456789',
+            isSuper: false,
+            company: {
+                connect: {
+                    id: manager!.companyId!
+                }
             }
+
         }
-        try {
-            const admin = await prisma.admin.create(payload);
-            return res.status(200).json(refineResponse(Status.SUCCESS, 'Manager created successfully', admin));
-        }
-        catch (error: any) {
-            console.log(error);
-            return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message));
-        }
+    }
+    try {
+        const manager = await prisma.manager.create(payload);
+        return res.status(200).json(refineResponse(Status.SUCCESS, 'Manager created successfully', manager));
+    }
+    catch (error: any) {
+        console.log(error);
+        return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message));
     }
 
 })

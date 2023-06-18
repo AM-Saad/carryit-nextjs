@@ -6,12 +6,13 @@ import { toast } from "react-toastify";
 import { Status } from '@/shared/modals/Response';
 import { sharedRepository } from '@/lib/repositries/driver/';
 import { useRouter } from 'next/router';
-import { Shipment } from '@/modals/Shipment';
+import { Package } from '@/modals/Package';
 
 const DriverContext = React.createContext<DriverContext>({
 
     driverMeta: { loading: true, error: null },
     driver: null,
+
     fetch_driver: () => Promise.resolve() as any,
 
     fetcher: (callback: any, isList: boolean = false) => Promise.resolve() as any,
@@ -34,8 +35,8 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
 
     const [fetchMeta, setFetchMeta] = useState<Meta>({ loading: true, error: null })
     const [updateMeta, setUpdateMeta] = useState<Meta>({ loading: false, error: null })
-    const [currentItems, setCurrentItems] = useState<Shipment[]>([])
-    const [currentItem, setCurrentItem] = useState<Shipment | null>(null)
+    const [currentItems, setCurrentItems] = useState<Package[]>([])
+    const [currentItem, setCurrentItem] = useState<Package | null>(null)
     const [driver, setDriver] = useState<any>(null)
     const router = useRouter()
 
@@ -54,7 +55,7 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
 
             localStorage.removeItem('uidjwt')
             localStorage.setItem('didjwt', response.items.token)
-             window.location.href = '/driver/shipments'
+             window.location.href = '/driver/packages'
              return
 
 
@@ -68,7 +69,6 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
         setDriverMeta({ loading: true, error: null })
         try {
             const response = await sharedRepository.fetch_driver()
-            console.log(response)
             if (response.status !== Status.SUCCESS) {
                 setDriverMeta({ loading: false, error: { message: response.message, code: response.status } })
                 toast[response.status != Status.UNEXPECTED_ERROR ? 'info' : 'error'](response.message)
@@ -143,11 +143,8 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
         driverMeta,
         driver,
         fetch_driver,
-
         fetchMeta,
-
         updateMeta,
-
         authenticate,
         fetcher,
         updater,

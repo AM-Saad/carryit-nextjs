@@ -23,7 +23,7 @@ type Libraries = 'geometry' | 'places'
 const libraries: Libraries[] = ['geometry', 'places']
 
 
-const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
+const Map: React.FC<{ packageId: string }> = ({ packageId }) => {
     const [marker, setMarker] = useState<any>(null)
 
     const [error, setError] = useState<string | null>(null)
@@ -64,7 +64,7 @@ const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
             }, 4000)
         });
 
-        socket.on("shipment-closed", (data: any) => setError('Please wait the driver is connecting..'));
+        socket.on("package-closed", (data: any) => setError('Please wait the driver is connecting..'));
 
 
         return () => {
@@ -78,9 +78,9 @@ const Map: React.FC<{ shipmentId: string }> = ({ shipmentId }) => {
         // Important! Always set the container height explicitly
         <Layout meta={
             {
-                title: "Karry | Track Shipment",
-                description: "Welcome to the ultimate logistics solution for brands! Our powerful SaaS platform makes it easy to manage your shipments and drivers, assign deliveries with just a few clicks, and track your packages in real-time. Our system offers unparalleled transparency and visibility to both you and your customers, ensuring that everyone knows exactly where their package is at all times. With our automated driver assignment system and smart routing algorithms, deliveries are faster and more efficient than ever before. Say goodbye to headaches and delays, and hello to seamless logistics management with our app. Sign up today and streamline your logistics operations like never before!",
-                keywords: "Karry, Track Shipment, Shipment Tracking, Track Shipment Online, Driver tracking, Delivery tracking ,Real-time location tracking, Order status, Package delivery tracking,  Restaurant delivery tracking "
+                title: "Karry | Track Package",
+                description: "Welcome to the ultimate logistics solution for brands! Our powerful SaaS platform makes it easy to manage your packages and drivers, assign deliveries with just a few clicks, and track your packages in real-time. Our system offers unparalleled transparency and visibility to both you and your customers, ensuring that everyone knows exactly where their package is at all times. With our automated driver assignment system and smart routing algorithms, deliveries are faster and more efficient than ever before. Say goodbye to headaches and delays, and hello to seamless logistics management with our app. Sign up today and streamline your logistics operations like never before!",
+                keywords: "Karry, Track Package, Package Tracking, Track Package Online, Driver tracking, Delivery tracking ,Real-time location tracking, Order status, Package delivery tracking,  Restaurant delivery tracking "
             }
         }>
         <div style={{ height: '100vh', width: '100%' }}>

@@ -18,9 +18,9 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
     // create a new driver
     if (req.method == 'POST') {
         const { values } = req.body
-        const admin = await prisma.admin.findFirst({ where: { id: token.adminId as string } });
+        const manager = await prisma.manager.findFirst({ where: { id: token.managerId as string } });
         const id = new ObjectId();
-        console.log(admin)
+        console.log(manager)
         const payload = {
             data: {
                 address: values.address,
@@ -29,14 +29,14 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                 password: values.password,
                 salary: values.salary,
                 image: '',
-                admin: {
+                manager: {
                     connect: {
-                        id: admin!.id
+                        id: manager!.id
                     }
                 },
                 company:{
                     connect:{
-                        id: admin!.companyId!
+                        id: manager!.companyId!
                     }
                 }
 

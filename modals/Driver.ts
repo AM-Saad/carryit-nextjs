@@ -9,8 +9,10 @@ export default interface Driver {
     name: string
     password: string
     salary: {base_salary: number, commission:number}
-    shipments: any[] // initally empty array
+    packages: any[] // initally empty array
     vehicle?: Vehicle | null // initally null
     documents: any[] // initally empty array
     vehicleId?: string // initally null
+    managerId?: string // initally null
+    companyId?: string // initally null
 }
