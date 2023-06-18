@@ -11,7 +11,7 @@ import Button from "@/components/shared/Button";
 
 interface Props {
   packageId: string;
-  package: Package;
+  currentPackage: Package;
   driver: Driver;
   ready: () => void;
 }
@@ -19,7 +19,7 @@ interface Props {
 type Libraries = "geometry" | "places";
 const libraries: Libraries[] = ["geometry", "places"];
 
-const Map: React.FC<Props> = ({ packageId, package, driver, ready }) => {
+const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!,
     libraries: libraries,
@@ -49,8 +49,8 @@ const Map: React.FC<Props> = ({ packageId, package, driver, ready }) => {
         position.coords.longitude,
       ),
       new google.maps.LatLng(
-        package.receiver.shipping_address.geometry.location.lat,
-        package.receiver.shipping_address.geometry.location.lng,
+        currentPackage.receiver.shipping_address.geometry.location.lat,
+        currentPackage.receiver.shipping_address.geometry.location.lng,
       ),
     );
 
