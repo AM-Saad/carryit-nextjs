@@ -12,17 +12,17 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse<a
         return res.status(401).json(refineResponse(Status.INVALID_CREDENTIALS, 'Method Not Allowed'))
     }
     if (req.method === 'GET') {
-        const package = await prisma.package.findFirst({ where: { packageNo: no as string } });
+        const item = await prisma.package.findFirst({ where: { packageNo: no as string } });
 
         try {
-            if (!package) {
+            if (!item) {
                 return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Package Not Found!!'));
             }
-            if(package.status !== PackageStatus.Shipped)
+            if(item.status !== PackageStatus.Shipped)
             {
                 return res.status(401).json(refineResponse(Status.UNHANDLED_SCENARIO, 'Package Not Shipped Yet.'))
             }
-            return res.status(200).json(refineResponse(Status.SUCCESS, 'Package fetched successfully', package));
+            return res.status(200).json(refineResponse(Status.SUCCESS, 'Package fetched successfully', item));
         } catch (error: any) {
             return res.status(500).json({ error: error.message });
         }
