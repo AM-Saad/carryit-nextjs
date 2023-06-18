@@ -36,7 +36,7 @@ const Trip = () => {
         <>
           <h1 className="text-lg font-bold text-gray-500 my-2"> {currentItem.packageNo} </h1>
           <div style={{ height: '83vh', width: '100%' }} className='mb-10 rounded-md overflow-hidden shadow-md'>
-            <Map packageId={currentItem.id} package={currentItem} driver={driver} ready={() => setIsReady(true)} />
+            <Map packageId={currentItem.id} currentPackage={currentItem} driver={driver} ready={() => setIsReady(true)} />
           </div>
           {isReady && <div tabIndex={0} className='w-full bg-white p-2 fixed left-0 bottom-0 flex items-center gap-x-3 border-t-2'>
             <CancelModel packageId={currentItem.id} />
