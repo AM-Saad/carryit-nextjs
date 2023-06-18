@@ -1,17 +1,17 @@
 import Layout from '@/components/layout'
 import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { shipmentRepository } from '@/lib/repositries/admin'
+import { packageRepository } from '@/lib/repositries/admin'
 import AdminContext from '@/stores/admin'
 import { useSession } from 'next-auth/react'
 import Loading from '@/components/shared/Loading'
 import FetchError from '@/components/shared/Error'
-import ShipmentFrom from '@/components/admin/shipment'
+import PackageFrom from '@/components/admin/package'
 import { INTERNAL_SHIPMENTS_ROUTE } from '@/lib/constants'
 import withAuth from '@/components/shared/auth';
 
 
-const Shipment = () => {
+const Package = () => {
   const router = useRouter()
   const { id } = router.query as { id: string }
   const { data: session } = useSession()
@@ -20,14 +20,14 @@ const Shipment = () => {
   const { loading, error } = fetchMeta
 
   const fetch_data = async () => {
-    await fetcher(shipmentRepository.fetch_shipment(id), false)
+    await fetcher(packageRepository.fetch_package(id), false)
   }
 
   const update_data = async (data: any) => {
-    await updater(shipmentRepository.update_partial_shipment(id, data), false)
+    await updater(packageRepository.update_partial_package(id, data), false)
   }
   const remove_data = async () => {
-    await remover(shipmentRepository.delete_shipment(id), INTERNAL_SHIPMENTS_ROUTE)
+    await remover(packageRepository.delete_package(id), INTERNAL_SHIPMENTS_ROUTE)
   }
 
   useEffect(() => {
@@ -40,16 +40,16 @@ const Shipment = () => {
   return (
     <Layout
       meta={{
-        title: `${currentItem ? currentItem.shipmentNo : 'Shipment'} | Admin`,
-        description: 'Shipment',
+        title: `${currentItem ? currentItem.packageNo : 'Package'} | Admin`,
+        description: 'Package',
       }}
     >
 
       {loading && <Loading />}
       {error && !loading && <FetchError reload={fetch_data} error={error} />}
-      {(!loading && currentItem) && <ShipmentFrom shipment={currentItem} onDelete={remove_data} onUpdate={update_data} loading={updateMeta.loading} />}
+      {(!loading && currentItem) && <PackageFrom currentPackage={currentItem} onDelete={remove_data} onUpdate={update_data} loading={updateMeta.loading} />}
     </Layout>
   )
 }
 
-export default withAuth(Shipment)
+export default withAuth(Package)

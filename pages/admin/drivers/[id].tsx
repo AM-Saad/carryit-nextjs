@@ -18,7 +18,6 @@ const Driver = () => {
 
   const fetch_data = useCallback(async () => {
     if(!id) return
-    console.log(id)
     await fetcher(driverRepository.fetch_driver(id), false)
   }, [id])
 

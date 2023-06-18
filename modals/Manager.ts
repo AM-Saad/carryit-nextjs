@@ -1,5 +1,5 @@
 
-import { Shipment } from "./Shipment";
+import { Package } from "./Package";
 import Vehicle from "./Vehicle";
 
 
@@ -15,7 +15,8 @@ interface ManagerCreate {
     createdAt: Date;
     updatedAt: Date;
     vehicles: Vehicle[];
-    shipments: Shipment[];
+    packages: Package[];
+    
     
 }
 export interface Manager extends ManagerCreate {

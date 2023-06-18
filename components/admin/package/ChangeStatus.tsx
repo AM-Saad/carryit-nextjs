@@ -5,9 +5,9 @@ import Popover from "@/components/shared/popover";
 import { motion } from "framer-motion";
 import { FADE_IN_ANIMATION_SETTINGS } from "@/lib/constants";
 
-import { getShipmentStatusColor, SHIPMENT_STATUS_LABELS, ShipmentStatus } from '@/modals/Shipment';
+import { getPackageStatusColor, SHIPMENT_STATUS_LABELS, PackageStatus } from '@/modals/Package';
 import AdminContext from '@/stores/admin';
-import { shipmentRepository } from '@/lib/repositries/admin';
+import { packageRepository } from '@/lib/repositries/admin';
 import Badge from '@/components/shared/Badge';
 import Button from '@/components/shared/Button';
 
@@ -30,11 +30,11 @@ export default function ChangeStatus() {
     const update = async () => {
         setError(null)
         try {
-            if (status === ShipmentStatus.Canceled && currentItem?.status !== ShipmentStatus.Canceled) {
+            if (status === PackageStatus.Canceled && currentItem?.status !== PackageStatus.Canceled) {
                 if (!reason) return setError('Reason is required')
             }
 
-            await updater(shipmentRepository.change_status(currentItem?.id!, status, { status: reason ? true : false, reason: reason }), false)
+            await updater(packageRepository.change_status(currentItem?.id!, status, { status: reason ? true : false, reason: reason }), false)
 
             setTimeout(() => {
                 console.log(openPopover)
@@ -72,7 +72,7 @@ export default function ChangeStatus() {
                             )}
                         </select>
 
-                        {status === ShipmentStatus.Canceled && currentItem?.status !== ShipmentStatus.Canceled && <div>
+                        {status === PackageStatus.Canceled && currentItem?.status !== PackageStatus.Canceled && <div>
                             <div className='mt-4 text-xs'>
                                 <label htmlFor="reason" className='mb-1 block'>Reason</label>
                                 <textarea
@@ -98,7 +98,7 @@ export default function ChangeStatus() {
             >
                 <button
                     className="flex items-center justify-center overflow-hidden rounded-full shadow transition-all duration-75 focus:outline-none active:scale-95" >
-                    <Badge label={SHIPMENT_STATUS_LABELS.get(currentItem?.status!)} className="cursor-pointer-hover" color={getShipmentStatusColor(currentItem?.status!)} />
+                    <Badge label={SHIPMENT_STATUS_LABELS.get(currentItem?.status!)} className="cursor-pointer-hover" color={getPackageStatusColor(currentItem?.status!)} />
                 </button>
 
             </Popover>

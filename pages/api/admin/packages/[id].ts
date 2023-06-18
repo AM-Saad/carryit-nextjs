@@ -9,18 +9,18 @@ import { authMiddleware, Token } from '@/middleware/auth';
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<any>, token: Token) => {
     const id = req.query.id as string
 
-    let shipment
+    let item
     if (req.method === 'GET' || req.method === 'PATCH') {
-        shipment = await prisma.shipment.findFirst({ where: { id: id as string, adminId:token.adminId } });
+        item = await prisma.package.findFirst({ where: { id: id as string, managerId: token.managerId } });
 
     }
     if (req.method === 'GET') {
 
         try {
-            if (!shipment) {
-                return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'shipments not found'));
+            if (!item) {
+                return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Packages not found'));
             }
-            return res.status(200).json(refineResponse(Status.SUCCESS, 'Shipment fetched successfully', shipment));
+            return res.status(200).json(refineResponse(Status.SUCCESS, 'Package fetched successfully', item));
         } catch (error: any) {
             return res.status(500).json({ error: error.message });
         }
@@ -61,23 +61,23 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
             const receiverQuery = query.receiver
 
             delete query.receiver
-          await prisma.shipment.updateMany({
+            await prisma.package.updateMany({
                 where: {
                     id: id,
-                    adminId: token!.adminId!
+                    managerId: token!.managerId!
                 },
 
                 data: {
                     ...query,
                     receiver: {
-                        set: { ...shipment?.receiver, ...receiverQuery },
+                        set: { ...item?.receiver, ...receiverQuery },
                     }
                 }
             })
 
-            const updatedShipment = await prisma.shipment.findFirst({ where: { id: id } })
+            const updatedPackage = await prisma.package.findFirst({ where: { id: id } })
 
-            return res.status(200).json(refineResponse(Status.SUCCESS, 'Shipment updated successfully', updatedShipment))
+            return res.status(200).json(refineResponse(Status.SUCCESS, 'Package updated successfully', updatedPackage))
 
         } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))
@@ -87,8 +87,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
 
     if (req.method == 'DELETE') {
         try {
-            const item = await prisma.shipment.deleteMany({ where: { id: req.query.id as string, adminId:token!.adminId } })
-            return res.status(200).json(refineResponse(Status.SUCCESS, 'Shipment deleted successfully', item))
+            const item = await prisma.package.deleteMany({ where: { id: req.query.id as string, managerId: token!.managerId } })
+            return res.status(200).json(refineResponse(Status.SUCCESS, 'Package deleted successfully', item))
         } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))
         }

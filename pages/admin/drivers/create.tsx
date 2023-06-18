@@ -25,7 +25,7 @@ const DriverForm = () => {
         name: '',
         password: '',
         salary: { base_salary: 0, commission: 0 },
-        shipments: [],
+        packages: [],
         vehicle: null,
         documents: []
     };

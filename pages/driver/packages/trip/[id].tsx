@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import DriverContext from '@/stores/driver'
-import { shipmentRepository } from '@/lib/repositries/driver'
+import { packageRepository } from '@/lib/repositries/driver'
 import Loading from '@/components/shared/Loading'
 import FetchError from '@/components/shared/Error'
 import Map from '@/components/driver/map'
 import CancelModel from '@/components/driver/map/CancelModel'
+import withAuth from '@/components/shared/auth'
 const Trip = () => {
 
   const router = useRouter()
@@ -16,7 +17,7 @@ const Trip = () => {
   const [isReady, setIsReady] = React.useState<boolean>(false)
 
   const fetch_data = async () => {
-    await fetcher(shipmentRepository.fetch_shipment(id), false)
+    await fetcher(packageRepository.fetch_package(id), false)
   }
 
 
@@ -33,12 +34,12 @@ const Trip = () => {
       {error && !loading && <FetchError reload={fetch_data} error={error} />}
       {(!loading && currentItem) &&
         <>
-          <h1 className="text-lg font-bold text-gray-500 my-2"> {currentItem.shipmentNo} </h1>
+          <h1 className="text-lg font-bold text-gray-500 my-2"> {currentItem.packageNo} </h1>
           <div style={{ height: '83vh', width: '100%' }} className='mb-10 rounded-md overflow-hidden shadow-md'>
-            <Map shipmentId={currentItem.id} shipment={currentItem} driver={driver} ready={() => setIsReady(true)} />
+            <Map packageId={currentItem.id} package={currentItem} driver={driver} ready={() => setIsReady(true)} />
           </div>
           {isReady && <div tabIndex={0} className='w-full bg-white p-2 fixed left-0 bottom-0 flex items-center gap-x-3 border-t-2'>
-            <CancelModel shipmentId={currentItem.id} />
+            <CancelModel packageId={currentItem.id} />
             <button className='bg-green-500 text-white p-2 rounded-md w-full' onClick={() => { }}>Delivered</button>
 
           </div>}
@@ -49,4 +50,4 @@ const Trip = () => {
 }
 
 
-export default Trip
+export default withAuth(Trip)

@@ -10,7 +10,7 @@ import { authMiddleware, Token } from '@/middleware/auth';
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
     try {
-        const drivers = await prisma.driver.findMany({ where: { adminId: token.adminId } });
+        const drivers = await prisma.driver.findMany({ where: { managerId: token.managerId } });
         if (!drivers) {
             return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'drivers not found'));
         }

@@ -10,7 +10,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
     if (req.method == 'GET') {
 
         try {
-            const drivers = await prisma.driver.findFirst({ where: { id: req.query.id as string, adminId: token.adminId } });
+            const drivers = await prisma.driver.findFirst({ where: { id: req.query.id as string, managerId: token.managerId } });
             if (!drivers) {
                 return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Driver not found'));
             }
@@ -34,8 +34,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                     query[keys[0]] = vals[0]
                 }
             })
-            const item = await prisma.driver.updateMany({ where: { id: req.query.id as string, adminId: token.adminId }, data: query })
-            const driver = await prisma.driver.findFirst({ where: { id: req.query.id as string, adminId: token.adminId } });
+            const item = await prisma.driver.updateMany({ where: { id: req.query.id as string, managerId: token.managerId }, data: query })
+            const driver = await prisma.driver.findFirst({ where: { id: req.query.id as string, managerId: token.managerId } });
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Driver updated successfully', driver))
 
         } catch (error: any) {
@@ -46,7 +46,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
 
     if (req.method == 'DELETE') {
         try {
-            const item = await prisma.driver.deleteMany({ where: { id: req.query.id as string, adminId: token.adminId } })
+            const item = await prisma.driver.deleteMany({ where: { id: req.query.id as string, managerId: token.managerId } })
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Driver deleted successfully', item))
         } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))

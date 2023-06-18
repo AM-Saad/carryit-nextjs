@@ -11,7 +11,7 @@ const dashboard = () => {
         }
       }>
         <div>
-          <h1>Active Shipments</h1>
+          <h1>Active Packages</h1>
         </div>
 
       </Layout>

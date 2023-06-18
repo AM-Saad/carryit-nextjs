@@ -3,11 +3,12 @@ import { Status } from '@/shared/modals/Response';
 import jwt from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
 export interface Token {
-  adminId: string;
+  managerId: string;
   companyId?: string;
   driverId?: string;
   isAdmin: boolean;
   isDriver: boolean;
+  isSuper: boolean;
 }
 
 
@@ -26,7 +27,14 @@ export const authMiddleware = (handler: (req: NextApiRequest, res: NextApiRespon
     if (decoded === jwt.TokenExpiredError) {
       return res.status(401).json(refineResponse(Status.TOKEN_NOT_FOUND, 'Unauthorized'));
     }
-    return handler(req, res, { adminId: decoded.adminId, companyId: decoded.companyId, driverId: decoded.driverId || null, isAdmin: decoded.isAdmin, isDriver: decoded.isDriver });
+    return handler(req, res,
+      {
+        managerId: decoded.managerId,
+        companyId: decoded.companyId,
+        driverId: decoded.driverId || null, isAdmin: decoded.isAdmin,
+        isDriver: decoded.isDriver,
+        isSuper: decoded.isSuper
+      });
   } catch (error) {
     console.error(error);
     return res.status(401).json(refineResponse(Status.TOKEN_NOT_FOUND, 'Unauthorized..'));

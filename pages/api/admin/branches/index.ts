@@ -10,7 +10,7 @@ import { authMiddleware, Token } from '@/middleware/auth';
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
     try {
-        const branches = await prisma.branch.findMany({ where: { adminId: token.adminId } });
+        const branches = await prisma.branch.findMany({ where: { companyId: token.companyId } });
         if (!branches) {
             return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Branches not found'));
         }

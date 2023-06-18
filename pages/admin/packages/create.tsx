@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Shipment, ShipmentPayload } from '@/modals/Shipment'
+import { Package, PackagePayload } from '@/modals/Package'
 import Layout from '@/components/layout'
-import { shipmentRepository } from '@/lib/repositries/admin'
+import { packageRepository } from '@/lib/repositries/admin'
 import { Formik } from 'formik'
 import * as Yup from "yup";
 import { useRouter } from 'next/router'
@@ -80,14 +80,14 @@ const Create: React.FC = () => {
             .default(() => new Date()),
 
     })
-    const createShipment = async (payload: ShipmentPayload) => {
+    const createPackage = async (payload: PackagePayload) => {
 
         setLoading(true)
-        const response = await shipmentRepository.create_shipment(payload)
+        const response = await packageRepository.create_package(payload)
         setLoading(false)
         if (response.status === Status.SUCCESS) {
-            const shipment = response.items as Shipment
-            router.push(`${INTERNAL_SHIPMENTS_ROUTE}/${shipment.id}`)
+            const item = response.items as Package
+            router.push(`${INTERNAL_SHIPMENTS_ROUTE}/${item.id}`)
             return toast.success(response.message)
         }
         toast.error(response.message)
@@ -97,8 +97,8 @@ const Create: React.FC = () => {
     return (
         <Layout
             meta={{
-                title: "Create Shipment",
-                description: "Create Shipment",
+                title: "Create Package",
+                description: "Create Package",
             }}
         >
             <div className="form-body">
@@ -106,7 +106,7 @@ const Create: React.FC = () => {
                     initialValues={initialValues}
                     validationSchema={validationScheme}
                     onSubmit={(values, { setSubmitting }) => {
-                        createShipment({ ...values, receiver: { ...values.receiver, address: shippingAddress.formatted_address, shipping_address: shippingAddress } })
+                        createPackage({ ...values, receiver: { ...values.receiver, address: shippingAddress.formatted_address, shipping_address: shippingAddress } })
                         setSubmitting(false)
                     }}
                 >
@@ -114,7 +114,7 @@ const Create: React.FC = () => {
                         { console.log(errors) }
                         return (
                             <>
-                                <h1 className='font-medium mb-5'>Create Shipment</h1>
+                                <h1 className='font-medium mb-5'>Create Package</h1>
                                 <div className='flex gap-5 items-center lg:col-span-3'>
                                     <div className="flex gap-2 items-center">
                                         <span className=" text-gray-600 block">Fragile</span>

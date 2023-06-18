@@ -14,12 +14,12 @@ export const config = {
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
     try {
-        const shipments = await prisma.shipment.findMany({ where: { driverId: token.driverId } });
-        if (!shipments) {
-            return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Shipments not found'));
+        const packages = await prisma.package.findMany({ where: { driverId: token.driverId } });
+        if (!packages) {
+            return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Packages not found'));
         }
 
-        return res.status(200).json(refineResponse(Status.SUCCESS, 'Shipments fetched successfully', shipments));
+        return res.status(200).json(refineResponse(Status.SUCCESS, 'Packages fetched successfully', packages));
     } catch (error: any) {
         return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message));
     }

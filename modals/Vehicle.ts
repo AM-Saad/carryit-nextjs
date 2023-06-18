@@ -3,7 +3,7 @@ export default interface Vehicle {
     id: string;
     name: string;
     active: boolean;
-    adminId: number | string
+    managerId: number | string
     fuel_tank: FuelTank | null;
     fuel_type: FuelTypes;
     gas_history: { cost: number, amount: number, date: string }[];

@@ -10,7 +10,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
     if (req.method == 'GET') {
 
         try {
-            const vehicles = await prisma.vehicle.findFirst({ where: { id: req.query.id as string, adminId: token.adminId } });
+            const vehicles = await prisma.vehicle.findFirst({ where: { id: req.query.id as string, managerId: token.managerId } });
             if (!vehicles) {
                 return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Vehicle not found'));
             }
@@ -33,8 +33,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                     query[keys[0]] = vals[0]
                 }
             })
-            const item = await prisma.vehicle.updateMany({ where: { id: req.query.id as string, adminId: token.adminId as string }, data: query })
-            const vehicle = await prisma.vehicle.findFirst({ where: { id: req.query.id as string, adminId: token.adminId as string } });
+            const item = await prisma.vehicle.updateMany({ where: { id: req.query.id as string, managerId: token.managerId as string }, data: query })
+            const vehicle = await prisma.vehicle.findFirst({ where: { id: req.query.id as string, managerId: token.managerId as string } });
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Vehicle updated successfully', vehicle))
 
         } catch (error: any) {
@@ -45,7 +45,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
 
     if (req.method == 'DELETE') {
         try {
-            const item = await prisma.vehicle.deleteMany({ where: { id: req.query.id as string, adminId: token.adminId! as string } })
+            const item = await prisma.vehicle.deleteMany({ where: { id: req.query.id as string, managerId: token.managerId! as string } })
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Vehicles deleted successfully', item))
         } catch (error: any) {
             return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))

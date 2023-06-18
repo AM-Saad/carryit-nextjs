@@ -13,16 +13,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // Check if admin exists,
-    const admin = await prisma.admin.findUnique({
+    const manager = await prisma.manager.findUnique({
       where: { email: values.email },
     });
 
-    if (!admin) {
+    if (!manager) {
       return res.status(401).json(refineResponse(Status.DATA_NOT_FOUND, 'Data Not Found!'));
     }
 
     // Create JWT token
-    const token = jwt.sign({ adminId: admin.id, companyId: admin.companyId, driverId: null, isAdmin: true, isDriver: false }, process.env.NEXT_PUBLIC_JWT_SECRET!, {
+    const token = jwt.sign({ managerId: manager.id, companyId: manager.companyId, driverId: null, isAdmin: true, isDriver: false, isSuper: manager.isSuper }, process.env.NEXT_PUBLIC_JWT_SECRET!, {
       expiresIn: '7d',
     });
 

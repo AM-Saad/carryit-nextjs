@@ -3,21 +3,22 @@ import prisma from '../../../../../lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
 import { authMiddleware, Token } from '@/middleware/auth';
-import { ShipmentStatus } from '@/modals/Shipment';
+import { PackageStatus } from '@/modals/Package';
 import { ObjectId } from 'mongodb';
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
-    if (req.method !== 'PUT') {
-        return res.status(405).json(refineResponse(Status.UNHANDLED_SCENARIO, 'Method not allowed'));
-    }
+    if (req.method !== 'PUT') return res.status(405).json(refineResponse(Status.UNHANDLED_SCENARIO, 'Method not allowed'));
+
+    if (!token.isSuper) return res.status(403).json(refineResponse(Status.USER_TYPE_UNAUTHORIZED, 'You are not allowed to perform this action'));
+
 
     const { id, vehicleId } = req.query;
 
     if (!id || !vehicleId) {
         return res.status(400).json(refineResponse(Status.INVALID_PARAMETER, 'Invalid parameter'));
     }
-    const driver = await prisma.driver.findFirst({ where: { id: id as string, adminId: token.adminId } });
-    const vehicle = await prisma.vehicle.findFirst({ where: { id: vehicleId as string, adminId: token.adminId } })
+    const driver = await prisma.driver.findFirst({ where: { id: id as string, managerId: token.managerId } });
+    const vehicle = await prisma.vehicle.findFirst({ where: { id: vehicleId as string, managerId: token.managerId } })
     try {
         if (!driver || !vehicle) {
             return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Data not found'));
@@ -43,7 +44,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
         }
 
         // Remove vehicle from previous driver
-        await prisma.driver.updateMany({ where: {vehicleId: vehicleId as string, adminId: token.adminId },  data: { vehicleId: null }})
+        await prisma.driver.updateMany({ where: { vehicleId: vehicleId as string, managerId: token.managerId }, data: { vehicleId: null } })
 
         // Assign vehicle to driver
         await prisma.driver.update({
@@ -62,8 +63,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
 
         })
 
-        const updatedDriver = await prisma.driver.findFirst({ where: { id: id as string, adminId: token.adminId } });
-        return res.status(200).json(refineResponse(Status.SUCCESS, 'Shipment assigned successfully', updatedDriver));
+        const updatedDriver = await prisma.driver.findFirst({ where: { id: id as string, managerId: token.managerId } });
+        return res.status(200).json(refineResponse(Status.SUCCESS, 'Package assigned successfully', updatedDriver));
 
     } catch (error: any) {
         console.log(error);

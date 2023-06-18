@@ -51,10 +51,10 @@ type DriversSalary {
   commission  Int? @default(0)
 }
 
-type DriversShipments {
+type DriversPackages {
   id         String  @db.ObjectId
-  shipmentId String? @db.ObjectId
-  shipmentNo String?
+  packageId String? @db.ObjectId
+  packageNo String?
 }
 
 type DriversVehicle {
@@ -62,14 +62,14 @@ type DriversVehicle {
   name String
 }
 
-type ShipmentsDriver {
+type PackagesDriver {
   assignedAt String
   id         String @db.ObjectId
   mobile     String
   name       String
 }
 
-type ShipmentsReceiverZone {
+type PackagesReceiverZone {
   name   String
   zoneId Int
 }
@@ -106,14 +106,14 @@ type MaintenanceHistory {
   type        String?
 }
 
-type ZonesShipments {
+type ZonesPackages {
   id       String  @map("_id") @db.ObjectId
   delivery Boolean
   id_      String  @map("id") @db.ObjectId
   no       Int
 }
 
-model Admin {
+model Manager {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime?  @db.Date
   mobile    String?
@@ -124,7 +124,7 @@ model Admin {
   updatedAt DateTime?  @db.Date
   isSuper   Boolean?
   drivers   Driver[]
-  shipments Shipment[]
+  packages Package[]
   vehicles  Vehicle[]
   zones     Zone[]
   company   Company?   @relation(fields: [companyId], references: [id])
@@ -138,12 +138,12 @@ model Branch {
   id    String  @id @default(auto()) @map("_id") @db.ObjectId
   name  String
   notes String?
-
-  adminId String? @map("admin") @db.ObjectId
-
+  managerId String? @map("manager") @db.ObjectId
   company     Company? @relation(fields: [companyId], references: [id])
   companyId   String?  @map("company") @db.ObjectId
   drivers     String[]
+  packages   String[]
+  vehicles    String[]
   address     String?
   phone       String?
   governorate String?
@@ -174,7 +174,7 @@ model Chat {
   id         String            @id @default(auto()) @map("_id") @db.ObjectId
   v          Int               @map("__v")
   active     Boolean
-  admin      String            @db.ObjectId
+  manager      String            @db.ObjectId
   chatId     Int               @unique(map: "chatId_1")
   conversion ChatsConversion[]
   driver     String            @db.ObjectId
@@ -189,19 +189,19 @@ model Driver {
   name        String
   password    String
   salary      DriversSalary
-  shipments   DriversShipments[]
+  packages   DriversPackages[]
   documents   Document[]
   active      Boolean?
 
   vehicleId String?
-  admin     Admin?   @relation(fields: [adminId], references: [id])
-  adminId   String?  @map("admin") @db.ObjectId
+  manager     Manager?   @relation(fields: [managerId], references: [id])
+  managerId   String?  @map("manager") @db.ObjectId
   company   Company? @relation(fields: [companyId], references: [id])
   companyId String?  @map("company") @db.ObjectId
   branchId  String?  @map("branch") @db.ObjectId
 }
 
-type ShipmentsPickup {
+type PackagesPickup {
   address   String
   apartment Int?
   area      String?
@@ -209,15 +209,15 @@ type ShipmentsPickup {
   floor     Int?
   name      String
   phone     String
-  zone      ShipmentsPickupZone?
+  zone      PackagesPickupZone?
 }
 
-type ShipmentsPickupZone {
+type PackagesPickupZone {
   name   String
   zoneId Int?
 }
 
-type ShipmentsReceiver {
+type PackagesReceiver {
   name      String
   phone     String
   address   String
@@ -237,7 +237,7 @@ type Cancled {
   reason String?
 }
 
-model Shipment {
+model Package {
   id            String             @id @default(auto()) @map("_id") @db.ObjectId
   createdAt     DateTime           @db.Date
   customerId    String?
@@ -249,12 +249,12 @@ model Shipment {
   notes         String?
   pickup_date   String?
   total_cost    Int
-  receiver      ShipmentsReceiver?
+  receiver      PackagesReceiver?
   shipping_cost Int?
   status        Int?
-  admin         Admin?             @relation(fields: [adminId], references: [id])
-  adminId       String?            @map("admin") @db.ObjectId
-  shipmentNo    String?            @unique(map: "shipmentNo_1")
+  manager         Manager?             @relation(fields: [managerId], references: [id])
+  managerId       String?            @map("manager") @db.ObjectId
+  packageNo    String?            @unique(map: "packageNo_1")
   items         Items[]
   discount      Int?               @default(0)
   company       Company?           @relation(fields: [companyId], references: [id])
@@ -283,8 +283,8 @@ model Vehicle {
   notes        String?
   plate_number String?              @default("00000")
   model        String?              @default("00000")
-  admin        Admin?               @relation(fields: [adminId], references: [id])
-  adminId      String?              @map("admin") @db.ObjectId
+  manager        Manager?               @relation(fields: [managerId], references: [id])
+  managerId      String?              @map("manager") @db.ObjectId
   description  String?
   documents    Document[]
   driverId     String?
@@ -301,7 +301,7 @@ model User {
   mobile            String?
   name              String
   password          String?
-  shipments         String[] @map("shipments") @db.ObjectId
+  packages         String[] @map("packages") @db.ObjectId
   signUpToken       String?
   company           Company? @relation(fields: [companyId], references: [id])
   companyId         String?  @map("company") @db.ObjectId
@@ -318,8 +318,8 @@ model Zone {
   pickup      Boolean
   shipping    Int
   zoneId      Int
-  admin       Admin?   @relation(fields: [adminId], references: [id])
-  adminId     String?  @map("admin") @db.ObjectId
+  manager       Manager?   @relation(fields: [managerId], references: [id])
+  managerId     String?  @map("manager") @db.ObjectId
   company     Company? @relation(fields: [companyId], references: [id])
   companyId   String?  @map("company") @db.ObjectId
 }
@@ -339,12 +339,16 @@ model Company {
   brand_name   String?                 @unique
   main_email   String?                 @unique
   logo         String?
+  hotline      String?
+  address      String?
+  mobile       String?
+
   roles        CompaniesRoles[]
   subscription CompaniesSubscriptions?
-  admins       Admin[]
-  adminsIds    String[]                @map("admins") @db.ObjectId
+  managers       Manager[]
+  managersIds    String[]                @map("managers") @db.ObjectId
   Driver       Driver[]
-  Shipment     Shipment[]
+  Package     Package[]
   Vehicle      Vehicle[]
   Product      Product[]
   Zone         Zone[]

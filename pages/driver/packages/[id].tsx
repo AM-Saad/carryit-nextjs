@@ -1,14 +1,15 @@
 import Layout from '@/components/layout/driver'
 import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { shipmentRepository } from '@/lib/repositries/driver'
+import { packageRepository } from '@/lib/repositries/driver'
 import DriverContext from '@/stores/driver'
 import Loading from '@/components/shared/Loading'
 import FetchError from '@/components/shared/Error'
-import { ShipmentStatus, getShipmentStatus, getShipmentStatusColor } from '@/modals/Shipment'
+import { PackageStatus, getPackageStatus, getPackageStatusColor } from '@/modals/Package'
 import Button from '@/components/shared/Button'
+import withAuth from '@/components/shared/auth'
 
-const Shipment = () => {
+const Package = () => {
     const router = useRouter()
     const { id } = router.query as { id: string }
 
@@ -16,7 +17,7 @@ const Shipment = () => {
     const { loading, error } = fetchMeta
 
     const fetch_data = async () => {
-        const res = await fetcher(shipmentRepository.fetch_shipment(id), false)
+        const res = await fetcher(packageRepository.fetch_package(id), false)
        
     }
 
@@ -29,8 +30,8 @@ const Shipment = () => {
 
     useEffect(() => {
         if (currentItem) {
-            if(currentItem.status === ShipmentStatus.Shipped){
-                router.push(`/driver/shipments/trip/${id}`)
+            if(currentItem.status === PackageStatus.Shipped){
+                router.push(`/driver/packages/trip/${id}`)
             }
         }
     }, [currentItem]);
@@ -44,12 +45,12 @@ const Shipment = () => {
                 <>
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center gap-3'>
-                            <h1 className="text-xl font-bold">{currentItem.shipmentNo}</h1>
-                            <span style={{ backgroundColor: getShipmentStatusColor(currentItem.status!) }} className='rounded-full px-2 py-1 text-xs'>{getShipmentStatus(currentItem.status!)}</span>
+                            <h1 className="text-xl font-bold">{currentItem.packageNo}</h1>
+                            <span style={{ backgroundColor: getPackageStatusColor(currentItem.status!) }} className='rounded-full px-2 py-1 text-xs'>{getPackageStatus(currentItem.status!)}</span>
                         </div>
                         <div className='flex items-center gap-3'>
                             <button className='btn btn-primary'>Print</button>
-                            <Button title='Start Trip' disabled={currentItem.status !== ShipmentStatus.Ready} onClick={() => { router.push(`/driver/shipments/trip/${id}`) }} />
+                            <Button title='Start Trip' disabled={currentItem.status !== PackageStatus.Ready} onClick={() => { router.push(`/driver/packages/trip/${id}`) }} />
                         </div>
                     </div>
                     <div className='grid grid-cols-3 gap-5 my-5'>
@@ -67,7 +68,7 @@ const Shipment = () => {
                             </div>
                         </div>
                         <div className='mt-4 col-span-1'>
-                            <h2 className='mb-4 font-medium'>Shipment Info</h2>
+                            <h2 className='mb-4 font-medium'>Package Info</h2>
                             <div className='flex items-center gap-5 text-xs mb-2'>
                                 <p >Is Liquid: {currentItem.is_liquid ? 'Yes' : 'No'}</p>
                                 <p>Is Fragile: : {currentItem.is_fragile ? 'Yes' : 'No'}</p>
@@ -108,4 +109,4 @@ const Shipment = () => {
     )
 }
 
-export default Shipment
+export default withAuth(Package)

@@ -1,10 +1,10 @@
 import { fetcher } from "@/lib/utils";
 import Response, { Status } from "@/shared/modals/Response";
 import { DRIVER_SHIPMENTS_ROUTE } from '@/lib/constants'
-import { Shipment } from "@/modals/Shipment";
+import { Package } from "@/modals/Package";
 
 
-export default class ShipmentRepository {
+export default class PackageRepository {
     constructor() {
 
     }
@@ -13,10 +13,10 @@ export default class ShipmentRepository {
 
     }
 
-    fetch_shipments: () => Promise<Response<Shipment[]>> = async () => {
+    fetch_packages: () => Promise<Response<Package[]>> = async () => {
 
         try {
-            const response: Response<Shipment[]> = await fetcher(DRIVER_SHIPMENTS_ROUTE, {
+            const response: Response<Package[]> = await fetcher(DRIVER_SHIPMENTS_ROUTE, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${this.getToken()}`,
@@ -34,9 +34,9 @@ export default class ShipmentRepository {
 
         }
     }
-    fetch_shipment: (id: string) => Promise<Response<Shipment>> = async (id) => {
+    fetch_package: (id: string) => Promise<Response<Package>> = async (id) => {
         try {
-            const response: Response<Shipment> = await fetcher(`${DRIVER_SHIPMENTS_ROUTE}/${id}`, {
+            const response: Response<Package> = await fetcher(`${DRIVER_SHIPMENTS_ROUTE}/${id}`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${this.getToken()}`,

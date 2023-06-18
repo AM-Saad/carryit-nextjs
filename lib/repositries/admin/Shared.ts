@@ -10,7 +10,7 @@ export default class SharedRepository {
     }
     getToken = () => {
         return window.localStorage.getItem('uidjwt')
-        
+
     }
 
     login: (email: string) => Promise<Response<any>> = async (email) => {
@@ -124,6 +124,63 @@ export default class SharedRepository {
                 }
             });
 
+            return response
+        } catch (error: any) {
+            return {
+                message: error.message, state: Status.UNEXPECTED_ERROR, items: []
+            }
+
+        }
+    }
+
+    fetch_company: () => Promise<Response<any>> = async () => {
+        try {
+            const response = await fetcher(`/api/admin/company`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            }
+            );
+            return response
+        } catch (error: any) {
+            return {
+                message: error.message, state: Status.UNEXPECTED_ERROR, items: []
+            }
+
+        }
+    }
+    update_partial_admin: (values: any) => Promise<Response<any>> = async (values) => {
+        try {
+            const response = await fetcher(`/api/admin`, {
+                method: "PATCH",
+                body: JSON.stringify(values),
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            }
+            );
+            return response
+        } catch (error: any) {
+            return {
+                message: error.message, state: Status.UNEXPECTED_ERROR, items: []
+            }
+
+        }
+    }
+    update_partial_company: (values: any) => Promise<Response<any>> = async (values) => {
+        try {
+            const response = await fetcher(`/api/admin/company`, {
+                method: "PATCH",
+                body: JSON.stringify(values),
+                headers: {
+                    Authorization: `Bearer ${this.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            }
+            );
             return response
         } catch (error: any) {
             return {

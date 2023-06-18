@@ -12,10 +12,10 @@ export const config = {
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
 
-    // create shipment
+    // create package
     if (req.method == 'POST') {
         const { values } = req.body
-        const admin = await prisma.admin.findFirst({ where: { id: token.adminId as string } });
+        const manager = await prisma.manager.findFirst({ where: { id: token.managerId as string } });
         const receiver = {
             set: {
                 name: values.receiver.name,
@@ -51,22 +51,22 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                         itemId: new ObjectId().toString()
                     }
                 ],
-                admin: {
+                manager: {
                     connect: {
-                        id: admin!.id!
+                        id: manager!.id!
                     }
                 },
                 company: {
                     connect: {
-                        id: admin!.companyId!
+                        id: manager!.companyId!
                     }
                 },
-                shipmentNo: `SHP-${Math.floor(Math.random() * 1000000)}`,
+                packageNo: `SHP-${Math.floor(Math.random() * 1000000)}`,
             }
         }
         try {
-            const shipment = await prisma.shipment.create(payload);
-            return res.status(200).json(refineResponse(Status.SUCCESS, 'Shipment created successfully', shipment));
+            const item = await prisma.package.create(payload);
+            return res.status(200).json(refineResponse(Status.SUCCESS, 'Package created successfully', item));
         }
         catch (error: any) {
             console.log(error);

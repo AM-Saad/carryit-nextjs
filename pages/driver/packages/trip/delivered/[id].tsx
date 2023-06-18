@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import Layout from '@/components/layout/driver'
 import DriverContext from '@/stores/driver'
-import { shipmentRepository } from '@/lib/repositries/driver'
+import { packageRepository } from '@/lib/repositries/driver'
 import { useRouter } from 'next/router'
 import Loading from '@/components/shared/Loading'
 import FetchError from '@/components/shared/Error'
 import { FileIcon } from '@radix-ui/react-icons'
+import withAuth from '@/components/shared/auth'
 FileIcon
 const Delivered = () => {
     const router = useRouter()
@@ -15,7 +16,7 @@ const Delivered = () => {
     const { loading, error } = fetchMeta
 
     const fetch_data = async () => {
-        await fetcher(shipmentRepository.fetch_shipment(id), false)
+        await fetcher(packageRepository.fetch_package(id), false)
     }
 
 
@@ -34,7 +35,7 @@ const Delivered = () => {
                 {(!loading && currentItem) &&
                     <>
                         <div className='flex items-center justify-between'>
-                            <h1 className="text-xl font-bold">{currentItem.shipmentNo}</h1>
+                            <h1 className="text-xl font-bold">{currentItem.packageNo}</h1>
                             <button
                                 className='flex items-center gap-3 justify-between'
                                 onClick={() => window.print()}
@@ -59,7 +60,7 @@ const Delivered = () => {
                                 </div>
                             </div>
                             <div className='mt-4 col-span-1'>
-                                <h2 className='mb-4 font-medium'>Shipment Info</h2>
+                                <h2 className='mb-4 font-medium'>Package Info</h2>
                                 <div className='flex items-center gap-5 text-xs mb-2'>
                                     <p >Is Liquid: {currentItem.is_liquid ? 'Yes' : 'No'}</p>
                                     <p>Is Fragile: : {currentItem.is_fragile ? 'Yes' : 'No'}</p>
@@ -102,4 +103,4 @@ const Delivered = () => {
     )
 }
 
-export default Delivered
+export default withAuth(Delivered)

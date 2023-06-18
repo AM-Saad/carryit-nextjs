@@ -19,8 +19,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
     try {
 
         const { canceled, status } = req.body
-        const shipment = await prisma.shipment.findFirst({ where: { id: id as string, adminId: token.adminId } });
-        if (!shipment) return res.status(400).json(refineResponse(Status.DATA_NOT_FOUND, 'Shipment not found'))
+        const package = await prisma.package.findFirst({ where: { id: id as string, managerId: token.managerId } });
+        if (!package) return res.status(400).json(refineResponse(Status.DATA_NOT_FOUND, 'Package not found'))
 
         // if(values.status === 'DELIVERED') {
         //     query.deliveredAt = new Date()
@@ -30,10 +30,10 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
         console.log(canceled)
         console.log(status)
 
-        await prisma.shipment.updateMany({
+        await prisma.package.updateMany({
             where: {
                 id: id,
-                adminId: token!.adminId!
+                managerId: token!.managerId!
             },
 
             data: {
@@ -43,9 +43,9 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
 
         })
 
-        const updatedShipment = await prisma.shipment.findFirst({ where: { id: id } })
+        const updatedPackage = await prisma.package.findFirst({ where: { id: id } })
 
-        return res.status(200).json(refineResponse(Status.SUCCESS, 'Status Updated Successfully', updatedShipment))
+        return res.status(200).json(refineResponse(Status.SUCCESS, 'Status Updated Successfully', updatedPackage))
 
     } catch (error: any) {
         return res.status(500).json(refineResponse(Status.UNEXPECTED_ERROR, error.message))

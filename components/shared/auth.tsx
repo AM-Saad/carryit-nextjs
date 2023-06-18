@@ -21,7 +21,6 @@ const withAuth = (WrappedComponent: any) => {
 
     const checkIfUserIsAuthenticated = (destination: string) => {
         if (typeof window !== 'undefined') {
-            console.log(localStorage.getItem('didjwt'))
             if (destination === '/driver') {
                 const token = localStorage.getItem('didjwt')
                 if (!token) {
