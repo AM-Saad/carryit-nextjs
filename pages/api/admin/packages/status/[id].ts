@@ -19,8 +19,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
     try {
 
         const { canceled, status } = req.body
-        const package = await prisma.package.findFirst({ where: { id: id as string, managerId: token.managerId } });
-        if (!package) return res.status(400).json(refineResponse(Status.DATA_NOT_FOUND, 'Package not found'))
+        const item = await prisma.package.findFirst({ where: { id: id as string, managerId: token.managerId } });
+        if (!item) return res.status(400).json(refineResponse(Status.DATA_NOT_FOUND, 'Package not found'))
 
         // if(values.status === 'DELIVERED') {
         //     query.deliveredAt = new Date()
