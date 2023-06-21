@@ -12,7 +12,7 @@ import Item from '@/components/shared/wrappers/items/item';
 import ItemsWrapper from '@/components/shared/wrappers/items';
 import withAuth from '@/components/shared/auth';
 
-const Admins = () => {
+const Managers = () => {
   const { data: session } = useSession()
   const { fetcher, fetchMeta, currentItems } = useContext(AdminContext);
   const { loading, error } = fetchMeta
@@ -75,7 +75,7 @@ const Admins = () => {
               height='100'
               style={{ filter: 'drop-shadow(2px 2px 2px #555)' }}
             />
-            <p className='mt-3 font-medium text-gray-700 text-xs sm:text-sm'>No Admins Yet!</p>
+            <p className='mt-3 font-medium text-gray-700 text-xs sm:text-sm'>No Managers Yet!</p>
             <Link href={`${INTERNAL_MANAGERS_ROUTE}/create`} className='text-blue-500 text-sm mt-2'>Create New</Link>
           </div>
         }
@@ -84,4 +84,4 @@ const Admins = () => {
   )
 }
 
-export default withAuth(Admins)
+export default withAuth(Managers)

@@ -1,3 +1,4 @@
+import { useState,useEffect } from 'react'
 import EditableInput from '@/components/shared/EditableInput'
 import ToggleBtn from '@/components/shared/ToggleBtn'
 import DocumentsContainer from '@/components/admin/driver/DocumentsContainer'
@@ -6,7 +7,10 @@ import Vehicle, { VehicleTypes, fuelTypesArray, vehicleTypesArray, getFuelUnit }
 import Button from '@/components/shared/Button'
 import Modal from '@/components/shared/modal'
 import ConfirmDeleteItem from '@/components/shared/ConfirmDelete'
-import { useState } from 'react'
+import { BRANCHES_ROUTE } from '@/lib/constants'
+import { getHeaders } from '@/lib/utils'
+import Response from '@/shared/modals/Response'
+import Home from '@/components/shared/icons/home'
 
 interface Props {
   vehicle: Vehicle,
@@ -22,14 +26,35 @@ const VehicleFrom: React.FC<Props> = ({ vehicle, onUpdate, loading, onDelete }) 
 
   const update_partial_vehicle = async (data: any) => onUpdate(data)
   const [openConfirmDeleteModal, setOpenConfirmDeleteModal] = useState<boolean>(false)
+  const [branchName, setBranchName] = useState<string | null>(null)
 
+  const fetch_driver_branch = async () => {
+    if(!vehicle.branchId) return setBranchName('Not assosiated to branch')
+    const token = localStorage.getItem('uidjwt')!
 
+    const res:any= await fetch(`${BRANCHES_ROUTE}/${vehicle.branchId}`, {  headers: getHeaders(token) })
+    const data:Response<Vehicle>  = await res.json().then((data:Response<Vehicle>) => data)
+
+    const branch = data.items as Vehicle
+    setBranchName(branch ? branch.name : 'Not assosiated to branch')
+  }
+
+  useEffect(() => {
+    fetch_driver_branch()
+  }, [])
 
   return (
     <>
       <div className='items-header'>
-        <h1 className='title'>{vehicle.name}</h1>
+        <div>
 
+        <h1 className='title'>{vehicle.name}</h1>
+        <span className='text-xs flex items-center gap-x-2 mt-1'>
+          <Home 
+          className='w-3 h-3'
+          />
+           {branchName || '....'}</span>
+        </div>
         <div className='flex items-center justify-between gap-5'>
 
           <Button

@@ -30,6 +30,16 @@ export async function fetcher<JSON = any>(
   return res.json();
 }
 
+export function getHeaders(token: string) {
+  const headers: any = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": `Bearer ${token}`,
+  };
+  return headers;
+}
+
+
 export function nFormatter(num: number, digits?: number) {
   if (!num) return "0";
   const lookup = [

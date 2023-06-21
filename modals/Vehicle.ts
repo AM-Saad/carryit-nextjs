@@ -14,6 +14,7 @@ export default interface Vehicle {
     plate_number: string;
     model: string;
     documents: any[];
+    branchId: any;
 
 }
 export interface VehiclePayload {

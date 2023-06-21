@@ -8,6 +8,11 @@ import { useEffect, useState, useContext } from 'react'
 import MultiSelect from '@/components/shared/MultiSelect'
 import { driverRepository } from '@/lib/repositries/admin'
 import AdminContext from '@/stores/admin'
+import { BRANCHES_ROUTE, VEHICLES_ROUTE } from '@/lib/constants'
+import Response from '@/shared/modals/Response'
+import Branch from '@/modals/Branch'
+import { getHeaders } from '@/lib/utils'
+import Home from '@/components/shared/icons/home'
 interface Props {
   driver: any,
   onUpdate: (data: any) => void,
@@ -21,14 +26,14 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
   const [vehiclesToAssign, setVehicleToAssign] = useState<any[]>([])
   const [selectedVehicles, setSelectedVehicles] = useState<any[]>([])
   const [assignVehicleError, setAssignVehicleError] = useState<string | null>(null)
-
-
-  const update_partial_driver = async (data: any) => onUpdate({ values: [data] })
+  const [branchName , setBranchName] = useState<string | null>(null)
   const { updater, updateMeta } = useContext(AdminContext)
 
 
-  const assign_vehicle = async (vehicleId: string | null) => {
+  const update_partial_driver = async (data: any) => onUpdate({ values: [data] })
 
+
+  const assign_vehicle = async (vehicleId: string | null) => {
     await updater(driverRepository.assign_vehicle(driver.id, vehicleId), false)
   }
 
@@ -36,15 +41,15 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
   const fetch_vehicles = async () => {
     const token = localStorage.getItem('uidjwt')
 
-    const res = await fetch('/api/admin/vehicles', {
+    const res = await fetch(`${VEHICLES_ROUTE}`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }
     })
     const data = await res.json()
-
-    const vehicles = data.items.map((item: any) => ({ value: item.id, label: item.name }))
+ 
+    const vehicles = data.items.filter((item: any) => item.branchId === driver.branchId).map((item: any) => ({ label: item.name, value: item.id }))
 
     const currentVehicle = vehicles.find((item: any) => item.value === driver.vehicleId)
 
@@ -56,10 +61,21 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
     setVehicles(data.items)
   }
 
+  const fetch_driver_branch = async () => {
+    if(!driver.branchId) return setBranchName('Not assosiated to branch')
+    const token = localStorage.getItem('uidjwt')!
+
+    const res:any= await fetch(`${BRANCHES_ROUTE}/${driver.branchId}`, {  headers: getHeaders(token) })
+    const data:Response<Branch>  = await res.json().then((data:Response<Branch>) => data)
+
+    const branch = data.items as Branch
+    setBranchName(branch ? branch.name : 'Not assosiated to branch')
+  }
 
   useEffect(() => {
 
     fetch_vehicles()
+    fetch_driver_branch()
 
   }, [])
 
@@ -67,20 +83,27 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
   return (
     <>
       <div className='items-header'>
-        <h1 className='title'>{driver.name || 'n.c.'}</h1>
+        <div>
 
+        <h1 className='title'>{driver.name || 'n.c.'}</h1>
+        <span className='text-xs flex items-center gap-x-2 mt-1'>
+          <Home 
+          className='w-3 h-3'
+          />
+           {branchName || '....'}</span>
+        </div>
         <div className='flex items-center justify-between gap-5'>
 
           <Button
             onClick={() => setOpenConfirmDeleteModal(true)}
             title='Delete'
             style='bg-red-500 text-white'
-            loading={loading}
-            disabled={loading}
+            loading={loading || updateMeta.loading}
+            disabled={loading || updateMeta.loading}
           />
 
           <Modal showModal={openConfirmDeleteModal} setShowModal={() => setOpenConfirmDeleteModal(false)}>
-            <ConfirmDeleteItem label='driver' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} />
+            <ConfirmDeleteItem label='driver' cancel={() => setOpenConfirmDeleteModal(false)} onConfirmDelete={onDelete} loading={updateMeta.loading} />
           </Modal>
         </div>
 
@@ -172,6 +195,7 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading, onDelete }) =>
         <DocumentsContainer
           item={driver}
           context='drivers'
+          
         />
       </div>
 
