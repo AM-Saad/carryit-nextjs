@@ -3,13 +3,14 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
+import { useRouter } from "next/router";
 
 const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
   const { isMobile, isDesktop } = useWindowSize();
   const leafletRef = useRef<HTMLUListElement>(null);
   const [show, setShow] = useState(false);
   const controls = useAnimation();
-
+  const router = useRouter();
   const transitionProps = {
     type: "spring",
     stiffness: 700,
@@ -47,6 +48,7 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
   }
 
   useEffect(() => {
+    console.log(router.pathname)
     if (isMobile) {
       setShow(true);
       controls.start({ x: "-110px", transition: transitionProps });
@@ -67,7 +69,7 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
         <motion.ul
           ref={leafletRef}
           key="leaflet"
-          className={`group flex min-h-screen w-40
+          className={` flex min-h-screen w-40
                         cursor-grab flex-col items-start gap-4 overflow-hidden rounded-tr-lg border bg-gray-50 p-2  px-4 pb-5 transition-all duration-75
                         active:cursor-grabbing sm:gap-3
                         sm:bg-white
@@ -93,7 +95,7 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
           }}
         >
           {links.map((link: any) => (
-            <li className="block w-full cursor-pointer sm:mb-5" key={link.name}>
+            <li className="block w-full cursor-pointer sm:mb-5 group" key={link.name}>
               <Link
                 href={link.href}
                 className="flex  w-full cursor-pointer justify-between text-xs text-gray-800 transition-all duration-300 sm:gap-1 md:text-sm"
@@ -103,7 +105,7 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
                   src={link.icon}
                   width="20"
                   height="20"
-                  className="h-5 w-5"
+                  className={`h-5 w-5 ${router.pathname.includes(link.name.toLowerCase()) ? '': 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
                   alt={link.name}
                 />
               </Link>

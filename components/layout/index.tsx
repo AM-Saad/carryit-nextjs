@@ -64,7 +64,7 @@ interface Props {
 
 const Layout = ({ meta, children, isDashboard = true }: Props) => {
   const { SignInModal, setShowSignInModal } = useSignInModal();
-  const scrolled = useScroll(50);
+  const scrolled = useScroll(20);
 
   const { admin, fetch_admin } = useContext(AdminContext);
   const router = useRouter();

@@ -33,9 +33,31 @@ const BranchFrom: React.FC<Props> = ({
 
   const update_partial_branch = async (data: any) =>
     onUpdate({ values: [data] });
-  const { updater, updateMeta } = useContext(AdminContext);
 
+  const check_if_driver_is_assigned_to_another_branck = (
+    selectedDrivers: any,
+  ) => {
+    let assingedDrivers: any = [];
+    selectedDrivers.forEach((item: any) => {
+      const driver = drivers.find((item: any) => item.id === item.value);
+      if (driver) {
+        const driverbranchId = driver.branchId;
+        if (branch && driverbranchId !== "" && driverbranchId !== branch.id) {
+          assingedDrivers.push(driver);
+        }
+      }
+    });
+
+    return assingedDrivers;
+  };
   const update_drivers = async (drivers: any[]) => {
+    const assingedDrivers =
+      check_if_driver_is_assigned_to_another_branck(drivers);
+    console.log(assingedDrivers);
+    if (assingedDrivers.length > 0) {
+      return alert("Driver is assigned to another branch");
+    }
+
     const driverIds = drivers.map((item: any) => item.value);
     console.log(driverIds);
     update_partial_branch({ drivers: driverIds });
