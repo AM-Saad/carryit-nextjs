@@ -61,7 +61,7 @@ const Branches = () => {
             </div>
             <ItemsWrapper>
               {currentItems.map((item: any) => (
-                <Item id={item.id} title={item.name} route={INTERNAL_BRANCHES_ROUTE} />
+                <Item id={item.id} title={item.name} route={INTERNAL_BRANCHES_ROUTE} key={item.id} />
               ))
               }
             </ItemsWrapper>

@@ -104,7 +104,7 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
             let response = await sharedRepository.login(email)
 
             if (response.status === Status.DATA_NOT_FOUND) {
-                 response = await sharedRepository.create_admin(email, name)
+                response = await sharedRepository.create_admin(email, name)
             } else {
                 if (response.status !== Status.SUCCESS) {
                     toast.error(response.message)
@@ -123,7 +123,7 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
         setAdminMeta({ loading: false, error: null })
     }
 
-    const fetch_admin  = async () => {
+    const fetch_admin = async () => {
         setAdminMeta({ loading: true, error: null })
         try {
             const response = await sharedRepository.fetch_admin()
@@ -141,10 +141,16 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
 
 
 
-
     useEffect(() => {
-
-    }, [])
+        // if (!isSecured) return
+        const token = localStorage.getItem("uidjwt");
+        // if (!token && !router.pathname.includes('user')) {
+        //   router.push('/')
+        //   return
+        // }
+        console.log('Created by Abdelrahman Saad')
+        token && fetch_admin();
+    }, []);
 
     const userCtx = {
         adminMeta,

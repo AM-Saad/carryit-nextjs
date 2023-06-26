@@ -62,6 +62,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                     }
                 },
                 packageNo: `SHP-${Math.floor(Math.random() * 1000000)}`,
+                branchId: values.branchId
             }
         }
         try {

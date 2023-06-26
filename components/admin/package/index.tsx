@@ -11,6 +11,12 @@ import AdminContext from "@/stores/admin";
 import ChangeStatus from "./ChangeStatus";
 import Fragile from "@/components/shared/icons/fragile";
 import Liquid from "@/components/shared/icons/liquid";
+import Branch from "@/modals/Branch";
+import Response from "@/shared/modals/Response";
+import { BRANCHES_ROUTE } from "@/lib/constants";
+import { getHeaders } from "@/lib/utils";
+import Home from "@/components/shared/icons/home";
+import Driver from "@/modals/Driver";
 
 interface Props {
   currentPackage: Package;
@@ -19,12 +25,7 @@ interface Props {
   onDelete: () => void;
 }
 
-const PackageFrom: React.FC<Props> = ({
-  currentPackage,
-  onUpdate,
-  loading,
-  onDelete,
-}) => {
+const PackageFrom: React.FC<Props> = ({ currentPackage, onUpdate, loading, onDelete }) => {
   const update_partial_package = async (data: any) =>
     onUpdate({ values: [data] });
   const [openConfirmDeleteModal, setOpenConfirmDeleteModal] =
@@ -32,37 +33,27 @@ const PackageFrom: React.FC<Props> = ({
   const [drivers, setDrivers] = useState<any[]>([]);
   const [driverToAssign, setDriverToAssign] = useState<any[]>([]);
   const [selectedDrivers, setSelectedDrivers] = useState<any[]>([]);
-  const [assignDriverError, setAssignDriverError] = useState<string | null>(
-    null,
-  );
+  const [assignDriverError, setAssignDriverError] = useState<string | null>(null);
+  const [branchName, setBranchName] = useState<string>("");
+
   const { updater, updateMeta } = useContext(AdminContext);
 
   const assign_package = async (driverId: string) => {
-    await updater(
-      packageRepository.assign_package(currentPackage.id, driverId),
-      false,
-    );
+    await updater(packageRepository.assign_package(currentPackage.id, driverId), false);
   };
 
   const fetch_drivers = async () => {
-    const token = localStorage.getItem("uidjwt");
+    const token = localStorage.getItem("uidjwt")!;
 
-    const res = await fetch("/api/admin/drivers", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch("/api/admin/drivers", { headers: getHeaders(token) });
     const data = await res.json();
 
-    const drivers = data.items.map((item: any) => ({
+    const drivers = data.items.filter((i: Driver) => i.branchId && i.branchId === currentPackage.branchId).map((item: any) => ({
       value: item.id,
       label: item.name,
     }));
 
-    const currentDriver = drivers.find(
-      (item: any) => item.value === currentPackage.driverId,
-    );
+    const currentDriver = drivers.find((item: any) => item.value === currentPackage.driverId);
 
     if (currentDriver) {
       setSelectedDrivers([
@@ -73,17 +64,38 @@ const PackageFrom: React.FC<Props> = ({
     setDrivers(data.items);
   };
 
+  const fetch_package_branch = async () => {
+    if (!currentPackage.branchId) return setBranchName("Not assosiated to branch")
+
+    const token = localStorage.getItem("uidjwt")!;
+
+    const res: any = await fetch(`${BRANCHES_ROUTE}/${currentPackage.branchId}`, { headers: getHeaders(token) });
+    const data: Response<Branch> = await res.json().then((data: Response<Branch>) => data);
+    const branch = data.items as Branch;
+
+    setBranchName(branch ? branch.name : "Not assosiated to branch");
+  };
+
   useEffect(() => {
     fetch_drivers();
+    fetch_package_branch();
   }, []);
 
   return (
     <>
       <div className="items-header">
-        <div className="flex items-center gap-3">
-          <h1 className="title">{currentPackage.packageNo || "n.c."}</h1>
-          <ChangeStatus />
+
+        <div>
+          <div className="flex items-center gap-3">
+            <h1 className="title">{currentPackage.packageNo || "n.c."}</h1>
+            <ChangeStatus />
+          </div>
+          <span className="mt-1 flex items-center gap-x-2 text-xs">
+            <Home className="h-3 w-3" />
+            {branchName || "...."}
+          </span>
         </div>
+
         <div className="flex items-center justify-between gap-5">
           <Button
             onClick={() => setOpenConfirmDeleteModal(true)}
@@ -92,7 +104,6 @@ const PackageFrom: React.FC<Props> = ({
             loading={loading}
             disabled={loading}
           />
-
           <Modal
             showModal={openConfirmDeleteModal}
             setShowModal={() => setOpenConfirmDeleteModal(false)}
@@ -104,6 +115,7 @@ const PackageFrom: React.FC<Props> = ({
             />
           </Modal>
         </div>
+
       </div>
       <div className="form-body">
         <div className="my-3 flex items-center justify-between gap-2">

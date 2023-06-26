@@ -94,7 +94,6 @@ const MultiSelect: React.FC<Props> = ({ options, multiple, closeOnSelect, placeh
     useEffect(() => {
         if (!isFirstRender) {
             input(selected)
-
         }
 
         setIsFirstRender(false)
@@ -103,19 +102,21 @@ const MultiSelect: React.FC<Props> = ({ options, multiple, closeOnSelect, placeh
 
 
     useEffect(() => {
+        console.log(listIsOpen)
         setSelected(preSelected)
         document.addEventListener('mousedown', closeList)
 
         return () => document.removeEventListener('mousedown', closeList)
     }, []);
 
+    useEffect(() => {
+        if (listIsOpen) searchInput.current?.focus({ preventScroll: true })
+    }, [listIsOpen])
 
     return (
         <>
             <div id={id} className="multiple-select bg-white py -1 rounded-md w-full">
-
                 <div className='relative' ref={itemsMenu} onClick={() => setListIsOpen(true)}>
-
                     <div className={`selected-list flex items-center flex-wrap gap-1 w-full ${(!multiple && selected.length === 1) && 'p-1'}`}>
 
                         {(selected !== null && selected.length > 0) &&
@@ -125,38 +126,38 @@ const MultiSelect: React.FC<Props> = ({ options, multiple, closeOnSelect, placeh
                                     {!multiple && !listIsOpen && <p key={option[trackBy]} className='text-xs p-1 cursor-pointer block w-full'>{option[label]}</p>}
                                 </>
                             })}
-
                     </div>
 
                     {(listIsOpen || (!listIsOpen && multiple) || (!multiple && selected.length === 0)) &&
                         <input
-                            className='multiple-select_input my-1 focus:outline-none w-full pl-1 text-xs border-none rounded-md'
+                            className={`multiple-select_input my-1 focus:outline-none w-full pl-1 text-xs border-none rounded-md ${listIsOpen && 'bg-gray-50'}`}
                             type="text"
                             ref={searchInput}
                             onChange={search}
-                            autoFocus
                             onFocus={() => setListIsOpen(true)}
+                            placeholder={placeholder}
                         />
                     }
 
-
                     {listIsOpen &&
-                        <ul className='absolute bg-white border multiple-select_list mt-3 my-2 p-1 rounded-lg shadow-md w-full z-20'>
-                            {filtered.length > 0 && filtered.map((option, idx) =>
-                                <li
-                                    className={`p-2 text-xs my-1 rounded-md cursor-pointer hover:bg-gray-200 ${checkIfSelected(option[trackBy]) ? 'font-medium bg-gray-50' : ''}`}
-                                    key={option[label] + idx}
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        selectItem(option[trackBy])
-                                    }}
-                                >
-                                    {option[label]}
-                                </li>
-                            )}
+                        <>
+                            <ul className='absolute bg-white border multiple-select_list mt-3 my-2 p-1 rounded-lg shadow-md w-full z-20'>
+                                {filtered.length > 0 && filtered.map((option, idx) =>
+                                    <li
+                                        className={`p-2 text-xs my-1 rounded-md cursor-pointer hover:bg-gray-200 ${checkIfSelected(option[trackBy]) ? 'font-medium bg-gray-50' : ''}`}
+                                        key={option[label] + idx}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            selectItem(option[trackBy])
+                                        }}
+                                    >
+                                        {option[label]}
+                                    </li>
+                                )}
 
-                            {filtered.length === 0 && <p className='text-xs text-gray-600 my-2'>Nothing here</p>}
-                        </ul>
+                                {filtered.length === 0 && <p className='text-xs text-gray-600 my-2'>Nothing here</p>}
+                            </ul>
+                        </>
                     }
                 </div>
 

@@ -56,10 +56,11 @@ const Drivers = () => {
               <Link href={`${INTERNAL_DRIVERS_ROUTE}/create`} className='text-blue-500 text-sm'>Create New</Link>
             </div>
             <ItemsWrapper >
-              {currentItems.map((driver: any) => (
+              {currentItems.map((item: any) => (
                 <Item
-                  title={driver.name}
-                  id={driver.id}
+                  key={item.id}
+                  title={item.name}
+                  id={item.id}
                   route={INTERNAL_DRIVERS_ROUTE}
                 />
               ))}

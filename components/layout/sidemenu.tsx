@@ -1,16 +1,18 @@
 import useWindowSize from "@/lib/hooks/use-window-size";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, memo } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
 
-const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
+const Sidemenu: React.FC<{ links: any }> = memo(({ links }) => {
   const { isMobile, isDesktop } = useWindowSize();
   const leafletRef = useRef<HTMLUListElement>(null);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState<boolean>(true);
   const controls = useAnimation();
   const router = useRouter();
+  const menuLinks = useMemo(() => links, [links])
+
   const transitionProps = {
     type: "spring",
     stiffness: 700,
@@ -26,11 +28,11 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
     console.log(info.velocity.x);
     if (offset > width / 4 || velocity > 400) {
       await controls.start({ x: "0px", transition: transitionProps });
-      setShow(false);
+      setShow(true);
     } else {
+      setShow(false);
       // console.log(velocity)
       // if(velocity > 10){
-      setShow(true);
 
       controls.start({ x: "-70%", transition: transitionProps });
       // }
@@ -47,29 +49,30 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
     // setShow(true);
   }
 
-  useEffect(() => {
-    console.log(router.pathname)
-    if (isMobile) {
-      setShow(true);
-      controls.start({ x: "-110px", transition: transitionProps });
-    } else {
-      setShow(false);
-      controls.start({ x: "0px", transition: transitionProps });
-    }
-    controls.start({ transition: transitionProps });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile, isDesktop]);
+  // useEffect(() => {
+  //   if (isMobile) {
+  //     setShow(false);
+  //     controls.start({ x: "-110px", transition: transitionProps });
+  //   } else {
+  //     setShow(true);
+  //     controls.start({ x: "0px", transition: transitionProps });
+  //   }
+  //   controls.start({ transition: transitionProps });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   console.log('why!')
+  // }, []);
+
+
   return (
     <div
-      className={`${
-        show ? "w-14" : "w-auto"
-      } transition-transform delay-100 duration-1000`}
+      className={`${!show ? "w-14" : ""
+        } transition-transform delay-100 duration-1000`}
     >
       <AnimatePresence>
         <motion.ul
           ref={leafletRef}
           key="leaflet"
-          className={` flex min-h-screen w-40
+          className={`flex h-full w-40
                         cursor-grab flex-col items-start gap-4 overflow-hidden rounded-tr-lg border bg-gray-50 p-2  px-4 pb-5 transition-all duration-75
                         active:cursor-grabbing sm:gap-3
                         sm:bg-white
@@ -77,7 +80,7 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
           animate={controls}
           transition={transitionProps}
           drag="x"
-          initial={{ x: isDesktop ? "-70%" : "0px" }}
+          initial={{ x: "0" }}
           dragDirectionLock
           onDragEnd={handleDragEnd}
           dragElastic={{ top: 0, bottom: 1 }}
@@ -94,7 +97,7 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
             }
           }}
         >
-          {links.map((link: any) => (
+          {menuLinks.map((link: any) => (
             <li className="block w-full cursor-pointer sm:mb-5 group" key={link.name}>
               <Link
                 href={link.href}
@@ -105,7 +108,7 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
                   src={link.icon}
                   width="20"
                   height="20"
-                  className={`h-5 w-5 ${router.pathname.includes(link.name.toLowerCase()) ? '': 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
+                  className={`h-5 w-5 ${router.pathname.includes(link.name.toLowerCase()) ? '' : 'filter grayscale'} group-hover:grayscale-0 transition-all duration-300`}
                   alt={link.name}
                 />
               </Link>
@@ -123,6 +126,6 @@ const Sidemenu: React.FC<{ links: any }> = ({ links }) => {
       </AnimatePresence>
     </div>
   );
-};
+});
 
-export default Sidemenu;
+export default Sidemenu

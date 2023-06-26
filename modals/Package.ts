@@ -30,7 +30,7 @@ export interface PackagePayload {
     total_cost?: number,
     discount?: number
     canceled?: { status: boolean, reason: string },
-
+    branchId?: string,
 }
 
 

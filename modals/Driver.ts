@@ -15,4 +15,5 @@ export default interface Driver {
     vehicleId?: string // initally null
     managerId?: string // initally null
     companyId?: string // initally null
+    branchId?: string // initally null
 }
