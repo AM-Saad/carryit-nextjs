@@ -58,7 +58,11 @@ const Managers = () => {
             </div>
             <ItemsWrapper>
               {currentItems.map((item: any) => (
-                <Item id={item.id} title={item.name} route={INTERNAL_MANAGERS_ROUTE} />
+                <Item
+                  key={item.id}
+                  id={item.id}
+                  title={item.name}
+                  route={INTERNAL_MANAGERS_ROUTE} />
               ))
               }
             </ItemsWrapper>

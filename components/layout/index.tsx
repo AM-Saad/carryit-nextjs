@@ -9,7 +9,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode, useEffect, useContext } from "react";
+import React, { ReactNode, useContext } from "react";
 import AdminContext from "@/stores/admin";
 import useScroll from "@/lib/hooks/use-scroll";
 import Meta from "@/components/layout/meta";
@@ -62,36 +62,26 @@ interface Props {
   isDashboard?: boolean;
 }
 
-const Layout = ({ meta, children, isDashboard = true }: Props) => {
+const Layout = ({ meta, children }: Props) => {
   const { SignInModal, setShowSignInModal } = useSignInModal();
-  const scrolled = useScroll(20);
+  const { admin } = useContext(AdminContext);
+  const scrolled = useScroll(30);
 
-  const { admin, fetch_admin } = useContext(AdminContext);
-  const router = useRouter();
 
-  const getAdmin = async () => {
-    await fetch_admin();
-  };
 
-  useEffect(() => {
-    // if (!isSecured) return
-    const token = localStorage.getItem("uidjwt");
-    // if (!token && !router.pathname.includes('user')) {
-    //   router.push('/')
-    //   return
-    // }
-    token && getAdmin();
-  }, []);
+
+
   return (
-    <div className="pb-8">
+    <div className="h-[100dvh] flex flex-col justify-between align-top">
       <Meta {...meta} />
       <SignInModal />
+
+      {/* Nav */}
       <div
-        className={`fixed top-0 w-full ${
-          scrolled
-            ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
-            : "bg-white/0"
-        } z-30 transition-all`}
+        className={`fixed top-0 w-full ${scrolled
+          ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl "
+          : "bg-white/0"
+          } z-30 transition-all`}
       >
         <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
           <Link href="/" className="flex items-center font-display text-xl">
@@ -121,16 +111,18 @@ const Layout = ({ meta, children, isDashboard = true }: Props) => {
           </div>
         </div>
       </div>
-      {/*  Main content goes here */}
-      <main className="flex min-h-[100dvh] w-full gap-3 pr-2 pt-20 sm:gap-5">
-        {isDashboard && <Sidemenu links={links} />}
 
-        <div className="min-h-[100vh] w-full rounded-md border ">
+
+      {/*  Main content goes here */}
+      <main className="flex w-full gap-3 pr-2 sm:gap-5 flex-1 pt-20">
+        <Sidemenu links={links} />
+        <div className="w-full rounded-md border overflow-auto">
           {children}
         </div>
       </main>
 
-      <div className="fixed bottom-0 w-full border-t border-gray-200 bg-white py-3 text-center text-sm">
+      {/* Footer */}
+      <div className="w-full border-t border-gray-200 bg-white py-3 text-center text-sm">
         <p className="text-gray-500">
           Provided by{" "}
           <a
@@ -143,7 +135,8 @@ const Layout = ({ meta, children, isDashboard = true }: Props) => {
           </a>
         </p>
       </div>
+
     </div>
   );
 };
-export default Layout;
+export default React.memo(Layout);

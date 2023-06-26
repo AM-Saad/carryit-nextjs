@@ -68,7 +68,11 @@ const Packages = () => {
             <ItemsWrapper>
 
               {currentItems.map((item: Package) => (
-                <Item id={item.id} title={item.packageNo!} route={INTERNAL_SHIPMENTS_ROUTE} />
+                <Item
+                  key={item.id}
+                  id={item.id}
+                  title={item.packageNo!}
+                  route={INTERNAL_SHIPMENTS_ROUTE} />
               ))}
             </ItemsWrapper>
           </>

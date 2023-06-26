@@ -2,7 +2,7 @@ import React, { use, useEffect, useState } from "react";
 import { Package, PackagePayload } from "@/modals/Package";
 import Layout from "@/components/layout";
 import { packageRepository } from "@/lib/repositries/admin";
-import { Formik } from "formik";
+import { Formik,ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -44,6 +44,7 @@ const Create: React.FC = () => {
     shipping_cost: 0,
     date: new Date(),
     delivery_date: new Date(),
+    branchId: "",
   };
 
   const validationScheme = Yup.object({
@@ -69,7 +70,7 @@ const Create: React.FC = () => {
       .min(0, "Shipping cost must be positive"),
     date: Yup.date().default(() => new Date()),
     delivery_date: Yup.date().default(() => new Date()),
-    branchId: Yup.string(),
+    branchId: Yup.string().required("Branch is required"),
   });
   const createPackage = async (payload: PackagePayload) => {
     setLoading(true);
@@ -137,9 +138,7 @@ const Create: React.FC = () => {
             touched,
             values,
           }) => {
-            {
-              console.log(errors);
-            }
+           {console.log(errors)}
             return (
               <>
                 <h1 className="mb-5 font-medium">Create Package</h1>
@@ -167,6 +166,7 @@ const Create: React.FC = () => {
                     />
                   </div>
                 </div>
+                <div>
                 <div className="mb-2 mt-3 rounded-lg border px-2 pb-2">
                   <label
                     htmlFor="assigned_branch"
@@ -180,10 +180,11 @@ const Create: React.FC = () => {
                       multiple={false}
                       trackBy="value"
                       closeOnSelect={true}
+                      
                       input={(props: any) => {
-                        props[0] &&
+                        touched.branchId = true;
                           handleChange({
-                            target: { name: "branchId", value: props[0].value },
+                            target: { name: "branchId", value: props[0] ? props[0].value : '' },
                           });
                       }}
                       id="assigned_branch"
@@ -192,6 +193,9 @@ const Create: React.FC = () => {
                       disabled={loading}
                     />
                   )}
+
+                </div>
+                {errors.branchId && touched.branchId && <div className='text-red-500 text-xs mt-px text-left'>{errors.branchId}</div> }
                 </div>
                 <FormikInput label="Receiver Name" name="receiver.name" />
                 <FormikInput label="Receiver Phone" name="receiver.phone" />

@@ -62,7 +62,11 @@ const Vehicles = () => {
 
             <ItemsWrapper>
               {currentItems.map((item: any) => (
-                <Item id={item.id} title={item.name} route={INTERNAL_VEHICLES_ROUTE} />
+                <Item
+                  key={item.id}
+                  id={item.id}
+                  title={item.name}
+                  route={INTERNAL_VEHICLES_ROUTE} />
               ))
               }
             </ItemsWrapper>
