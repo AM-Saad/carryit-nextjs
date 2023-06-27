@@ -89,7 +89,7 @@ const Layout = ({ meta, children }: Props) => {
 
       {/*  Main content goes here */}
       <main className="flex min-h-[100dvh] w-full gap-3 pr-2 pt-20 sm:gap-5">
-        {driver && <Sidemenu links={links} />}
+        {driver && <Sidemenu links={links} isMobile={false}/>}
         <div className={`min-h-[100vh] rounded-md  ${!driver? 'w-9/12 m-auto' : ' w-full border'}`}>
           {children}
         </div>
