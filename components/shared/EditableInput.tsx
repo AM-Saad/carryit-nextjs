@@ -19,7 +19,7 @@ const EditIcon: React.FC<{
           onClick={() => {
             startEdit();
           }}
-          className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full border text-xs  hover:bg-blue-200"
+          className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full border text-xs  hover:bg-gray-200"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +215,7 @@ const EditableInput: React.FC<Props> = (props, ref) => {
             <div className="absolute bottom-[6px] right-1 mt-1 flex justify-end gap-2">
               <button
                 type="button"
-                className="editable-input_cancel rounded-full px-3 py-1 text-xs text-white shadow hover:opacity-70"
+                className="editable-input_cancel rounded-full px-3 py-1 text-xs text-white shadow hover:bg-gray-100"
                 onClick={cancel}
                 disabled={loading}
               >
@@ -223,7 +223,7 @@ const EditableInput: React.FC<Props> = (props, ref) => {
               </button>
               <button
                 type="button"
-                className={`editable-input_update rounded-full px-3 py-1 text-xs text-white shadow hover:opacity-70 ${
+                className={`editable-input_update rounded-full px-3 py-1 text-xs text-white shadow hover:bg-gray-100 ${
                   isEditing && error ? "opacity-70" : ""
                 }`}
                 onClick={submit}
