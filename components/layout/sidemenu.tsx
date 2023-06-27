@@ -5,14 +5,27 @@ import Image from "next/image";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/router";
 
-const Sidemenu: React.FC<{ links: any }> = memo(({ links }) => {
-  const { isMobile, isDesktop } = useWindowSize();
+
+type Link = {
+  href: string;
+  name: string;
+  icon: string;
+};
+
+export interface Props {
+  links: Link[];
+  isMobile: boolean;
+}
+
+const Sidemenu: React.FC<Props> = memo(({ links, isMobile }) => {
+  // const { isMobile } = useWindowSize();
   const leafletRef = useRef<HTMLUListElement>(null);
-  const [show, setShow] = useState<boolean>(true);
+  const [show, setShow] = useState(isMobile ? false : true);
   const controls = useAnimation();
   const router = useRouter();
   const menuLinks = useMemo(() => links, [links])
 
+  console.log(isMobile)
   const transitionProps = {
     type: "spring",
     stiffness: 700,
@@ -24,8 +37,6 @@ const Sidemenu: React.FC<{ links: any }> = memo(({ links }) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
     const width = leafletRef.current?.getBoundingClientRect().width || 0;
-    console.log(offset);
-    console.log(info.velocity.x);
     if (offset > width / 4 || velocity > 400) {
       await controls.start({ x: "0px", transition: transitionProps });
       setShow(true);
@@ -49,18 +60,16 @@ const Sidemenu: React.FC<{ links: any }> = memo(({ links }) => {
     // setShow(true);
   }
 
-  // useEffect(() => {
-  //   if (isMobile) {
-  //     setShow(false);
-  //     controls.start({ x: "-110px", transition: transitionProps });
-  //   } else {
-  //     setShow(true);
-  //     controls.start({ x: "0px", transition: transitionProps });
-  //   }
-  //   controls.start({ transition: transitionProps });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   console.log('why!')
-  // }, []);
+  useEffect(() => {
+    // if (isMobile) {
+    //   controls.start({ x: "-110px", transition: transitionProps });
+    // } else {
+    //   controls.start({ x: "0px", transition: transitionProps });
+    // }
+    // controls.start({ transition: transitionProps });
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
 
   return (
@@ -73,14 +82,13 @@ const Sidemenu: React.FC<{ links: any }> = memo(({ links }) => {
           ref={leafletRef}
           key="leaflet"
           className={`flex h-full w-40
-                        cursor-grab flex-col items-start gap-4 overflow-hidden rounded-tr-lg border bg-gray-50 p-2  px-4 pb-5 transition-all duration-75
+                        cursor-grab flex-col items-start gap-4 overflow-hidden rounded-tr-lg border border-b-0 bg-gray-50 p-2  px-4 pb-5 transition-all duration-75
                         active:cursor-grabbing sm:gap-3
-                        sm:bg-white
                     `}
           animate={controls}
           transition={transitionProps}
           drag="x"
-          initial={{ x: "0" }}
+          initial={{ x: isMobile ? "-110px" : "0px" }}
           dragDirectionLock
           onDragEnd={handleDragEnd}
           dragElastic={{ top: 0, bottom: 1 }}
@@ -98,10 +106,10 @@ const Sidemenu: React.FC<{ links: any }> = memo(({ links }) => {
           }}
         >
           {menuLinks.map((link: any) => (
-            <li className="block w-full cursor-pointer sm:mb-5 group" key={link.name}>
+            <li className="block w-full cursor-pointer mb-5 group" key={link.name}>
               <Link
                 href={link.href}
-                className="flex  w-full cursor-pointer justify-between text-xs text-gray-800 transition-all duration-300 sm:gap-1 md:text-sm"
+                className={`flex w-full cursor-pointer justify-between font-medium text-xs text-gray-500 transition-all duration-300 sm:gap-1 md:text-sm ${router.pathname.includes(link.name.toLowerCase()) ? 'text-gray-900' : 'group-hover:text-gray-900'}`}
               >
                 <span className="block w-9/12">{link.name}</span>
                 <Image
