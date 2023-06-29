@@ -7,15 +7,17 @@ import { useRouter } from 'next/router'
 const Login = () => {
   const { authenticate, driverMeta } = useContext(DriverContext)
   const router = useRouter()
-  const [isAuthenticated, setIsAuthenticated] = useState(true)
+  // const [isAuthenticated, setIsAuthenticated] = useState(true)
+
   useEffect(() => {
-    const token = localStorage.getItem('didjwt')
-    if (!token) {
-      setIsAuthenticated(false)
-      return
-    }
-    router.push(('/driver/packages'))
+    // const token = localStorage.getItem('didjwt')
+    // if (!token) {
+    //   setIsAuthenticated(false)
+    //   return
+    // }
+    // router.push(('/driver/sso'))
   }, []);
+  
   return (
     <Layout
       meta={{
@@ -24,10 +26,10 @@ const Login = () => {
         keywords: "Karry, Track Package, Package Tracking, Track Package Online, Driver tracking, Delivery tracking ,Real-time location tracking, Order status, Package delivery tracking,  Restaurant delivery tracking "
       }}
     >
-      {!isAuthenticated && <div>
-        <h1>Login</h1>
+     <div>
+        <h1 className='font-medium text-xl mb-5'>Login</h1>
         <Form onSubmit={authenticate} loading={driverMeta.loading} error={driverMeta.error?.message} />
-      </div>}
+      </div>
     </Layout>
   )
 }

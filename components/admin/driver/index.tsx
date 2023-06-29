@@ -15,14 +15,12 @@ import { getHeaders } from "@/lib/utils";
 import Home from "@/components/shared/icons/home";
 interface Props {
   driver: any;
-  onUpdate: (data: any) => void;
   loading: boolean;
   onDelete: () => void;
 }
 
 const DriverFrom: React.FC<Props> = ({
   driver,
-  onUpdate,
   loading,
   onDelete,
 }) => {
@@ -37,8 +35,11 @@ const DriverFrom: React.FC<Props> = ({
   const [branchName, setBranchName] = useState<string | null>(null);
   const { updater, updateMeta } = useContext(AdminContext);
 
-  const update_partial_driver = async (data: any) =>
-    onUpdate({ values: [data] });
+
+  const update_partial_driver = async (data: any) => {
+    await updater(driverRepository.update_partial_driver(driver.id, { values: [data] }), false)
+
+  }
 
   const assign_vehicle = async (vehicleId: string | null) => {
     await updater(driverRepository.assign_vehicle(driver.id, vehicleId), false);
@@ -91,6 +92,8 @@ const DriverFrom: React.FC<Props> = ({
     fetch_driver_branch();
   }, []);
 
+
+
   return (
     <>
       <div className="items-header">
@@ -121,6 +124,15 @@ const DriverFrom: React.FC<Props> = ({
               loading={updateMeta.loading}
             />
           </Modal>
+          <Button
+            onClick={() => {
+              update_partial_driver({ password: "123456" })
+            }}
+            title="Reset Password"
+            style="bg-blue-500 text-white"
+            loading={loading || updateMeta.loading}
+            disabled={loading || updateMeta.loading}
+          />
         </div>
       </div>
 
@@ -131,31 +143,32 @@ const DriverFrom: React.FC<Props> = ({
           label="Name"
           inputType="text"
           onSave={(value: string | number) => {
-            update_partial_driver({ name: value });
+            return update_partial_driver({ name: value });
           }}
           defaultVal={driver.name}
           loading={loading}
           required={true}
           validationMessage={"Name is required"}
+          error={updateMeta.error ? true : false}
         />
         <EditableInput
           label="Mobile"
           inputType="number"
           onSave={(value: string | number) => {
-            update_partial_driver({ mobile: value });
+            return update_partial_driver({ mobile: value });
           }}
           defaultVal={driver.mobile}
           loading={loading}
           required={true}
           validationMessage={"Mobile is required"}
+          error={updateMeta.error ? true : false}
         />
 
         <EditableInput
           label="Base Salary"
           inputType="number"
           onSave={(value: string | number) => {
-            console.log(value);
-            update_partial_driver({
+            return update_partial_driver({
               salary: {
                 ...driver.salary,
                 base_salary: Number(value),
@@ -165,12 +178,15 @@ const DriverFrom: React.FC<Props> = ({
           defaultVal={driver.salary.base_salary || 0}
           loading={loading}
           required={false}
+          min={0}
+          error={updateMeta.error ? true : false}
+
         />
         <EditableInput
           label="Commission"
           inputType="number"
           onSave={(value: string | number) => {
-            update_partial_driver({
+           return update_partial_driver({
               salary: {
                 ...driver.salary,
                 commission: Number(value),
@@ -180,6 +196,9 @@ const DriverFrom: React.FC<Props> = ({
           defaultVal={driver.salary.commission}
           loading={loading}
           required={false}
+          min={0}
+          error={updateMeta.error ? true : false}
+
         />
 
         <div className="mb-2 mt-3 rounded-lg border px-2 pb-2">

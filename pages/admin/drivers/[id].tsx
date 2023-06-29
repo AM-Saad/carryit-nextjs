@@ -12,7 +12,7 @@ import withAuth from '@/components/shared/auth';
 const Driver = () => {
   const router = useRouter()
   const { id } = router.query as { id: string }
-  const { fetcher, fetchMeta, currentItem, updater, updateMeta, remover } = useContext(AdminContext);
+  const { fetcher, fetchMeta, currentItem, updateMeta, remover } = useContext(AdminContext);
   const { loading, error } = fetchMeta
 
 
@@ -21,12 +21,6 @@ const Driver = () => {
     await fetcher(driverRepository.fetch_driver(id), false)
   }, [id])
 
-
-  const update_partial_driver = async (data: any) => {
-
-    await updater(driverRepository.update_partial_driver(id, data), false)
-
-  }
 
 
   const delete_driver = async () => {
@@ -55,7 +49,6 @@ const Driver = () => {
       {(!loading && currentItem) &&
         <DriverFrom
           driver={currentItem}
-          onUpdate={update_partial_driver}
           loading={updateMeta.loading}
           onDelete={delete_driver}
         />

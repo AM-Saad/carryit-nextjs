@@ -10,14 +10,12 @@ import Branch from "@/modals/Branch";
 
 interface Props {
   branch: Branch;
-  onUpdate: (data: any) => void;
   loading: boolean;
   onDelete: () => void;
 }
 
 const BranchFrom: React.FC<Props> = ({
   branch,
-  onUpdate,
   loading,
   onDelete,
 }) => {
@@ -30,9 +28,12 @@ const BranchFrom: React.FC<Props> = ({
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [vehiclesToAssign, setVehiclesToAssign] = useState<any[]>([]);
   const [selectedVehicles, setSelectedVehicles] = useState<any[]>([]);
+  const { updater, updateMeta } = useContext(AdminContext);
 
-  const update_partial_branch = async (data: any) =>
-    onUpdate({ values: [data] });
+  const update_partial_branch = async (data: any) => {
+    await updater(branchRepository.update_partial_branch(branch.id!, { values: [data] }), false)
+
+  }
 
   const check_if_driver_is_assigned_to_another_branck = (
     selectedDrivers: any,
@@ -158,69 +159,80 @@ const BranchFrom: React.FC<Props> = ({
           label="Name"
           inputType="text"
           onSave={(value: string | number) => {
-            update_partial_branch({ name: value });
+            return update_partial_branch({ name: value });
           }}
           defaultVal={branch.name}
           loading={loading}
           required={true}
           validationMessage={"Name is required"}
+          error={updateMeta.error ? true : false}
         />
         <EditableInput
           label="Phone"
           inputType="number"
           onSave={(value: string | number) => {
-            update_partial_branch({ phone: value });
+            return update_partial_branch({ phone: value });
           }}
           defaultVal={branch.phone || ""}
           loading={loading}
           required={true}
           validationMessage={"Phone is required"}
+          error={updateMeta.error ? true : false}
+
         />
         <EditableInput
           label="Address"
-          inputType="number"
+          inputType="text"
           onSave={(value: string | number) => {
-            update_partial_branch({ address: value });
+            return update_partial_branch({ address: value });
           }}
           defaultVal={branch.address || ""}
           loading={loading}
           required={true}
           validationMessage={"Address is required"}
+          error={updateMeta.error ? true : false}
+
         />
         <EditableInput
           label="State"
           inputType="text"
           onSave={(value: string | number) => {
-            update_partial_branch({ state: value });
+            return update_partial_branch({ state: value });
           }}
           defaultVal={branch.state || ""}
           loading={loading}
           required={true}
           validationMessage={"State is required"}
+          error={updateMeta.error ? true : false}
+
         />
 
         <EditableInput
           label="City"
           inputType="text"
           onSave={(value: string | number) => {
-            update_partial_branch({ city: value });
+            return update_partial_branch({ city: value });
           }}
           defaultVal={branch.city || ""}
           loading={loading}
           required={true}
           validationMessage={"City is required"}
+          error={updateMeta.error ? true : false}
+
         />
 
         <EditableInput
           label="Governorate"
           inputType="text"
           onSave={(value: string | number) => {
-            update_partial_branch({ governorate: value });
+            return update_partial_branch({ governorate: value });
           }}
           defaultVal={branch.governorate || ""}
           loading={loading}
           required={true}
           validationMessage={"Governorate is required"}
+          error={updateMeta.error ? true : false}
+
         />
 
         <div className="mb-2 mt-3 rounded-lg border px-2 pb-2">

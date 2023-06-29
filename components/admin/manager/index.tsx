@@ -99,7 +99,7 @@ const ManagerFrom: React.FC<Props> = ({
           label="Name"
           inputType="text"
           onSave={(value: string | number) => {
-            update_partial_branch({ name: value });
+            return update_partial_branch({ name: value });
           }}
           defaultVal={manager.name}
           loading={loading}
@@ -110,7 +110,7 @@ const ManagerFrom: React.FC<Props> = ({
           label="Phone"
           inputType="number"
           onSave={(value: string | number) => {
-            update_partial_branch({ mobile: value });
+            return update_partial_branch({ mobile: value });
           }}
           defaultVal={manager.mobile || ""}
           loading={loading}

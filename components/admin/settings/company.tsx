@@ -66,7 +66,7 @@ const CompanyForm = () => {
             label="Brand Address"
             inputType="text"
             onSave={(value: string | number) => {
-              update_partial({ address: value });
+              return update_partial({ address: value });
             }}
             defaultVal={company.address || ""}
             loading={updating}
@@ -76,7 +76,7 @@ const CompanyForm = () => {
             label="Brand Hotline"
             inputType="number"
             onSave={(value: string | number) => {
-              update_partial({ hotline: value });
+              return update_partial({ hotline: value });
             }}
             defaultVal={company.hotline || ""}
             loading={updating}

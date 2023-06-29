@@ -16,16 +16,14 @@ const Package = () => {
   const { id } = router.query as { id: string }
   const { data: session } = useSession()
 
-  const { fetcher, fetchMeta, currentItem, updater,updateMeta, remover } = useContext(AdminContext);
+  const { fetcher, fetchMeta, currentItem, updateMeta, remover } = useContext(AdminContext);
   const { loading, error } = fetchMeta
 
   const fetch_data = async () => {
     await fetcher(packageRepository.fetch_package(id), false)
   }
 
-  const update_data = async (data: any) => {
-    await updater(packageRepository.update_partial_package(id, data), false)
-  }
+
   const remove_data = async () => {
     await remover(packageRepository.delete_package(id), INTERNAL_SHIPMENTS_ROUTE)
   }
@@ -47,7 +45,10 @@ const Package = () => {
 
       {loading && <Loading />}
       {error && !loading && <FetchError reload={fetch_data} error={error} />}
-      {(!loading && currentItem) && <PackageFrom currentPackage={currentItem} onDelete={remove_data} onUpdate={update_data} loading={updateMeta.loading} />}
+      {(!loading && currentItem) && <PackageFrom
+        currentPackage={currentItem}
+        onDelete={remove_data}
+        loading={updateMeta.loading} />}
     </Layout>
   )
 }

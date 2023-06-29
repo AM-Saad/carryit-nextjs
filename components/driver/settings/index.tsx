@@ -17,9 +17,7 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading }) => {
         <EditableInput
           label="Name"
           inputType="text"
-          onSave={(value: string | number) => {
-            update_partial_driver({ name: value });
-          }}
+          onSave={(value: string | number) => update_partial_driver({ name: value })}
           defaultVal={driver.name}
           loading={loading}
           required={true}
@@ -28,9 +26,7 @@ const DriverFrom: React.FC<Props> = ({ driver, onUpdate, loading }) => {
         <EditableInput
           label="Mobile"
           inputType="number"
-          onSave={(value: string | number) => {
-            update_partial_driver({ mobile: value });
-          }}
+          onSave={(value: string | number) => update_partial_driver({ mobile: value })}
           defaultVal={driver.mobile}
           loading={loading}
           required={true}

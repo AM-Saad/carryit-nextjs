@@ -9,7 +9,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import React, { ReactNode, useContext} from "react";
+import React, { ReactNode, useContext } from "react";
 import AdminContext from "@/stores/admin";
 import useScroll from "@/lib/hooks/use-scroll";
 import Meta from "@/components/layout/meta";
@@ -112,7 +112,7 @@ const Layout = ({ meta, children }: Props) => {
 
       {/*  Main content goes here */}
       <main className="flex w-full gap-3 flex-1 pt-20">
-        <Sidemenu links={links} isMobile={true} />
+        {admin && <Sidemenu links={links} isMobile={true} />}
         <div className="w-full rounded-tl-md border border-b-0 overflow-auto">
           {children}
         </div>

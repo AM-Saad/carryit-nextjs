@@ -115,7 +115,6 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
             localStorage.setItem('uidjwt', response.items.token)
             localStorage.removeItem('didjwt')
 
-            router.push('/admin/dashboard')
             return
         } catch (error) {
             toast.error('Something went wrong')

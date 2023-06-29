@@ -55,13 +55,12 @@ const LoginForm: React.FC<Props> = ({ onSubmit, loading, error }) => {
                                 error={errors.password}
                                 type="password"
                             />
+                            {error && <p className='text-red-500 text-xs mt-2'>{error}</p>}
                             <div className='flex items-center mt-2 gap-3 w-full text-xs'>
                                 <p>You dont have an account yet!</p>
                                 <a href='/client/register' className='text-blue-600 underline font-bold'> Register </a>
                             </div>
                             <div className='flex justify-end w-full'>
-
-
 
                                 <Button onClick={submitForm} title='Submit' type='submit' loading={loading} />
                             </div>

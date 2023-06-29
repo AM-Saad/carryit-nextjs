@@ -34,7 +34,16 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                     query[keys[0]] = vals[0]
                 }
             })
-            const item = await prisma.driver.updateMany({ where: { id: req.query.id as string, managerId: token.managerId }, data: query })
+
+            // check if trying to update mobile then check if the mobile already exists for another driver 
+            if (query.hasOwnProperty('mobile')) {
+                const driver = await prisma.driver.findFirst({ where: { mobile: query.mobile, id: { not: req.query.id as string } } });
+                if (driver) {
+                    return res.status(400).json(refineResponse(Status.DATA_ALREADY_EXISTS, 'Driver with this mobile already exists'));
+                }
+            }
+
+            await prisma.driver.updateMany({ where: { id: req.query.id as string, managerId: token.managerId }, data: query })
             const driver = await prisma.driver.findFirst({ where: { id: req.query.id as string, managerId: token.managerId } });
             return res.status(200).json(refineResponse(Status.SUCCESS, 'Driver updated successfully', driver))
 
