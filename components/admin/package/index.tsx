@@ -20,16 +20,16 @@ import Driver from "@/modals/Driver";
 
 interface Props {
   currentPackage: Package;
-  onUpdate: (data: any) => void;
   loading: boolean;
   onDelete: () => void;
 }
 
-const PackageFrom: React.FC<Props> = ({ currentPackage, onUpdate, loading, onDelete }) => {
-  const update_partial_package = async (data: any) =>
-    onUpdate({ values: [data] });
+const PackageFrom: React.FC<Props> = ({ currentPackage, loading, onDelete }) => {
+
+
   const [openConfirmDeleteModal, setOpenConfirmDeleteModal] =
     useState<boolean>(false);
+
   const [drivers, setDrivers] = useState<any[]>([]);
   const [driverToAssign, setDriverToAssign] = useState<any[]>([]);
   const [selectedDrivers, setSelectedDrivers] = useState<any[]>([]);
@@ -38,6 +38,9 @@ const PackageFrom: React.FC<Props> = ({ currentPackage, onUpdate, loading, onDel
 
   const { updater, updateMeta } = useContext(AdminContext);
 
+  const update_partial_package = async (data: any) => {
+    await updater(packageRepository.update_partial_package(currentPackage.id, { values: [data] }), false)
+  }
   const assign_package = async (driverId: string) => {
     await updater(packageRepository.assign_package(currentPackage.id, driverId), false);
   };
@@ -149,90 +152,102 @@ const PackageFrom: React.FC<Props> = ({ currentPackage, onUpdate, loading, onDel
             label="Name"
             inputType="text"
             onSave={(value: string | number) => {
-              update_partial_package({ "receiver.name": value });
+              return update_partial_package({ "receiver.name": value });
             }}
             defaultVal={currentPackage.receiver.name}
             loading={loading}
             required={true}
             validationMessage={"name is required"}
+            error={updateMeta.error ? true : false}
           />
           <EditableInput
             label="Mobile"
             inputType="number"
             onSave={(value: string | number) => {
-              update_partial_package({ "receiver.phone": value });
+              return update_partial_package({ "receiver.phone": value });
             }}
             defaultVal={currentPackage.receiver.phone}
             loading={loading}
             required={true}
             validationMessage={"Mobile is required"}
+            error={updateMeta.error ? true : false}
+
           />
 
           <EditableInput
             label="Address"
             inputType="text"
             onSave={(value: string | number) => {
-              update_partial_package({ "receiver.address": value });
+              return update_partial_package({ "receiver.address": value });
             }}
             defaultVal={currentPackage.receiver.address}
             loading={loading}
             required={true}
             validationMessage={"Address is required"}
+            error={updateMeta.error ? true : false}
           />
           <EditableInput
             label="Apartment"
             inputType="number"
             onSave={(value: string | number) => {
-              update_partial_package({ "receiver.apartment": value });
+              return update_partial_package({ "receiver.apartment": value });
             }}
             defaultVal={currentPackage.receiver.apartment}
             loading={loading}
             required={true}
             validationMessage={"Apartment is required"}
+            error={updateMeta.error ? true : false}
           />
           <EditableInput
             label="Building"
             inputType="number"
             onSave={(value: string | number) => {
-              update_partial_package({ "receiver.building": value });
+              return update_partial_package({ "receiver.building": value });
             }}
             defaultVal={currentPackage.receiver.building}
             loading={loading}
             required={true}
             validationMessage={"Building is required"}
+            error={updateMeta.error ? true : false}
           />
           <EditableInput
             label="City"
             inputType="text"
             onSave={(value: string | number) => {
-              update_partial_package({ "receiver.city": value });
+              return update_partial_package({ "receiver.city": value });
             }}
             defaultVal={currentPackage.receiver.city || ""}
             loading={loading}
             required={false}
             validationMessage={"City is required"}
+            error={updateMeta.error ? true : false}
+
           />
           <EditableInput
             label="State"
             inputType="text"
             onSave={(value: string | number) => {
-              update_partial_package({ "receiver.state": value });
+              return update_partial_package({ "receiver.state": value });
             }}
             defaultVal={currentPackage.receiver.state || ""}
             loading={loading}
             required={false}
             validationMessage={"State is required"}
+            error={updateMeta.error ? true : false}
+
           />
           <EditableInput
             label="Zip"
             inputType="text"
             onSave={(value: string | number) => {
-              update_partial_package({ "receiver.zip": value });
+              return update_partial_package({ "receiver.zip": value });
             }}
             defaultVal={currentPackage.receiver.zip || ""}
             loading={loading}
             required={false}
             validationMessage={"Zip is required"}
+            error={updateMeta.error ? true : false}
+
           />
 
           <div className="mb-2 mt-3 rounded-lg border px-2 pb-2">

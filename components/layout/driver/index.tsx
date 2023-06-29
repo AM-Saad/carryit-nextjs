@@ -39,24 +39,19 @@ const Layout = ({ meta, children }: Props) => {
 
   const { fetch_driver, driver, driverMeta } = useContext(DriverContext);
 
-  const getDriver = async () => {
-    await fetch_driver();
-  };
 
   useEffect(() => {
-    const token = localStorage.getItem("didjwt");
 
-    token && getDriver();
+    fetch_driver();
   }, []);
   return (
     <>
       <Meta {...meta} />
       <div
-        className={`fixed top-0 w-full ${
-          scrolled
-            ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
-            : "bg-white/0"
-        } z-30 transition-all`}
+        className={`fixed top-0 w-full ${scrolled
+          ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
+          : "bg-white/0"
+          } z-30 transition-all`}
       >
         <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
           <Link href="/" className="flex items-center font-display text-2xl">
@@ -74,7 +69,7 @@ const Layout = ({ meta, children }: Props) => {
               {!driver ? (
                 <motion.button
                   className="rounded-full border border-black p-1.5 px-4 text-sm transition-all hover:bg-black hover:text-white "
-                  onClick={() => {}}
+                  onClick={() => { }}
                   {...FADE_IN_ANIMATION_SETTINGS}
                 >
                   Sign In
@@ -89,8 +84,8 @@ const Layout = ({ meta, children }: Props) => {
 
       {/*  Main content goes here */}
       <main className="flex min-h-[100dvh] w-full gap-3 pr-2 pt-20 sm:gap-5">
-        {driver && <Sidemenu links={links} isMobile={false}/>}
-        <div className={`min-h-[100vh] rounded-md  ${!driver? 'w-9/12 m-auto' : ' w-full border'}`}>
+        {driver && <Sidemenu links={links} isMobile={true} />}
+        <div className={`min-h-[100vh] rounded-md  ${!driver ? 'w-9/12 m-auto' : ' w-full border'}`}>
           {children}
         </div>
       </main>

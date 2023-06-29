@@ -87,14 +87,18 @@ interface Props {
   inputType: string;
   defaultVal: string | number;
   loading?: boolean;
-  onSave: (value: string | number) => void;
+  onSave: (value: string | number) => Promise<void>;
   required?: boolean;
   validationMessage?: string;
   updateBtnText?: string;
   cancelBtnText?: string;
   id?: string;
   error?: boolean;
+  min?: number;
+  max?: number;
 }
+
+
 const EditableInput: React.FC<Props> = (props, ref) => {
   const {
     loading,
@@ -106,7 +110,10 @@ const EditableInput: React.FC<Props> = (props, ref) => {
     defaultVal,
     id,
     error = false,
+    min,
+    max,
   } = props;
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isTouched, setIsTouched] = useState<boolean>(false);
   const [newVal, setNewVal] = useState<string | number>(defaultVal);
@@ -138,7 +145,7 @@ const EditableInput: React.FC<Props> = (props, ref) => {
     setValidationError(null);
     setNewVal(defaultVal);
   };
-  const submit = (): void => {
+  const submit = async () => {
     setValidationError(null);
     setIsTouched(true);
     if (required && isEmptyOrSpaces(newVal)) {
@@ -147,7 +154,9 @@ const EditableInput: React.FC<Props> = (props, ref) => {
     if (loading === undefined || loading === null) {
       setIsEditing(false);
     }
-    return onSave(newVal);
+    const response = await onSave(newVal);
+    console.log(response);
+
   };
 
   useEffect(() => {
@@ -207,8 +216,10 @@ const EditableInput: React.FC<Props> = (props, ref) => {
               type={inputType}
               placeholder={`Add ${label}`}
               defaultValue={newVal}
+              min={min || 0}
+              max={max ? max : undefined}
             />
-            <p className="editable-input_error mt-2 text-sm text-red-400">
+            <p className="editable-input_error mt-1 text-xs text-red-400">
               {validationError}
             </p>
 
@@ -223,13 +234,12 @@ const EditableInput: React.FC<Props> = (props, ref) => {
               </button>
               <button
                 type="button"
-                className={`editable-input_update rounded-full px-3 py-1 text-xs text-white shadow hover:bg-gray-100 ${
-                  isEditing && error ? "opacity-70" : ""
-                }`}
+                className={`editable-input_update rounded-full px-3 py-1 text-xs text-white shadow hover:bg-gray-100 ${isEditing && error ? "opacity-70" : ""
+                  }`}
                 onClick={submit}
                 disabled={loading}
               >
-                {!loading ? <ConfirmIcon /> : <img className="h-4" src="/icons/edit2.webp"/>}
+                {!loading ? <ConfirmIcon /> : <img className="h-4" src="/icons/edit2.webp" />}
               </button>
             </div>
           </div>

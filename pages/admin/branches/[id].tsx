@@ -12,7 +12,7 @@ import withAuth from '@/components/shared/auth';
 const Branch = () => {
   const router = useRouter()
   const { id } = router.query as { id: string }
-  const { fetcher, fetchMeta, currentItem, updater, updateMeta, remover } = useContext(AdminContext);
+  const { fetcher, fetchMeta, currentItem, updateMeta, remover } = useContext(AdminContext);
   const { loading, error } = fetchMeta
 
 
@@ -21,10 +21,6 @@ const Branch = () => {
   }
 
 
-  const update_partial_item = async (data: any) => {
-    await updater(branchRepository.update_partial_branch(id, data), false)
-
-  }
 
   const delete_item = async () => {
     await remover(branchRepository.delete_branch(id), INTERNAL_BRANCHES_ROUTE)
@@ -51,7 +47,6 @@ const Branch = () => {
       {(!loading && currentItem) &&
         <BranchFrom
           branch={currentItem}
-          onUpdate={update_partial_item}
           loading={updateMeta.loading}
           onDelete={delete_item}
         />

@@ -47,38 +47,41 @@ export const DriverContextProvider: React.FC<{ children: React.ReactNode }> = (p
         try {
             let response = await sharedRepository.login(phone, password)
 
-            if (response.status === Status.DATA_NOT_FOUND || response.status === Status.INVALID_CREDENTIALS) {
+            if (response.status !== Status.SUCCESS) {
                 setDriverMeta({ loading: false, error: { message: response.message, code: response.status } })
                 return
-
             }
 
             localStorage.removeItem('uidjwt')
             localStorage.setItem('didjwt', response.items.token)
-             window.location.href = '/driver/packages'
-             return
+            router.push('/driver/sso')
+            return
 
 
         } catch (error) {
             toast.error('Something went wrong')
+            setDriverMeta({ loading: false, error: { message: 'Something went wrong', code: Status.UNEXPECTED_ERROR } })
         }
         setDriverMeta({ loading: false, error: null })
     }
 
+
     const fetch_driver = async () => {
         setDriverMeta({ loading: true, error: null })
+
         try {
             const response = await sharedRepository.fetch_driver()
             if (response.status !== Status.SUCCESS) {
                 setDriverMeta({ loading: false, error: { message: response.message, code: response.status } })
                 toast[response.status != Status.UNEXPECTED_ERROR ? 'info' : 'error'](response.message)
                 router.push('/driver/login')
-
                 return
             }
+
             setDriverMeta({ loading: false, error: null })
-            const admin = response.items
-            setDriver(admin)
+            const driver = response.items
+            setDriver(driver)
+
         } catch (error) {
             toast.error('Something went wrong')
         }
