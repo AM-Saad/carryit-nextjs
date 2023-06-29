@@ -17,7 +17,7 @@ const AdminInfoForm: React.FC<Props> = ({ item, onUpdate, loading }) => {
           label="Name"
           inputType="text"
           onSave={(value: string | number) => {
-            update_partial({ name: value });
+            return update_partial({ name: value });
           }}
           defaultVal={item.name}
           loading={loading}
@@ -28,7 +28,7 @@ const AdminInfoForm: React.FC<Props> = ({ item, onUpdate, loading }) => {
           label="Mobile"
           inputType="number"
           onSave={(value: string | number) => {
-            update_partial({ mobile: value });
+            return update_partial({ mobile: value });
           }}
           defaultVal={item.mobile}
           loading={loading}
