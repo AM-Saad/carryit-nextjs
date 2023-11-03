@@ -19,6 +19,7 @@ interface Company {
     Zone: any[];
     User: any[];
     Branch: any[];
+    preferences: any;
 }
 
 export default Company;

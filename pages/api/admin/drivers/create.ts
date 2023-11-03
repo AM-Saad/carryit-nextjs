@@ -5,7 +5,7 @@ import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
 import { } from '.prisma/client';
 import { ObjectId } from 'bson'
-import { authMiddleware , Token} from '@/middleware/auth';
+import { authMiddleware, Token } from '@/middleware/auth';
 
 export const config = {
     api: {
@@ -13,7 +13,7 @@ export const config = {
     },
 }
 
-export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token:Token) => {
+export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, token: Token) => {
 
     // create a new driver
     if (req.method == 'POST') {
@@ -21,6 +21,11 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
         const manager = await prisma.manager.findFirst({ where: { id: token.managerId as string } });
         const id = new ObjectId();
         console.log(manager)
+
+        const driver = await prisma.driver.findFirst({ where: { mobile: values.mobile } })
+        if (driver) {
+            return res.status(400).json(refineResponse(Status.ALREADY_DONE, 'Driver with the name number already exists'));
+        }
         const payload = {
             data: {
                 address: values.address,
@@ -34,8 +39,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
                         id: manager!.id
                     }
                 },
-                company:{
-                    connect:{
+                company: {
+                    connect: {
                         id: manager!.companyId!
                     }
                 }

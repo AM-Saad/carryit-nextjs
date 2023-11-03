@@ -94,3 +94,45 @@
 .orientation {
   @apply bg-white p-1 rounded-md shadow w-28 h-10 m-1
 }
+
+.title{
+  @apply bg-gradient-to-br from-black to-stone-500 bg-clip-text font-display font-bold md:font-normal drop-shadow-sm text-transparent
+}
+
+#rangeValue {
+  position: relative;
+  display: block;
+  text-align: center;
+  font-size: 6em;
+  color: #999;
+  font-weight: 400;
+}
+.range {
+  width: 400px;
+  max-width: 90%;
+  height: 17px;
+  -webkit-appearance: none;
+  background: #fff;
+  outline: none;
+  border-radius: 15px;
+  box-shadow: inset 0 0 5px rgba(43, 43, 43, 0.3);
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #6bb6c2;
+  cursor: pointer;
+  border: 1px solid #333;
+  transition: .3s ease-in-out; 
+}
+.range::-webkit-slider-thumb:hover {
+  width: 20px;
+  height: 20px;
+ box-shadow: 0 0 0 3px rgba(107, 182, 194, 0.3);
+}
+
+.form-title {
+  @apply font-medium text-lg mb-4 mt-2
+}

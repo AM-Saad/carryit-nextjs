@@ -1,8 +1,8 @@
 import React from 'react'
 import { Formik } from "formik";
 import * as Yup from "yup";
-import Input from '@/components/shared/Input';
-import Button from '@/components/shared/Button';
+import Input from '@/components/shared/ui/Input';
+import Button from '@/components/shared/ui/Button';
 interface Props {
     onSubmit: (phone: string, password: string) => void;
     loading?: boolean,
@@ -42,6 +42,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit, loading, error }) => {
                                 handleBlur={handleBlur('phone')}
                                 hasError={errors.phone && touched.phone}
                                 error={errors.phone}
+                                type='tel'
                             />
 
                             <Input

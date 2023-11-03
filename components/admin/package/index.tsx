@@ -1,12 +1,12 @@
-import EditableInput from "@/components/shared/EditableInput";
-import ToggleBtn from "@/components/shared/ToggleBtn";
-import Button from "@/components/shared/Button";
+import EditableInput from "@/components/shared/ui/EditableInput";
+import ToggleBtn from "@/components/shared/ui/ToggleBtn";
+import Button from "@/components/shared/ui/Button";
+import MultiSelect from "@/components/shared/ui/MultiSelect";
 import { Package } from "@/modals/Package";
 import Modal from "@/components/shared/modal";
 import ConfirmDeleteItem from "@/components/shared/ConfirmDelete";
 import { useEffect, useState, useContext } from "react";
 import { packageRepository } from "@/lib/repositries/admin";
-import MultiSelect from "@/components/shared/MultiSelect";
 import AdminContext from "@/stores/admin";
 import ChangeStatus from "./ChangeStatus";
 import Fragile from "@/components/shared/icons/fragile";
@@ -252,7 +252,7 @@ const PackageFrom: React.FC<Props> = ({ currentPackage, loading, onDelete }) => 
 
           <div className="mb-2 mt-3 rounded-lg border px-2 pb-2">
             <label
-              htmlFor="assigned_vehicle"
+              htmlFor="assigned_driver"
               className="editable-input_label mt-2 block text-sm font-medium text-gray-600"
             >
               {currentPackage.driverId ? "Assigned" : "Assign"} Driver{" "}
@@ -269,9 +269,9 @@ const PackageFrom: React.FC<Props> = ({ currentPackage, loading, onDelete }) => 
                 input={(props: any) => {
                   props[0] && assign_package(props[0].value);
                 }}
-                id="assigned_vehicle"
+                id="assigned_driver"
                 options={driverToAssign}
-                placeholder={"Assigned Vehicle"}
+                placeholder={"Assign Driver"}
                 disabled={loading}
                 preSelected={selectedDrivers}
               />

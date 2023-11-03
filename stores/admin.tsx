@@ -128,6 +128,8 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
             const response = await sharedRepository.fetch_admin()
             if (response.status !== Status.SUCCESS) {
                 toast.error(response.message)
+                localStorage.removeItem('uidjwt')
+                 router.push('/')
                 return
             }
             const admin = response.items
@@ -147,7 +149,6 @@ export const AdminContextProvider: React.FC<{ children: React.ReactNode }> = (pr
         //   router.push('/')
         //   return
         // }
-        console.log('Created by Abdelrahman Saad')
         token && fetch_admin();
     }, []);
 

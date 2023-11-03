@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import ToggleBtn from '@/components/shared/ToggleBtn'
-import MultiSelect from '@/components/shared/MultiSelect'
+import ToggleBtn from '@/components/shared/ui/ToggleBtn'
+import MultiSelect from '@/components/shared/ui/MultiSelect'
+import Input from '@/components/shared/ui/Input'
+import Button from '@/components/shared/ui/Button'
 import { VehiclePayload, VehicleTypes, getFuelUnit, fuelTypesArray, vehicleTypesArray } from '@/modals/Vehicle'
-import Input from '@/components/shared/Input'
 import Layout from '@/components/layout'
 import { vehicleRepository } from '@/lib/repositries/admin'
-import Button from '@/components/shared/Button'
 import { Formik } from 'formik'
 import * as Yup from "yup";
 import { Status } from '@/shared/modals/Response'
@@ -85,6 +85,7 @@ const Create: React.FC = () => {
             }}
         >
             <div className='form-body'>
+            <h1 className='form-title'>Create Vehicles</h1>
 
                 <Formik
                     initialValues={initialValues}

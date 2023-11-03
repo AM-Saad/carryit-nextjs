@@ -7,6 +7,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
     if (req.method !== 'GET' && req.method !== 'PATCH') return res.status(404).json(refineResponse(Status.METHOD_NOT_ALLOWED, 'Method not allowed'));
     if (req.method == 'GET') {
         try {
+
             const manager = await prisma.manager.findFirst({ where: { id: token.managerId } });
             if (!manager) return res.status(404).json(refineResponse(Status.DATA_NOT_FOUND, 'Manager not found'));
 

@@ -11,6 +11,8 @@ class MapClass {
     duration: string;
     distance: string;
 
+
+
     constructor(startLatlng: any, endLatlng: any) {
         this.map = null;
         this.directionsService = null;
@@ -25,15 +27,22 @@ class MapClass {
         this.distance = ''
     }
 
+
+
     async initialize() {
         const latlng: any = this.startLatlng;
 
+
         this.geocoder = new google.maps.Geocoder();
+
         this.directionsService = new google.maps.DirectionsService();
+
         this.directionsDisplay = new google.maps.DirectionsRenderer({
             draggable: true,
             preserveViewport: true,
         });
+
+
 
         const myOptions = {
             zoom: this.zoomLevel,
@@ -46,9 +55,13 @@ class MapClass {
             maxZoom: 20,
         };
 
+
         this.map = new google.maps.Map(document.getElementById('map_canvas') as HTMLDivElement, myOptions);
         this.directionsDisplay.setMap(this.map);
         this.directionsDisplay.setPanel(document.getElementById('directionsPanel'));
+
+
+
 
         // Preserve last manual zooming, in order to don't resetting the zoom when moveMarker called 
         google.maps.event.addListener(this.map, 'zoom_changed', () => {
@@ -57,8 +70,9 @@ class MapClass {
 
         });
 
-        google.maps.event.addListener(this.map, 'dragend', () => {
 
+
+        google.maps.event.addListener(this.map, 'dragend', () => {
             const bounds: any = this.map?.getBounds();
             const areaBounds = {
                 north: bounds.getNorthEast().lat(),
@@ -74,19 +88,20 @@ class MapClass {
         google.maps.event.addListener(this.directionsDisplay, 'directions_changed', () => {
             const directions = this.directionsDisplay?.getDirections();
             if (!directions) return;
+
             const overview_path = directions.routes[0].overview_path;
             const startingPoint = overview_path[0];
             const destination = overview_path[overview_path.length - 1];
 
             if (!this.startLatlng || !startingPoint.equals(this.startLatlng)) {
                 this.startLatlng = startingPoint;
-
             }
+
             if (!this.endLatlng || !destination.equals(this.endLatlng)) {
                 this.endLatlng = destination;
             }
-
         });
+
 
 
         this.add_directions_buttons()
@@ -94,8 +109,9 @@ class MapClass {
 
         setTimeout(() => this.reset_scene(), 2000)
 
-
     }
+
+
 
     add_directions_buttons() {
         const buttons = [
@@ -104,6 +120,7 @@ class MapClass {
             ["Tilt Down", "tilt", 20, google.maps.ControlPosition.TOP_CENTER],
             ["Tilt Up", "tilt", -20, google.maps.ControlPosition.BOTTOM_CENTER],
         ];
+
 
         buttons.forEach(([text, mode, amount, position]: any) => {
             const controlDiv = document.createElement("div");
@@ -115,23 +132,23 @@ class MapClass {
             controlDiv.appendChild(controlUI);
             this.map?.controls[position].push(controlDiv);
         });
-
-
     }
+
+
+
     create_markers() {
 
         // Create the icons for the markers
         const originIcon: google.maps.Icon = {
             url: '/icons/car.png', // Replace 'path_to_origin_icon' with the actual path to your origin marker icon image
             scaledSize: new google.maps.Size(52, 72), // Adjust the size of the icon as needed
-      
-
         };
 
         const destinationIcon = {
             url: 'path_to_destination_icon', // Replace 'path_to_destination_icon' with the actual path to your destination marker icon image
             scaledSize: new google.maps.Size(52, 52), // Adjust the size of the icon as needed
         };
+
 
         // Create the markers with the custom icons
         const originMarker = new google.maps.Marker({
@@ -147,15 +164,19 @@ class MapClass {
             map: this.map,
         });
 
+
         // Store the markers in the 'markers' array
         this.markers.push(originMarker);
         this.markers.push(destinationMarker);
 
     }
+
+
     reset_scene() {
 
         this.map?.setCenter(this.startLatlng!)
         const heading = google.maps.geometry.spherical.computeHeading(this.startLatlng!, this.endLatlng!);
+
         this.map?.setZoom(19)
 
         this.map?.setHeading(heading);
@@ -163,6 +184,8 @@ class MapClass {
         setTimeout(() => this.map?.setTilt(66), 2000)
 
     }
+
+
     adjustMap(mode: any, amount: any) {
         switch (mode) {
             case "tilt":
@@ -176,28 +199,40 @@ class MapClass {
         }
     }
 
+
+
     calc_route(options: any) {
         const defaultOptions = {
             preserveViewport: false,
         };
 
+
+        // Merge the user-options into the default options
         const mergedOptions = { ...defaultOptions, ...options };
 
+
+        // Create the request for the directions service
         const request: any = {
             origin: this.markers[0].getPosition(),
             destination: this.endLatlng,
             travelMode: google.maps.TravelMode.DRIVING,
         };
 
+
+
+        // Make the directions request
         this.directionsService?.route(request, (response, status) => {
+
             if (status == google.maps.DirectionsStatus.OK) {
                 this.map?.setZoom(this.zoomLevel);
 
                 // Display the route on the map
                 this.directionsDisplay?.setDirections(response);
 
+
                 // Store the current map viewport
                 const previousViewport = this.map?.getCenter();
+
 
                 // Adjust the map's viewport to fit the route's bounds if preserveViewport is not set to true
                 if (!mergedOptions.preserveViewport) {
@@ -212,28 +247,34 @@ class MapClass {
                 this.distance = response?.routes[0].legs[0].distance?.text || '0 km';
                 this.duration = response?.routes[0].legs[0].duration?.text || '0 min';
             }
+
         });
+
     }
+
+
+
     move_markers(newStartLatlng: any) {
         const numDeltas = 100;  // Number of intermediate positions
         let count = 0;
         let deltaLat: number;
         let deltaLng: number;
-    
+        let interval: any;
+
         const currentLatlng = this.markers[0].getPosition() as google.maps.LatLng;
         const newLatlng = new google.maps.LatLng(newStartLatlng);
-    
+
         // Calculate the lat, lng differences
         deltaLat = (newLatlng.lat() - currentLatlng.lat()) / numDeltas;
         deltaLng = (newLatlng.lng() - currentLatlng.lng()) / numDeltas;
-    
+
         const moveMarker = () => {
             const lat = currentLatlng.lat() + deltaLat * count;
             const lng = currentLatlng.lng() + deltaLng * count;
             const latlng = new google.maps.LatLng(lat, lng);
-    
+
             this.markers[0].setPosition(latlng);
-            
+
             if (count < numDeltas) {
                 count++;
             } else {
@@ -241,12 +282,12 @@ class MapClass {
                 clearInterval(interval);
             }
         }
-    
-        const interval = setInterval(moveMarker, 10); // Call moveMarker every 10 milliseconds
-    
+
+        interval = setInterval(moveMarker, 10); // Call moveMarker every 10 milliseconds
+
         // Update the stored startLatlng value
         this.startLatlng = newStartLatlng;
-    
+
         // Recalculate the route with the updated origin, preserving the viewport
         this.calc_route({ preserveViewport: true });
     }

@@ -353,6 +353,7 @@ model Company {
   Zone         Zone[]
   User         User[]
   Branch       Branch[]
+  preferences CompanyPreferences?
 }
 
 type CompaniesRoles {
@@ -387,4 +388,12 @@ type CompaniesSubscriptionsHistoryDates {
   id     String  @map("_id") @db.ObjectId
   data   String
   status Boolean
+}
+
+type CompanyPreferences {
+  id           String? @map("_id") @db.ObjectId
+  currency     String?
+  language     String?
+  timezone     String?
+  country      String?
 }

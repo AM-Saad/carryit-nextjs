@@ -1,5 +1,5 @@
-import Button from '@/components/shared/Button'
-import Input from '@/components/shared/Input'
+import Button from '@/components/shared/ui/Button'
+import Input from '@/components/shared/ui/Input'
 import Modal from '@/components/shared/modal'
 import { DRIVER_SHIPMENTS_ROUTE } from '@/lib/constants'
 import { PackageStatus } from '@/modals/Package'

@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!driver) {
       return res.status(401).json(refineResponse(Status.DATA_NOT_FOUND, 'Data Not Found!'));
     }
-
+    console.log(driver.password, values.password)
     // Check if password is correct
     if (driver.password !== values.password) {
       return res.status(401).json(refineResponse(Status.INVALID_CREDENTIALS, 'Invalid Credentials!'));

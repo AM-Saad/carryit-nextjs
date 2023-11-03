@@ -1,9 +1,9 @@
-import EditableInput from "@/components/shared/EditableInput";
-import Button from "@/components/shared/Button";
+import EditableInput from "@/components/shared/ui/EditableInput";
+import Button from "@/components/shared/ui/Button";
 import ConfirmDeleteItem from "@/components/shared/ConfirmDelete";
 import Modal from "@/components/shared/modal";
 import { useEffect, useState, useContext } from "react";
-import MultiSelect from "@/components/shared/MultiSelect";
+import MultiSelect from "@/components/shared/ui/MultiSelect";
 import { branchRepository } from "@/lib/repositries/admin";
 import AdminContext from "@/stores/admin";
 import Branch from "@/modals/Branch";
@@ -155,85 +155,93 @@ const BranchFrom: React.FC<Props> = ({
       </div>
 
       <div className="form-body">
-        <EditableInput
-          label="Name"
-          inputType="text"
-          onSave={(value: string | number) => {
-            return update_partial_branch({ name: value });
-          }}
-          defaultVal={branch.name}
-          loading={loading}
-          required={true}
-          validationMessage={"Name is required"}
-          error={updateMeta.error ? true : false}
-        />
-        <EditableInput
-          label="Phone"
-          inputType="number"
-          onSave={(value: string | number) => {
-            return update_partial_branch({ phone: value });
-          }}
-          defaultVal={branch.phone || ""}
-          loading={loading}
-          required={true}
-          validationMessage={"Phone is required"}
-          error={updateMeta.error ? true : false}
+        <div className="grid md:gap-3 md:grid-cols-3">
 
-        />
-        <EditableInput
-          label="Address"
-          inputType="text"
-          onSave={(value: string | number) => {
-            return update_partial_branch({ address: value });
-          }}
-          defaultVal={branch.address || ""}
-          loading={loading}
-          required={true}
-          validationMessage={"Address is required"}
-          error={updateMeta.error ? true : false}
+          <div>
+            <EditableInput
+              label="Name"
+              inputType="text"
+              onSave={(value: string | number) => {
+                return update_partial_branch({ name: value });
+              }}
+              defaultVal={branch.name}
+              loading={loading}
+              required={true}
+              validationMessage={"Name is required"}
+              error={updateMeta.error ? true : false}
+            />
+            <EditableInput
+              label="Phone"
+              inputType="number"
+              onSave={(value: string | number) => {
+                return update_partial_branch({ phone: value });
+              }}
+              defaultVal={branch.phone || ""}
+              loading={loading}
+              required={true}
+              validationMessage={"Phone is required"}
+              error={updateMeta.error ? true : false}
 
-        />
-        <EditableInput
-          label="State"
-          inputType="text"
-          onSave={(value: string | number) => {
-            return update_partial_branch({ state: value });
-          }}
-          defaultVal={branch.state || ""}
-          loading={loading}
-          required={true}
-          validationMessage={"State is required"}
-          error={updateMeta.error ? true : false}
+            />
+            <EditableInput
+              label="Address"
+              inputType="text"
+              onSave={(value: string | number) => {
+                return update_partial_branch({ address: value });
+              }}
+              defaultVal={branch.address || ""}
+              loading={loading}
+              required={true}
+              validationMessage={"Address is required"}
+              error={updateMeta.error ? true : false}
 
-        />
+            />
+          </div>
+          <div>
 
-        <EditableInput
-          label="City"
-          inputType="text"
-          onSave={(value: string | number) => {
-            return update_partial_branch({ city: value });
-          }}
-          defaultVal={branch.city || ""}
-          loading={loading}
-          required={true}
-          validationMessage={"City is required"}
-          error={updateMeta.error ? true : false}
+            <EditableInput
+              label="State"
+              inputType="text"
+              onSave={(value: string | number) => {
+                return update_partial_branch({ state: value });
+              }}
+              defaultVal={branch.state || ""}
+              loading={loading}
+              required={true}
+              validationMessage={"State is required"}
+              error={updateMeta.error ? true : false}
 
-        />
+            />
 
-        <EditableInput
-          label="Governorate"
-          inputType="text"
-          onSave={(value: string | number) => {
-            return update_partial_branch({ governorate: value });
-          }}
-          defaultVal={branch.governorate || ""}
-          loading={loading}
-          required={true}
-          validationMessage={"Governorate is required"}
-          error={updateMeta.error ? true : false}
+            <EditableInput
+              label="City"
+              inputType="text"
+              onSave={(value: string | number) => {
+                return update_partial_branch({ city: value });
+              }}
+              defaultVal={branch.city || ""}
+              loading={loading}
+              required={true}
+              validationMessage={"City is required"}
+              error={updateMeta.error ? true : false}
 
-        />
+            />
+
+            <EditableInput
+              label="Governorate"
+              inputType="text"
+              onSave={(value: string | number) => {
+                return update_partial_branch({ governorate: value });
+              }}
+              defaultVal={branch.governorate || ""}
+              loading={loading}
+              required={true}
+              validationMessage={"Governorate is required"}
+              error={updateMeta.error ? true : false}
+
+            />
+          </div>
+        </div>
 
         <div className="mb-2 mt-3 rounded-lg border px-2 pb-2">
           <label

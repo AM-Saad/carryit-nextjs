@@ -13,7 +13,8 @@
       "@/modals/*": ["modals/*"],
       "@/shared/*": ["shared/*"],
       "@/stores/*":["stores/*"],
-      "@/middleware/*":["middleware/*"]
+      "@/middleware/*":["middleware/*"],
+      "@/public/*":["public/*"]
     },
     "noImplicitAny": false,
     "strict": true,

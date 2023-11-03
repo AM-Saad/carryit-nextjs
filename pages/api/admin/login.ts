@@ -9,7 +9,6 @@ import jwt from 'jsonwebtoken';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const { values } = JSON.parse(req.body);
-  console.log(values)
 
   try {
     // Check if admin exists,
@@ -28,7 +27,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return res.status(200).json(refineResponse(Status.SUCCESS, "Login successful", { token }));
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
