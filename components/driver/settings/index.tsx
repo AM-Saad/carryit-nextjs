@@ -1,4 +1,4 @@
-import EditableInput from "@/components/shared/EditableInput";
+import EditableInput from "@/components/shared/ui/EditableInput";
 interface Props {
   driver: any;
   onUpdate: (data: any) => void;

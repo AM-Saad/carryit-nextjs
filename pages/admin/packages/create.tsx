@@ -2,7 +2,7 @@ import React, { use, useEffect, useState } from "react";
 import { Package, PackagePayload } from "@/modals/Package";
 import Layout from "@/components/layout";
 import { packageRepository } from "@/lib/repositries/admin";
-import { Formik,ErrorMessage } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -11,11 +11,11 @@ import loadable from "@loadable/component";
 import PlacesAutocomplete from "@/components/shared/PlaceAutoComplete2";
 import { Status } from "@/shared/modals/Response";
 import withAuth from "@/components/shared/auth";
-import MultiSelect from "@/components/shared/MultiSelect";
+import MultiSelect from "@/components/shared/ui/MultiSelect";
 
-const ToggleBtn = loadable(() => import("@/components/shared/ToggleBtn"));
-const Input = loadable(() => import("@/components/shared/Input"));
-const Button = loadable(() => import("@/components/shared/Button"));
+const ToggleBtn = loadable(() => import("@/components/shared/ui/ToggleBtn"));
+const Input = loadable(() => import("@/components/shared/ui/Input"));
+const Button = loadable(() => import("@/components/shared/ui/Button"));
 const FormikInput = loadable(() => import("@/components/shared/FormikInput"));
 
 const Create: React.FC = () => {
@@ -115,6 +115,8 @@ const Create: React.FC = () => {
       }}
     >
       <div className="form-body">
+      <h1 className='form-title'>Create Package</h1>
+
         <Formik
           initialValues={initialValues}
           validationSchema={validationScheme}
@@ -138,10 +140,9 @@ const Create: React.FC = () => {
             touched,
             values,
           }) => {
-           {console.log(errors)}
+            { console.log(errors) }
             return (
               <>
-                <h1 className="mb-5 font-medium">Create Package</h1>
                 <div className="flex items-center gap-5 lg:col-span-3">
                   <div className="flex items-center gap-2">
                     <span className=" block text-gray-600">Fragile</span>
@@ -167,79 +168,90 @@ const Create: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                <div className="mb-2 mt-3 rounded-lg border px-2 pb-2">
-                  <label
-                    htmlFor="assigned_branch"
-                    className="editable-input_label mt-2 block text-sm font-medium text-gray-600"
-                  >
-                    Assigned Branch{" "}
-                  </label>
-                  {branches.length > 0 && (
-                    <MultiSelect
-                      label="label"
-                      multiple={false}
-                      trackBy="value"
-                      closeOnSelect={true}
-                      
-                      input={(props: any) => {
-                        touched.branchId = true;
+                  <div className="mb-2 mt-3 rounded-lg border px-2 pb-2">
+                    <label
+                      htmlFor="assigned_branch"
+                      className="editable-input_label mt-2 block text-sm font-medium text-gray-600"
+                    >
+                      Assigned Branch{" "}
+                    </label>
+                    {branches.length > 0 && (
+                      <MultiSelect
+                        label="label"
+                        multiple={false}
+                        trackBy="value"
+                        closeOnSelect={true}
+
+                        input={(props: any) => {
+                          touched.branchId = true;
                           handleChange({
                             target: { name: "branchId", value: props[0] ? props[0].value : '' },
                           });
-                      }}
-                      id="assigned_branch"
-                      options={branchToAssign}
-                      placeholder={"Assigned Branch"}
-                      disabled={loading}
-                    />
-                  )}
+                        }}
+                        id="assigned_branch"
+                        options={branchToAssign}
+                        placeholder={"Assigned Branch"}
+                        disabled={loading}
+                      />
+                    )}
 
-                </div>
-                {errors.branchId && touched.branchId && <div className='text-red-500 text-xs mt-px text-left'>{errors.branchId}</div> }
-                </div>
-                <FormikInput label="Receiver Name" name="receiver.name" />
-                <FormikInput label="Receiver Phone" name="receiver.phone" />
-                <FormikInput
-                  label="Amount to be collected"
-                  name="price"
-                  type="number"
-                />
-                <FormikInput
-                  label="Shipping Cost"
-                  name="shipping_cost"
-                  type="number"
-                />
-                <FormikInput label="Quantity" name="quantity" type="number" />
-                <div className="grid gap-3 md:grid-cols-3">
-                  <div className="my-2">
-                    <label
-                      htmlFor={"Address"}
-                      className="mb-1 block text-xs font-medium text-gray-700"
-                    >
-                      Address
-                    </label>
-                    <PlacesAutocomplete
-                      setSelected={(e: any) => {
-                        setShippingAddress(e);
-                      }}
-                    />
                   </div>
-                  {/* <FormikInput label="Address" name="receiver.address" /> */}
-                  <FormikInput
-                    label="Building Number"
-                    name="receiver.building"
-                    type="number"
-                  />
-                  <FormikInput
-                    label="Floor Number"
-                    name="receiver.floor"
-                    type="number"
-                  />
-                  <FormikInput
-                    label="Apartment Number"
-                    name="receiver.apartment"
-                    type="number"
-                  />
+                  {errors.branchId && touched.branchId && <div className='text-red-500 text-xs mt-px text-left'>{errors.branchId}</div>}
+                </div>
+                <div className="grid gap-3 md:grid-cols-2 items-start">
+
+                  <div>
+
+                    <FormikInput label="Receiver Name" name="receiver.name" />
+                    <FormikInput label="Receiver Phone" name="receiver.phone" />
+                    <FormikInput
+                      label="Amount to be collected"
+                      name="price"
+                      type="number"
+                    />
+                    <FormikInput
+                      label="Shipping Cost"
+                      name="shipping_cost"
+                      type="number"
+                    />
+                    <FormikInput label="Quantity" name="quantity" type="number" />
+                  </div>
+
+                  <div className="">
+                    <div className="my-2">
+                      <label
+                        htmlFor={"Address"}
+                        className="mb-1 block text-xs font-medium text-gray-700"
+                      >
+                        Address
+                      </label>
+                      <PlacesAutocomplete
+                        setSelected={(e: any) => {
+                          setShippingAddress(e);
+                        }}
+                      />
+                    </div>
+                    {/* <FormikInput label="Address" name="receiver.address" /> */}
+                    <div className="grid gap-3 md:grid-cols-3">
+
+                      <FormikInput
+                        label="Building Number"
+                        name="receiver.building"
+                        type="number"
+                      />
+                      <FormikInput
+                        label="Floor Number"
+                        name="receiver.floor"
+                        type="number"
+                      />
+                      <FormikInput
+                        label="Apartment Number"
+                        name="receiver.apartment"
+                        type="number"
+                      />
+                    </div>
+
+                  </div>
                 </div>
 
                 <Input

@@ -1,7 +1,7 @@
 import { Status, Error, getErrorStatusColor } from '@/shared/modals/Response';
 
 import { ExclamationTriangleIcon, InfoCircledIcon } from '@radix-ui/react-icons'
-import Button from './Button';
+import Button from '@/components/shared/ui/Button'
 
 
 

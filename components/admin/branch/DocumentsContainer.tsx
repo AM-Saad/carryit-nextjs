@@ -9,7 +9,7 @@ import { sharedRepository } from '@/lib/repositries/admin'
 import { Status } from '@/shared/modals/Response'
 import { toast } from 'react-toastify'
 import Vehicle from '@/modals/Vehicle'
-import Button from '@/components/shared/Button'
+import Button from '@/components/shared/ui/Button'
 
 type PreviewDocs = {
     id: string

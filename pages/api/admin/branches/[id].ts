@@ -11,6 +11,7 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse, 
 
 
     if (req.method == 'GET') {
+        console.log(token)
         let query: any = token.isSuper ? { companyId: token.companyId } : { where: { managerId: token.managerId } }
         try {
             const branch = await prisma.branch.findFirst({ where: { id: req.query.id as string, ...query } });

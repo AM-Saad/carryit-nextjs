@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Response, { Status } from "@/shared/modals/Response";
 import { toast } from "react-toastify";
 import { sharedRepository } from "@/lib/repositries/admin";
-import EditableInput from "@/components/shared/EditableInput";
+import EditableInput from "@/components/shared/ui/EditableInput";
 import Company from "@/modals/Company";
 
 const CompanyForm = () => {

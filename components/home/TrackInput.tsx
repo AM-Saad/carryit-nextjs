@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Button from '@/components/shared/Button'
+import Button from '@/components/shared/ui/Button'
 import { fetcher } from '@/lib/utils'
 import Response, { Error, Status } from '@/shared/modals/Response'
 import { useRouter } from 'next/router'

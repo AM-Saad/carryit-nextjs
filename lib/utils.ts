@@ -1,5 +1,5 @@
 import ms from "ms";
-import timeZoneCityToCountry  from "./countries.json"
+import timeZoneCityToCountry from "./countries.json"
 
 
 
@@ -8,6 +8,7 @@ export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
   return `${ms(Date.now() - new Date(timestamp).getTime())}${timeOnly ? "" : " ago"
     }`;
 };
+
 
 export async function fetcher<JSON = any>(
   input: RequestInfo,
@@ -30,6 +31,7 @@ export async function fetcher<JSON = any>(
   return res.json();
 }
 
+
 export function getHeaders(token: string) {
   const headers: any = {
     "Content-Type": "application/json",
@@ -38,6 +40,7 @@ export function getHeaders(token: string) {
   };
   return headers;
 }
+
 
 
 export function nFormatter(num: number, digits?: number) {
@@ -85,6 +88,8 @@ export function setCookie(name: string, value: string, days: number) {
   document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
 
+
+
 export function getCookie(name: string) {
   var nameEQ = name + "=";
   var ca = document.cookie.split(';');
@@ -97,11 +102,11 @@ export function getCookie(name: string) {
 
 
 export function userLocationInfo() {
-  let userRegion:any
-  let userCity:any
-  let userCountry:any
-  let userTimeZone:any
-  const countries:any = timeZoneCityToCountry
+  let userRegion: any
+  let userCity: any
+  let userCountry: any
+  let userTimeZone: any
+  const countries: any = timeZoneCityToCountry
 
   if (Intl) {
     userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -117,6 +122,29 @@ export function userLocationInfo() {
 
 export function getCurrentPosition() {
   return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 });
+    navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 });
   });
+}
+
+export function calculateCost(branches, driversPerBranch, tripsPerDriver) {
+  // Constants
+  const daysInMonth = 30;
+  const mapLoadsCostPerThousand = 0.14;
+  const directionsCostPerThousand = 0.14;
+  const directionsRequestsPerTrip = 90;  // 2 requests per minute * 45 minutes 
+
+  // Map loads calculations
+  const mapLoadsPerDay = tripsPerDriver * driversPerBranch * branches;
+  const mapLoadsPerMonth = mapLoadsPerDay * daysInMonth;
+  const mapLoadsCost = (mapLoadsPerMonth / 1000) * mapLoadsCostPerThousand;
+
+  // Directions calculations
+  const directionRequestsPerDay = directionsRequestsPerTrip * tripsPerDriver * driversPerBranch * branches;
+  const directionRequestsPerMonth = directionRequestsPerDay * daysInMonth;
+  const directionsCost = (directionRequestsPerMonth / 1000) * directionsCostPerThousand;
+
+  // Total cost
+  const totalCost = mapLoadsCost + directionsCost;
+
+  return totalCost;
 }

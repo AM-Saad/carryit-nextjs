@@ -1,9 +1,9 @@
-import EditableInput from "@/components/shared/EditableInput";
-import Button from "@/components/shared/Button";
+import EditableInput from "@/components/shared/ui/EditableInput";
+import Button from "@/components/shared/ui/Button";
+import MultiSelect from "@/components/shared/ui/MultiSelect";
 import ConfirmDeleteItem from "@/components/shared/ConfirmDelete";
 import Modal from "@/components/shared/modal";
 import { useEffect, useState, useContext } from "react";
-import MultiSelect from "@/components/shared/MultiSelect";
 import AdminContext from "@/stores/admin";
 
 interface Props {

@@ -7,7 +7,9 @@ import MapClass from "@/lib/initMap";
 import socket from "@/lib/socket/trip";
 import { registerSocketEvents } from "@/lib/socket/socketHandler";
 import Info from "@/components/driver/map/Info";
-import Button from "@/components/shared/Button";
+import Button from "@/components/shared/ui/Button";
+import { GEO_NOT_SUPPORTED, ACCESS_DENIED, ALREADY_PROMPTED, LOCATION_NOT_GRANTED, USER_DENIED_LOCATION } from "@/lib/constants";
+
 
 interface Props {
   packageId: string;
@@ -19,11 +21,16 @@ interface Props {
 type Libraries = "geometry" | "places";
 const libraries: Libraries[] = ["geometry", "places"];
 
+
+
 const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!,
     libraries: libraries,
   });
+
+
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +39,12 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
   const [directionsPanel, setDirectionsPanel] = useState<boolean>(false);
   const [allowLocation, setAllowLocation] = useState<boolean>(false);
 
+
+
+
   const init = useCallback(async () => {
+
+    
     setAllowLocation(false);
     const permission = await checkLocationPermission();
     if (!permission) {
@@ -43,6 +55,8 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
     setStatus("Location access granted, initializing map...");
 
     const position: any = await getCurrentPosition();
+
+    // initialize map
     const map = new MapClass(
       new google.maps.LatLng(
         position.coords.latitude,
@@ -54,43 +68,46 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
       ),
     );
 
+
     map.initialize();
 
     setCurrentMap(map);
     setLoading(false);
     setStatus("Establishing connection with server...");
+
   }, []);
+
+
+
 
   async function checkLocationPermission(): Promise<boolean | undefined> {
     if (!navigator.geolocation) {
-      setError(
-        "Geolocation is not supported by your browser, please use a modern browser like Chrome or Firefox ",
-      );
+      setError(GEO_NOT_SUPPORTED);
       return false;
     }
     try {
       const res = await navigator.permissions.query({ name: "geolocation" });
       if (res.state === "denied") {
-        setError(
-          'Location access denied<br/> <span class="text-xs flex text-gray-400 mt-1 justify-center">Please allow location access in your browser settings and refresh the page to continue</span>',
-        );
+        setError(ACCESS_DENIED);
         return false;
       }
       if (res.state === "prompt") {
-        setError(`
-                Allow location permission to start <span class="text-xs flex text-gray-400 mt-1 justify-center">
-                if the popup does not show up asking for your permission, make sure you have enabled GPS in your device settings and the browser location access</span>`);
+        setError(ALREADY_PROMPTED);
         return false;
       }
       if (res.state != "granted") {
-        setError("Allow location permission to start");
-        return;
+        setError(LOCATION_NOT_GRANTED);
+        return false;
       }
       return true;
     } catch (error: any) {
       setError(error.message || "Something went wrong. Please try again later");
     }
   }
+
+
+
+
 
   async function startTracking() {
     try {
@@ -105,9 +122,13 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
     }
   }
 
+
+
   const hasError = (error: any) => {
     setError(error.message || "Something went wrong. Please try again later");
   };
+
+
 
   const watchLocation = async () => {
     try {
@@ -128,58 +149,55 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
     }
   };
 
+
+
   const askForPermission = async () => {
     try {
       await getCurrentPosition();
     } catch (error: any) {
-      console.log(error.message);
       if (error.message === "User denied Geolocation") {
-        setError(
-          'User denied Geolocation<br/> <span class="text-xs flex text-gray-400 mt-1">it looks like you have denied location access previously. Please allow location access in your browser settings and refresh the page to continue</span>',
-        );
+        setError(USER_DENIED_LOCATION);
       } else {
-        setError(
-          error.message || "Something went wrong. Please try again later",
-        );
+        setError(error.message || "Something went wrong. Please try again later");
       }
     }
   };
+
+
 
   useEffect(() => {
     let interval: any;
     if (currentMap) {
       startTracking();
 
-      interval = setInterval(async () => watchLocation(), 5000);
+      interval = setInterval(async () => watchLocation(), 4000);
     }
-    return () => {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
+
   }, [currentMap]);
+
+
+
 
   useEffect(() => {
     if (window.google) init();
   }, [window.google]);
 
+
+
   useEffect(() => {
+    
     let cleanupSocketEvents: any;
 
     if (packageId && !loading) {
-      cleanupSocketEvents = registerSocketEvents(
-        packageId,
-        () => {
-          setStatus("Go");
-        },
-        hasError,
-      );
+      cleanupSocketEvents = registerSocketEvents(packageId, () => setStatus("Go"), hasError);
     }
 
-    return () => {
-      if (cleanupSocketEvents) {
-        cleanupSocketEvents();
-      }
-    };
+    return () => cleanupSocketEvents && cleanupSocketEvents();
+
   }, [packageId, loading]);
+
+
 
   return (
     <div style={{ height: "400px", width: "100%" }}>
@@ -229,9 +247,8 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
           </button>
           <div
             id="directionsPanel"
-            className={`fixed right-1 top-1 h-96 w-1/3 overflow-auto rounded border bg-gray-50 p-4 text-xs shadow ${
-              directionsPanel ? "" : "hidden"
-            }`}
+            className={`fixed right-1 top-1 h-96 w-1/3 overflow-auto rounded border bg-gray-50 p-4 text-xs shadow ${directionsPanel ? "" : "hidden"
+              }`}
           ></div>
         </div>
       )}

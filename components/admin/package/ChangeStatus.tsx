@@ -1,15 +1,15 @@
 import { useContext, useState, useEffect } from 'react'
 
 
-import Popover from "@/components/shared/popover";
+import Popover from "@/components/shared/ui/popover";
 import { motion } from "framer-motion";
 import { FADE_IN_ANIMATION_SETTINGS } from "@/lib/constants";
 
 import { getPackageStatusColor, SHIPMENT_STATUS_LABELS, PackageStatus } from '@/modals/Package';
 import AdminContext from '@/stores/admin';
 import { packageRepository } from '@/lib/repositries/admin';
-import Badge from '@/components/shared/Badge';
-import Button from '@/components/shared/Button';
+import Badge from '@/components/shared/ui/Badge';
+import Button from '@/components/shared/ui/Button';
 
 export default function ChangeStatus() {
     const [openPopover, setOpenPopover] = useState(false);
@@ -84,18 +84,13 @@ export default function ChangeStatus() {
                             </div>
 
                         </div>}
-
                         <div className='flex mt-2 justify-end'>
                             <Button
                                 onClick={update} title='Update' disabled={updateMeta.loading}
                                 loading={updateMeta.loading}
                             />
                         </div>
-
-                    </div>
-                }
-
-            >
+                    </div>}>
                 <button
                     className="flex items-center justify-center overflow-hidden rounded-full shadow transition-all duration-75 focus:outline-none active:scale-95" >
                     <Badge label={SHIPMENT_STATUS_LABELS.get(currentItem?.status!)} className="cursor-pointer-hover" color={getPackageStatusColor(currentItem?.status!)} />

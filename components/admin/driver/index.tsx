@@ -1,11 +1,11 @@
-import EditableInput from "@/components/shared/EditableInput";
-import ToggleBtn from "@/components/shared/ToggleBtn";
+import EditableInput from "@/components/shared/ui/EditableInput";
+import ToggleBtn from "@/components/shared/ui/ToggleBtn";
 import DocumentsContainer from "@/components/admin/driver/DocumentsContainer";
-import Button from "@/components/shared/Button";
+import Button from "@/components/shared/ui/Button";
+import MultiSelect from "@/components/shared/ui/MultiSelect";
 import ConfirmDeleteItem from "@/components/shared/ConfirmDelete";
 import Modal from "@/components/shared/modal";
 import { useEffect, useState, useContext } from "react";
-import MultiSelect from "@/components/shared/MultiSelect";
 import { driverRepository } from "@/lib/repositries/admin";
 import AdminContext from "@/stores/admin";
 import { BRANCHES_ROUTE, VEHICLES_ROUTE } from "@/lib/constants";

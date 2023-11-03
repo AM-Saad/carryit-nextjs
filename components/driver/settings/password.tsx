@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikInput from "@/components/shared/FormikInput";
-import Button from "@/components/shared/Button";
+import Button from "@/components/shared/ui/Button";
 import { useRouter } from "next/router";
 import { sharedRepository } from "@/lib/repositries/driver";
 import Response, { Status } from "@/shared/modals/Response";

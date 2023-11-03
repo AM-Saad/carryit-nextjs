@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from './Button'
+import Button from '@/components/shared/ui/Button'
 
 interface Props {
     label: string,

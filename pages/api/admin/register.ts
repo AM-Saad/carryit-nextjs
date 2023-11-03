@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
+  
   if (req.method === 'POST') {
     const { values } = JSON.parse(req.body);
 
@@ -60,13 +61,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
 
-      const branch = await prisma.branch.create(payload);
+      await prisma.branch.create(payload);
       
       // Create JWT token
-      const token = jwt.sign({ sub: manager.id, company: manager.companyId }, process.env.NEXT_PUBLIC_JWT_SECRET!, {
+      const token = jwt.sign({ managerId: manager.id, companyId: manager.companyId, driverId: null, isAdmin: true, isDriver: false, isSuper: manager.isSuper }, process.env.NEXT_PUBLIC_JWT_SECRET!, {
         expiresIn: '7d',
       });
 
+      
       return res.status(200).json(refineResponse(Status.SUCCESS, "Manager created successfully", { admin: manager, token: token }))
     }
     catch (e) {

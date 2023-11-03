@@ -6,7 +6,7 @@ import DriverContext from '@/stores/driver'
 import Loading from '@/components/shared/Loading'
 import FetchError from '@/components/shared/Error'
 import { PackageStatus, getPackageStatus, getPackageStatusColor } from '@/modals/Package'
-import Button from '@/components/shared/Button'
+import Button from '@/components/shared/ui/Button'
 import withAuth from '@/components/shared/auth'
 
 const Package = () => {
@@ -18,7 +18,7 @@ const Package = () => {
 
     const fetch_data = async () => {
         const res = await fetcher(packageRepository.fetch_package(id), false)
-       
+
     }
 
 
@@ -30,7 +30,7 @@ const Package = () => {
 
     useEffect(() => {
         if (currentItem) {
-            if(currentItem.status === PackageStatus.Shipped){
+            if (currentItem.status === PackageStatus.Shipped) {
                 router.push(`/driver/packages/trip/${id}`)
             }
         }
@@ -42,7 +42,7 @@ const Package = () => {
             {loading && <Loading />}
             {error && !loading && <FetchError reload={fetch_data} error={error} />}
             {(!loading && currentItem) &&
-                <>
+                <div className='p-2'>
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center gap-3'>
                             <h1 className="text-xl font-bold">{currentItem.packageNo}</h1>
@@ -53,7 +53,7 @@ const Package = () => {
                             <Button title='Start Trip' disabled={currentItem.status !== PackageStatus.Ready} onClick={() => { router.push(`/driver/packages/trip/${id}`) }} />
                         </div>
                     </div>
-                    <div className='grid grid-cols-3 gap-5 my-5'>
+                    <div className='grid sm:grid-cols-3 gap-5 my-5'>
                         <div className='mt-4 col-span-2'>
                             <h2 className='mb-4 font-medium'>Receiver Details</h2>
                             <div className='flex flex-col gap-3 text-xs'>
@@ -82,8 +82,6 @@ const Package = () => {
                                         <p className='font-medium'>Total: {(item.price || 0) * (item.quantity || 0)}$</p>
                                     </div>
                                 )}
-
-
                             </div>
                         </div>
 
@@ -96,14 +94,14 @@ const Package = () => {
                             <p>Discount: {currentItem.discount}$</p>
                             <p>Shipping Cost: {currentItem.shipping_cost}$</p>
 
-                            <p className='font-medium text-md'>Grand Total: {(currentItem.total_cost || 0) -( currentItem.discount || 0)}$</p>
+                            <p className='font-medium text-md'>Grand Total: {(currentItem.total_cost || 0) - (currentItem.discount || 0)}$</p>
 
 
 
                         </div>
                     </div>
 
-                </>
+                </div>
             }
         </Layout>
     )

@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
 import { authMiddleware, Token } from '@/middleware/auth';
+import { PackageStatus } from '@/modals/Package';
 
 
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<any>, token: Token) => {
@@ -25,8 +26,9 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
         // if(values.status === 'DELIVERED') {
         //     query.deliveredAt = new Date()
         // }
-
-
+        if(status === PackageStatus.Shipped && !item.driverId) {
+            return res.status(400).json(refineResponse(Status.MISSING_PARAMETER, 'Assign a driver first'))
+        }
         console.log(canceled)
         console.log(status)
 
