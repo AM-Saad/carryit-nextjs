@@ -34,32 +34,25 @@ const index = () => {
     }, [])
 
 
-    const robotCarCtl = useControls('Robot Car', {
-        visible: true,
-        castShadow: true,
-        receiveShadow: true,
-        position: {
-            x: 8.7,
-            y: 3,
-            z: 0.1
-        },
-        rotation: {
-            x: Math.PI / 2,
-            y: -2,
-            z: 0
-        },
-    }, {
-        collapsed: true
-    })
+    // const robotCarCtl = useControls('Robot Car', {
+    //     visible: true,
+    //     castShadow: true,
+    //     receiveShadow: true,
+    //     position: {
+    //         x: 8.7,
+    //         y: 3,
+    //         z: 0.1
+    //     },
+    //     rotation: {
+    //         x: Math.PI / 2,
+    //         y: -2,
+    //         z: 0
+    //     },
+    // }, {
+    //     collapsed: true
+    // })
 
-    const planColor = useControls('Plane', {
-        color: '#fff',
-        visible: true,
-        castShadow: true,
-        receiveShadow: true,
-    }, {
-        collapsed: true
-    })
+
 
     const props: any = useSpring({
         position: [2, 0, 0],
@@ -109,8 +102,16 @@ const index = () => {
                 />
 
                 <RobotCar
-                    position={[robotCarCtl.position.x, robotCarCtl.position.y, robotCarCtl.position.z]}
-                    rotation={[robotCarCtl.rotation.x, robotCarCtl.rotation.y, robotCarCtl.rotation.z]}
+                    position={[
+                        8.7,
+                        3,
+                        0.1
+                    ]}
+                    rotation={[
+                        Math.PI / 2,
+                        -2,
+                        0
+                    ]}
                     to={[7, -1, 0.1]}
                     toRotation={[Math.PI / 2, -2, 0]}
                     duration={1600}

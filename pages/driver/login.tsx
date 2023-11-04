@@ -5,18 +5,16 @@ import DriverContext from '@/stores/driver'
 import { useRouter } from 'next/router'
 
 const Login = () => {
-  const { authenticate, driverMeta } = useContext(DriverContext)
+  const { authenticate, driverMeta,driver } = useContext(DriverContext)
   const router = useRouter()
-  // const [isAuthenticated, setIsAuthenticated] = useState(true)
 
   useEffect(() => {
-    // const token = localStorage.getItem('didjwt')
-    // if (!token) {
-    //   setIsAuthenticated(false)
-    //   return
-    // }
-    // router.push(('/driver/sso'))
-  }, []);
+    console.log(router.pathname)
+    if(router.pathname === '/driver/login' && driver){
+      router.push('/driver/packages')
+    }
+  }, [driver]);
+
   
   return (
     <Layout

@@ -5,19 +5,19 @@ import { useSpring, a } from '@react-spring/three'
 import { useFrame, useThree } from '@react-three/fiber';
 
 const Cam = () => {
-    const cameraCtl = useControls('Camera', {
-        position: {
+    // const cameraCtl = useControls('Camera', {
+    //     position: {
 
-            x: 0,
-            y: 0,
-            z: 10
-        },
-        fov: 66,
-        near: 0.10,
-        far: 1000,
-    }, {
-        collapsed: true,
-    });
+    //         x: 0,
+    //         y: 0,
+    //         z: 10
+    //     },
+    //     fov: 66,
+    //     near: 0.10,
+    //     far: 1000,
+    // }, {
+    //     collapsed: true,
+    // });
 
 
 
@@ -25,10 +25,10 @@ const Cam = () => {
 
         <PerspectiveCamera
             makeDefault
-            position={[cameraCtl.position.x, cameraCtl.position.y, cameraCtl.position.z]}
-            fov={cameraCtl.fov}
-            near={cameraCtl.near}
-            far={cameraCtl.far}
+            position={[0, 0, 10]}
+            fov={66}
+            near={0.10}
+            far={1000}
             aspect={window.innerWidth / window.innerHeight}
 
         />

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import { useLoadScript } from "@react-google-maps/api";
 import { getCurrentPosition } from "@/lib/utils";
 import Driver from "@/modals/Driver";
 import { Package } from "@/modals/Package";
@@ -44,7 +44,7 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
 
   const init = useCallback(async () => {
 
-    
+
     setAllowLocation(false);
     const permission = await checkLocationPermission();
     if (!permission) {
@@ -186,7 +186,7 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
 
 
   useEffect(() => {
-    
+
     let cleanupSocketEvents: any;
 
     if (packageId && !loading) {
