@@ -9,7 +9,7 @@ import { registerSocketEvents } from "@/lib/socket/socketHandler";
 import Info from "@/components/driver/map/Info";
 import Button from "@/components/shared/ui/Button";
 import { GEO_NOT_SUPPORTED, ACCESS_DENIED, ALREADY_PROMPTED, LOCATION_NOT_GRANTED, USER_DENIED_LOCATION } from "@/lib/constants";
-
+import useLocation from "@/lib/hooks/use-location";
 
 interface Props {
   packageId: string;
@@ -24,181 +24,87 @@ const libraries: Libraries[] = ["geometry", "places"];
 
 
 const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
-
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!,
     libraries: libraries,
   });
 
-
-
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [currentMap, setCurrentMap] = useState<any>(null);
-  const [status, setStatus] = useState<any>("Fetching...");
   const [directionsPanel, setDirectionsPanel] = useState<boolean>(false);
-  const [allowLocation, setAllowLocation] = useState<boolean>(false);
+  const [allowLocation, setAllowLocation] = useState<boolean>(true);
+  const [status, setStatus] = useState<string>("Getting your location...");
+  // Initialize useLocation hook
+  const [location, accuracy, locationError] = useLocation(allowLocation); // assuming you want to set 100 meters as the accuracy threshold
 
+// Notes from the trip: watchposition in not get updated when the user is moving
 
+  // Error handling state is now managed by the hook
+  const error = locationError || loadError;
 
-
-  const init = useCallback(async () => {
-
-
-    setAllowLocation(false);
-    const permission = await checkLocationPermission();
-    if (!permission) {
-      setAllowLocation(true);
-      return;
-    }
+  const init = useCallback(() => {
+    if (!location || currentMap) return;
 
     setStatus("Location access granted, initializing map...");
 
-    const position: any = await getCurrentPosition();
-
-    // initialize map
+    // initialize map with current location
     const map = new MapClass(
-      new google.maps.LatLng(
-        position.coords.latitude,
-        position.coords.longitude,
-      ),
+      new google.maps.LatLng(location.lat, location.lng),
       new google.maps.LatLng(
         currentPackage.receiver.shipping_address.geometry.location.lat,
         currentPackage.receiver.shipping_address.geometry.location.lng,
       ),
     );
 
-
     map.initialize();
-
     setCurrentMap(map);
     setLoading(false);
     setStatus("Establishing connection with server...");
+  }, [location, currentPackage]);
 
-  }, []);
+  const watchLocation = useCallback(() => {
+    if (!location || !currentMap) return;
 
+    currentMap.move_markers(location);
+    socket.emit("move", {
+      id: packageId,
+      coords: location,
+    });
+    console.log('location', location)
+  }, [location, currentMap, packageId]);
 
-
-
-  async function checkLocationPermission(): Promise<boolean | undefined> {
-    if (!navigator.geolocation) {
-      setError(GEO_NOT_SUPPORTED);
-      return false;
-    }
-    try {
-      const res = await navigator.permissions.query({ name: "geolocation" });
-      if (res.state === "denied") {
-        setError(ACCESS_DENIED);
-        return false;
-      }
-      if (res.state === "prompt") {
-        setError(ALREADY_PROMPTED);
-        return false;
-      }
-      if (res.state != "granted") {
-        setError(LOCATION_NOT_GRANTED);
-        return false;
-      }
-      return true;
-    } catch (error: any) {
-      setError(error.message || "Something went wrong. Please try again later");
-    }
-  }
-
-
-
-
-
-  async function startTracking() {
-    try {
-      const position: any = await getCurrentPosition();
-      currentMap.calc_route({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
-      ready();
-    } catch (error: any) {
-      setError(error.message || "Something went wrong. Please try again later");
-    }
-  }
-
-
-
-  const hasError = (error: any) => {
-    setError(error.message || "Something went wrong. Please try again later");
-  };
-
-
-
-  const watchLocation = async () => {
-    try {
-      const position: any = await getCurrentPosition();
-      currentMap.move_markers({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
-      socket.emit("move", {
-        id: packageId,
-        coords: {
-          lat: position.coords.latitude,
-          long: position.coords.longitude,
-        },
-      });
-    } catch (error: any) {
-      setError(error.message || "Something went wrong. Please try again later");
-    }
-  };
-
-
-
-  const askForPermission = async () => {
-    try {
-      await getCurrentPosition();
-    } catch (error: any) {
-      if (error.message === "User denied Geolocation") {
-        setError(USER_DENIED_LOCATION);
-      } else {
-        setError(error.message || "Something went wrong. Please try again later");
-      }
-    }
-  };
-
-
+  // Removed askForPermission function, since permission handling is within useLocation
 
   useEffect(() => {
-    let interval: any;
-    if (currentMap) {
-      startTracking();
-
-      interval = setInterval(async () => watchLocation(), 4000);
-    }
-    return () => clearInterval(interval);
-
-  }, [currentMap]);
-
-
-
+    if (isLoaded && !currentMap) init();
+  }, [isLoaded, init, currentMap]);
 
   useEffect(() => {
-    if (window.google) init();
-  }, [window.google]);
-
-
-
-  useEffect(() => {
-
     let cleanupSocketEvents: any;
 
     if (packageId && !loading) {
-      cleanupSocketEvents = registerSocketEvents(packageId, () => setStatus("Go"), hasError);
+      cleanupSocketEvents = registerSocketEvents(packageId, () => setStatus("Go"), () => { console.log('error') });
     }
 
     return () => cleanupSocketEvents && cleanupSocketEvents();
-
   }, [packageId, loading]);
 
+  useEffect(() => {
+    if (currentMap && location) {
+      ready();
+      watchLocation();
 
+    }
+  }, [currentMap, location, ready]);
 
+  // Handle location watching
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      watchLocation();
+    }, 4000);
+
+    return () => clearInterval(intervalId);
+  }, [watchLocation]);
   return (
     <div style={{ height: "400px", width: "100%" }}>
       <div className="m-auto my-5 flex flex-col items-center text-center">
@@ -208,10 +114,10 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
         {error && (
           <p
             className="m-auto mb-4 w-10/12 text-sm font-medium text-red-400 sm:w-8/12"
-            dangerouslySetInnerHTML={{ __html: error }}
+            dangerouslySetInnerHTML={{ __html: error instanceof Error ? error.message : error }}
           ></p>
         )}
-        {allowLocation && (
+        {/* {allowLocation && (
           <Button
             onClick={askForPermission}
             title="Allow Location"
@@ -232,7 +138,7 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
               ></path>
             </svg>
           </Button>
-        )}
+        )} */}
       </div>
 
       {isLoaded && (
