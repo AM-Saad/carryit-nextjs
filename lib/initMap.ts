@@ -92,8 +92,7 @@ class MapClass {
             const overview_path = directions.routes[0].overview_path;
             const startingPoint = overview_path[0];
             const destination = overview_path[overview_path.length - 1];
-
-            if (!this.startLatlng || !startingPoint.equals(this.startLatlng)) {
+            if (!this.startLatlng ) {
                 this.startLatlng = startingPoint;
             }
 
