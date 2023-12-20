@@ -83,7 +83,7 @@ const Layout = ({ meta, children }: Props) => {
 
 
       {/* Nav */}
-      {/* <motion.div
+      <motion.div
         className={`fixed top-0 w-full ${scrolled
           ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl "
           : "bg-white/0"
@@ -94,24 +94,24 @@ const Layout = ({ meta, children }: Props) => {
         whileInView="show"
         animate="show"
         viewport={{ once: true }}
-        // variants={
-        //   {
-        //     hidden: {
-        //       opacity: 0,
-        //       y: -800,
-        //       transition: {
-        //         delay: 2
-        //       },
-        //     },
-        //     show: {
-        //       opacity: 1,
-        //       y: 0,
-        //       transition: {
-        //         delay: 2
-        //       }
-        //     },
-        //   }
-        // }
+        variants={
+          {
+            hidden: {
+              opacity: 0,
+              y: -800,
+              transition: {
+                delay: 2
+              },
+            },
+            show: {
+              opacity: 1,
+              y: 0,
+              transition: {
+                delay: 2
+              }
+            },
+          }
+        }
       >
         <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
 
@@ -151,11 +151,11 @@ const Layout = ({ meta, children }: Props) => {
           </div>
 
         </div>
-      </motion.div> */}
+      </motion.div>
 
 
       {/*  Main content goes here */}
-      <main className="flex w-full gap-3 flex-1 ">
+      <main className="flex w-full gap-3 flex-1 pt-16">
 
         {(admin && isDashboard) && <Sidemenu links={links} isMobile={isMobile} />}
 

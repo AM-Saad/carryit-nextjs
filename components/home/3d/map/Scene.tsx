@@ -2,7 +2,6 @@ import { Scroll, ScrollControls } from '@react-three/drei'
 import React from 'react'
 import { Html } from './Html'
 import { Model as Scooter } from '@/components/home/3d/map/low-poly_scooter/Scene'
-import { useThree } from '@react-three/fiber'
 // import { useControls } from 'leva'
 
 export const canvasLeft = () => {
@@ -18,8 +17,6 @@ export const canvasLeft = () => {
 }
 
 function Map() {
-    const { width: w, height: h } = useThree((state) => state.viewport)
-
 
     // const scooterCtrl = useControls('Scooter', {
     //     visible: true,
@@ -32,20 +29,22 @@ function Map() {
 
     // })
 
-    console.log(h)
+
 
     return (
-        <ScrollControls pages={6}>
-            <Scroll html >
-                <Html />
-            </Scroll>
-            <Scooter
-                rotation={[.5, Math.PI, 0]}
-                position={[0, 0, 1]}
-                scale={[w / 16, w / 16, w / 16]}
-            />
-
-        </ScrollControls>
+        <group scale={[.7, .7, .7]}>
+            <ScrollControls pages={3} >
+                <Scroll>
+                    <Scooter
+                        rotation={[.5, Math.PI, 0]}
+                        position={[0, 0, 0]}
+                    />
+                </Scroll>
+                <Scroll html>
+                    <Html />
+                </Scroll>
+            </ScrollControls>
+        </group >
     )
 }
 

@@ -59,17 +59,18 @@ export default function Map() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, [lastScrollTop]);
+ 
     return (
         <>
-            {/* <Canvas
+            <Canvas
                 style={{ width: '100vw', height: '100vh', margin: '0 auto' }}
                 performance={{ min: 0.5, max: 1 }}
                 dpr={dpr}
             >
                 <Hero />
-            </Canvas> */}
+            </Canvas>
             <Canvas
-                style={{ width: '100vw', height: '100vh', margin: '0 auto', position: 'relative', zIndex: 2 }}
+                style={{ width: '100vw', height: '110vh', margin: '0 auto' }}
                 performance={{ min: 0.5, max: 1 }}
                 dpr={dpr}
             >

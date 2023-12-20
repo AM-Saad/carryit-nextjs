@@ -1,74 +1,53 @@
-import React, { useRef, useMemo } from "react";
+import React, { useRef } from "react";
 import { useScroll } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
-import { BoxGeometry } from "three";
-import { useControls } from "leva";
-import * as THREE from "three";
+import { canvasLeft } from "../Scene";
 
 export function Model(props) {
   const { nodes, materials } = useGLTF("/3d/scene.gltf");
   const group = useRef();
   const scrollData = useScroll();
-  const { width: w, height: h } = useThree((state) => state.viewport);
-  // const scooterCtrl = useControls(
-  //   "Scooter",
-  //   {
-  //     visible: true,
-  //     castShadow: true,
-  //     receiveShadow: true,
-  //     position: [0, 3, 0],
-  //   },
-  //   {
-  //     collapsed: true,
-  //   },
-  // );
-  // console.log(h);
+  const left = canvasLeft();
 
-  const { camera, size } = useThree();
+  function preventScroll(e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-  const oscillationRange = useMemo(() => {
-    if (camera.isPerspectiveCamera) {
-      const vFOV = THREE.MathUtils.degToRad(camera.fov); // Convert vertical fov to radians
-      const height = 2 * Math.tan(vFOV / 2) * Math.abs(camera.position.z); // Visible height
-      const width = height * camera.aspect; // Visible width
+    return false;
+  }
 
-      // Define the range based on visible width/height
-      return width / 4; // For example, half the width
-    } else {
-      // For orthographic camera or other types
-      return size.width / 4; // Fallback to half the canvas width
-    }
-  }, [camera, size.width, size.height]);
-
-  useFrame(({ camera, mouse }) => {
+  useFrame(({ mouse, camera }) => {
     if (group.current) {
-      const totalPages = 2;
+      // Handle X-axis motion
 
-      // Convert the normalized scroll value to a range of 0 to 6
-      const currentPage = scrollData.offset * totalPages;
-
-      // Determine the section of the page (e.g., 0.5 means halfway through the first page)
-      const sectionOfPage = currentPage % 1;
-      console.log(sectionOfPage)
-      // Calculate oscillation based on the section of the page
-      let oscillation =
-        Math.cos(sectionOfPage * Math.PI * 2) * oscillationRange;
+      let oscillation = Math.cos(scrollData.offset * (Math.PI / 0.6));
       group.current.position.x = oscillation;
+
+
+      // Handle Y-axis motion
+      const fullIntervalsY = Math.floor(scrollData.offset / 0.3);
+      console.log('fullIntervalsY', fullIntervalsY)
+      const progressY = (scrollData.offset % 0.3) / 0.3;
+      console.log('progressY', progressY)
+      const baseY = fullIntervalsY * 5;
+      console.log('baseY', baseY)
+      const newPositionY = baseY + 5 * progressY;
+      console.log('newPositionY', newPositionY)
+      group.current.position.y = -newPositionY;
+
+ 
     }
   });
 
   return (
     <group
-      // {...props}
+      {...props}
       rotation={props.rotation}
       position={props.position}
       dispose={null}
       ref={group}
-      scale={[0.5, 0.5, 0.5]}
     >
- 
       <group
         position={[0.11, 1.386, -0.332]}
         rotation={[-Math.PI / 2, 0, 0]}
@@ -102,6 +81,7 @@ export function Model(props) {
         <mesh geometry={nodes.Object_43.geometry} material={materials.Body} />
         <mesh geometry={nodes.Object_44.geometry} material={materials.Cancap} />
       </group>
+      {/* <mesh geometry={nodes.Object_4.geometry} material={materials['Material.006']} position={[-0.009, -0.01, -0.018]} scale={1.663} /> */}
       <mesh
         geometry={nodes.Object_6.geometry}
         material={materials["Material.013"]}
