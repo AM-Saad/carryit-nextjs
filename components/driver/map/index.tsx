@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLoadScript } from "@react-google-maps/api";
-import { getCurrentPosition } from "@/lib/utils";
 import Driver from "@/modals/Driver";
 import { Package } from "@/modals/Package";
 import MapClass from "@/lib/initMap";
@@ -33,11 +32,11 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
   const [currentMap, setCurrentMap] = useState<any>(null);
   const [directionsPanel, setDirectionsPanel] = useState<boolean>(false);
   const [allowLocation, setAllowLocation] = useState<boolean>(true);
-  const [status, setStatus] = useState<string>("Getting your location...");
+  const [status, setStatus] = useState<string>("Detecting Your Location...");
   // Initialize useLocation hook
   const [location, accuracy, locationError] = useLocation(allowLocation); // assuming you want to set 100 meters as the accuracy threshold
 
-// Notes from the trip: watchposition in not get updated when the user is moving
+  // Notes from the trip: watchposition in not get updated when the user is moving
 
   // Error handling state is now managed by the hook
   const error = locationError || loadError;
@@ -45,7 +44,7 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
   const init = useCallback(() => {
     if (!location || currentMap) return;
 
-    setStatus("Location access granted, initializing map...");
+    setStatus("Location Access Granted. Initializing Map...");
 
     // initialize map with current location
     const map = new MapClass(
@@ -59,34 +58,36 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
     map.initialize();
     setCurrentMap(map);
     setLoading(false);
-    setStatus("Establishing connection with server...");
+    setStatus("Establishing Connection With Server...");
+
   }, [location, currentPackage]);
 
   const watchLocation = useCallback(() => {
     if (!location || !currentMap) return;
 
     currentMap.move_markers(location);
-    socket.emit("move", {
-      id: packageId,
-      coords: location,
-    });
-    console.log('location', location)
+
+    socket.emit("move", { id: packageId, coords: location });
+
   }, [location, currentMap, packageId]);
 
   // Removed askForPermission function, since permission handling is within useLocation
 
   useEffect(() => {
     if (isLoaded && !currentMap) init();
+
   }, [isLoaded, init, currentMap]);
 
   useEffect(() => {
     let cleanupSocketEvents: any;
 
+
     if (packageId && !loading) {
-      cleanupSocketEvents = registerSocketEvents(packageId, () => setStatus("Go"), () => { console.log('error') });
+      cleanupSocketEvents = registerSocketEvents(packageId, () => setStatus("Go"), () => console.log('error'));
     }
 
     return () => cleanupSocketEvents && cleanupSocketEvents();
+
   }, [packageId, loading]);
 
   useEffect(() => {
@@ -99,9 +100,7 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
 
   // Handle location watching
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      watchLocation();
-    }, 4000);
+    const intervalId = setInterval(() => watchLocation(), 4000);
 
     return () => clearInterval(intervalId);
   }, [watchLocation]);
@@ -144,18 +143,11 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
       {isLoaded && (
         <div className="relative">
           {currentMap && <Info currentMap={currentMap} />}
-          <div id="map_canvas" className="h-[70vh] w-full"></div>
-          <button
-            className="m-auto my-3 block rounded-md bg-theme p-1 text-white shadow-md"
-            onClick={() => currentMap.reset_scene()}
-          >
-            Center
-          </button>
-          <div
-            id="directionsPanel"
-            className={`fixed right-1 top-1 h-96 w-1/3 overflow-auto rounded border bg-gray-50 p-4 text-xs shadow ${directionsPanel ? "" : "hidden"
-              }`}
-          ></div>
+
+          <div id="map_canvas" className="h-[65vh] w-full"></div>
+
+          <button className="m-auto my-3 block rounded-md bg-theme p-1 text-white shadow-md" onClick={() => currentMap.reset_scene()}> Center</button>
+          <div id="directionsPanel" className={`fixed right-1 top-1 h-96 w-1/3 overflow-auto rounded border bg-gray-50 p-4 text-xs shadow ${directionsPanel ? "" : "hidden"}`}></div>
         </div>
       )}
     </div>
