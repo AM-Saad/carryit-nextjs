@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AdminContextProvider } from '@/stores/admin'
 import { DriverContextProvider } from '@/stores/driver'
 import { useRouter } from 'next/router';
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const sfPro = localFont({
   src: "../styles/SF-Pro-Display-Medium.otf",
@@ -79,6 +79,7 @@ export default function MyApp({ Component, pageProps: { session, ...pageProps } 
 
   return (
     <SessionProvider session={session}>
+      <SpeedInsights />
       {contextProvider}
     </SessionProvider>
   );
