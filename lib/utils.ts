@@ -122,10 +122,50 @@ export function userLocationInfo() {
 
 export function getCurrentPosition() {
   return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 });
+    navigator.geolocation.watchPosition(resolve, reject, {
+      enableHighAccuracy: true, maximumAge: 5000
+
+    });
   });
 }
 
+// export function getCurrentPosition() {
+
+
+
+//   const readLocation = (
+//     setLocation: (location: ILocation) => void,
+//     setError: (errorMessage: string) => void,
+//     setAccuracy: (acc: number) => void
+//   ) => {
+//     if (navigator.geolocation) {
+//       const geoId = navigator.geolocation.watchPosition(
+//         (position) => {
+//           const lat = position.coords.latitude;
+//           const lng = position.coords.longitude;
+//           setLocation({ lat, lng });
+//           setAccuracy(position.coords.accuracy);
+//           console.log({ lat, lng }, position.coords.accuracy);
+//           if (position.coords.accuracy > 10) {
+//             showErrorSnackBar("The GPS accuracy isn't good enough");
+//           }
+//         },
+//         (e) => {
+//           showErrorSnackBar(e.message);
+//           setError(e.message);
+//         },
+//         { enableHighAccuracy: true, maximumAge: 2000, timeout: 5000 }
+//       );
+//       return () => {
+//         console.log('Clear watch called');
+//         window.navigator.geolocation.clearWatch(geoId);
+//       };
+//     }
+
+//     return;
+//   };
+
+// }
 export function calculateCost(branches, driversPerBranch, tripsPerDriver) {
   // Constants
   const daysInMonth = 30;

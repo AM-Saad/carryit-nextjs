@@ -44,6 +44,7 @@ const Layout = ({ meta, children }: Props) => {
 
     fetch_driver();
   }, []);
+
   return (
     <>
       <Meta {...meta} />

@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+/* html{
+  scroll-behavior: smooth;
+} */
 
 .MenubarRoot {
   @apply flex bg-white p-1 rounded-md shadow

@@ -1166,6 +1166,11 @@
   resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.50.5.tgz#a0d12675b547205fc163c4b8d999db305ba3862a"
   integrity sha512-RuZf1MJtctGlpW+Gd4a/eGtAufUDjMf+eyN1l+B3fbe2YLScJbg8KEljJfb+6vnSPFAeM1/48geVIEg3vqOkxw==
 
+"@types/google.maps@^3.54.10":
+  version "3.54.10"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.54.10.tgz#f3101dda3e873f3602ae664cf518592686ca215b"
+  integrity sha512-N6gwM01mKhooXaw+IKbUH7wJcIJCn8U60VoaVvom5EiQjmfgevhQ+0+/r17beXW5j8ad2x+WPr0iyOUodCw4/w==
+
 "@types/hast@^2.0.0":
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/@types/hast/-/hast-2.3.4.tgz#8aa5ef92c117d20d974a82bdfb6a648b08c0bafc"
@@ -1445,10 +1450,19 @@
     satori "0.0.46"
     yoga-wasm-web "0.3.0"
 
+<<<<<<< HEAD
 "@vercel/speed-insights@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@vercel/speed-insights/-/speed-insights-1.0.2.tgz#1bebf3e7c7046b6a911721233b263b69214ddb3e"
   integrity sha512-y5HWeB6RmlyVYxJAMrjiDEz8qAIy2cit0fhBq+MD78WaUwQvuBnQlX4+5MuwVTWi46bV3klaRMq83u9zUy1KOg==
+=======
+"@vis.gl/react-google-maps@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@vis.gl/react-google-maps/-/react-google-maps-0.4.1.tgz#35336141a0df9ce423d6c82347d1e027f3802deb"
+  integrity sha512-Dqv9N9mJOmXhDgcFmwyLby3x9diTMxO3D5b7ltAWsoP5aORlQqTITtuZT8IH3PQbyXyA/0fcMGhnfy/sRuVCLg==
+  dependencies:
+    "@types/google.maps" "^3.54.10"
+>>>>>>> dd4e73208bcfb3435c340b5621a2071a3a127c25
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
