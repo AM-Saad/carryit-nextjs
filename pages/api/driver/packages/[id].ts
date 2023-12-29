@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
 import { authMiddleware, Token } from '@/middleware/auth';
-import { ObjectId,toid } from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<any>, token: Token) => {
