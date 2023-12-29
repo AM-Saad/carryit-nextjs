@@ -1,61 +1,69 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-const useLocation = (
-    enabled: boolean,
-    accuracyThreshold?: number,
-    accuracyThresholdWaitTime?: number,
-    options?: PositionOptions
-): [any | undefined, number | undefined, string | undefined] => {
-    const [accuracy, setAccuracy] = useState<number>();
-    const [location, setLocation] = useState<any>();
-    const [error, setError] = useState<string>();
 
-    useEffect(() => {
-        if (!enabled) {
-            setAccuracy(undefined);
-            setError(undefined);
-            setLocation(undefined);
+const useLocation = (enabled, accuracyThreshold = 3000, options = { enableHighAccuracy: true, maximumAge: 10000, timeout: 4000 }) => {
+    const [location, setLocation] = useState<any>(null);
+    const [accuracy, setAccuracy] = useState<any>(null);
+    const [error, setError] = useState<any>(null);
+    const [isInitializing, setIsInitializing] = useState<any>(true);
+    const [attempt, setAttempt] = useState<any>(0);
+    const accuracyRef = useRef(accuracy);
+    accuracyRef.current = accuracy;
+
+    console.log('Rendring')
+    const checkAccuracyAndSetLocation = (position: any) => {
+        console.log(position)
+
+        const { latitude, longitude, accuracy } = position.coords;
+        setAccuracy(accuracy);
+
+        if (accuracy <= accuracyThreshold) {
+            setLocation({ lat: latitude, lng: longitude });
+            setIsInitializing(false);
+        }
+
+    };
+
+    
+    const handleError = (e) => {
+        console.log(e); // Log for debugging
+        if (e.code === 3 && location) { // Timeout error code is 3
+            // Ignore timeout error if a valid location has already been fetched
             return;
         }
-        if (navigator.geolocation) {
-            let timeout: NodeJS.Timeout | undefined;
-            const geoId = navigator.geolocation.watchPosition(
-                (position) => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    setAccuracy(position.coords.accuracy);
+        setError('Unable To Retrieve Your Location');
+        setIsInitializing(false);
+    };
 
-                    if (accuracyThreshold == null || position.coords.accuracy < accuracyThreshold) {
-                        setLocation({ lat, lng });
-                    }
-                },
-                (e) => { setError(e.message) },
-                options ?? { enableHighAccuracy: true, maximumAge: 100, timeout: 10000 }
-            );
-            if (accuracyThreshold && accuracyThresholdWaitTime) {
-                timeout = setTimeout(() => {
-                    if (!accuracy || accuracy < accuracyThreshold) {
-                        setError('Failed to reach desired accuracy');
-                    }
-                }, accuracyThresholdWaitTime * 1000);
-            }
-            return () => {
-                window.navigator.geolocation.clearWatch(geoId);
-                if (timeout) {
-                    clearTimeout(timeout);
+
+
+    useEffect(() => {
+        let geoId;
+        if (enabled && navigator.geolocation) {
+            geoId = navigator.geolocation.watchPosition(checkAccuracyAndSetLocation, handleError, options);
+            console.log('componentDidMount')
+            const accuracyInterval = setInterval(() => {
+                setAttempt(attempt + 1);
+                if (accuracyRef.current && accuracyRef.current <= accuracyThreshold) {
+                    clearInterval(accuracyInterval);
                 }
+                // if (attempt >= 3) {
+                //     clearInterval(accuracyInterval);
+                // }
+            }, 5000); // Check every 5 seconds
+
+            return () => {
+                navigator.geolocation.clearWatch(geoId);
+                clearInterval(accuracyInterval);
             };
+        } else {
+            setError('Geolocation API Not Available');
         }
+    }, []);
 
-        setError('Geolocation API not available');
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enabled, accuracyThresholdWaitTime, accuracyThreshold, options]);
 
-    if (!enabled) {
-        return [undefined, undefined, undefined];
-    }
+    return { location, accuracy, error, isInitializing };
 
-    return [location, accuracy, error];
 };
 
-export default useLocation
+export default useLocation;

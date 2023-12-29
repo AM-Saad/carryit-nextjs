@@ -29,7 +29,7 @@ const SignInModal = ({ showSignInModal, setShowSignInModal, }: { showSignInModal
   return (
     <Modal showModal={showSignInModal} setShowModal={setShowSignInModal}>
       <div className="w-full overflow-hidden shadow-xl md:max-w-md md:rounded-2xl md:border md:border-gray-200">
-        <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center md:px-16">
+        <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white dark:bg-stone-900 px-4 py-6 pt-8 text-center md:px-16">
           <Image
             src="/logo.png"
             alt="Logo"
@@ -61,7 +61,7 @@ const SignInModal = ({ showSignInModal, setShowSignInModal, }: { showSignInModal
           </button>
         </div>
 
-        <div className="flex flex-col space-y-4 bg-gray-50 p-4 md:px-16">
+        <div className="flex flex-col space-y-4 bg-gray-50 dark:bg-zinc-900 p-4 md:px-16 dark:text-white">
      
           <a href="/driver/login" className="text-xs">Are you a driver ?</a>
         </div>

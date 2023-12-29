@@ -57,29 +57,29 @@ const Package = () => {
                         <div className='mt-4 col-span-2'>
                             <h2 className='mb-4 font-medium'>Receiver Details</h2>
                             <div className='flex flex-col gap-3 text-xs'>
-                                <p>Name: {currentItem.receiver.name}</p>
-                                <p>Phone: {currentItem.receiver.phone}</p>
-                                <p>Address: {currentItem.receiver.address || '.n.c'}</p>
-                                <p>City: {currentItem.receiver.city || '.n.c'}</p>
-                                <p>State: {currentItem.receiver.state || '.n.c'}</p>
-                                <p>Building: {currentItem.receiver.building || '.n.c'}</p>
-                                <p>Floor: {currentItem.receiver.floor || '.n.c'}</p>
-                                <p>Apartment: {currentItem.receiver.apartment || '.n.c'}</p>
+                                <p><b>Name:</b> {currentItem.receiver.name}</p>
+                                <p><b>Phone:</b> {currentItem.receiver.phone}</p>
+                                <p><b>Address:</b> {currentItem.receiver.address || '.n.c'}</p>
+                                <p><b>City:</b> {currentItem.receiver.city || '.n.c'}</p>
+                                <p><b>State:</b> {currentItem.receiver.state || '.n.c'}</p>
+                                <p><b>Building:</b> {currentItem.receiver.building || '.n.c'}</p>
+                                <p><b>Floor:</b> {currentItem.receiver.floor || '.n.c'}</p>
+                                <p><b>Apartment:</b> {currentItem.receiver.apartment || '.n.c'}</p>
                             </div>
                         </div>
                         <div className='mt-4 col-span-1'>
                             <h2 className='mb-4 font-medium'>Package Info</h2>
                             <div className='flex items-center gap-5 text-xs mb-2'>
-                                <p >Is Liquid: {currentItem.is_liquid ? 'Yes' : 'No'}</p>
-                                <p>Is Fragile: : {currentItem.is_fragile ? 'Yes' : 'No'}</p>
+                                <p><b>Liquid:</b> {currentItem.is_liquid ? 'Yes' : 'No'}</p>
+                                <p><b>Fragile:</b> {currentItem.is_fragile ? 'Yes' : 'No'}</p>
                             </div>
-                            <div className='flex flex-col gap-3'>
+                            <div className='flex flex-col gap-3 w-full'>
                                 {currentItem.items?.map(item =>
-                                    <div key={item.itemId} className='p-2 bg-gray-50 rounded text-xs'>
-                                        <p className='mb-2'>Item Name: {item.name}</p>
-                                        <p className='mb-2'>Item Price: {item.price}$</p>
-                                        <p className='mb-3'>Item Quantity: {item.quantity}</p>
-                                        <p className='font-medium'>Total: {(item.price || 0) * (item.quantity || 0)}$</p>
+                                    <div key={item.itemId} className='p-2 bg-gray-50 dark:bg-stone-900 rounded text-xs shadow'>
+                                        <p className='mb-2'><b>Name:</b> {item.name}</p>
+                                        <p className='mb-2'><b>Price:</b> {item.price}$</p>
+                                        <p className='mb-3'><b>Quantity:</b> {item.quantity}</p>
+                                        <p className='font-medium'><b>Total:</b> {(item.price || 0) * (item.quantity || 0)}$</p>
                                     </div>
                                 )}
                             </div>
@@ -90,11 +90,11 @@ const Package = () => {
                     <div className='mt-4'>
                         <h2 className='mb-4 font-medium'>Shipping Info</h2>
                         <div className='flex flex-col gap-3 text-xs'>
-                            <p>Total: {(currentItem.total_cost || 0 - currentItem.shipping_cost)}$</p>
-                            <p>Discount: {currentItem.discount}$</p>
-                            <p>Shipping Cost: {currentItem.shipping_cost}$</p>
+                            <p><b>Total:</b> {(currentItem.total_cost || 0 - currentItem.shipping_cost)}$</p>
+                            <p><b>Discount:</b> {currentItem.discount}$</p>
+                            <p><b>Shipping Cost:</b> {currentItem.shipping_cost}$</p>
 
-                            <p className='font-medium text-md'>Grand Total: {(currentItem.total_cost || 0) - (currentItem.discount || 0)}$</p>
+                            <p className='font-medium text-xl'>Grand Total: {(currentItem.total_cost || 0) - (currentItem.discount || 0)}$</p>
 
 
 

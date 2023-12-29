@@ -82,7 +82,7 @@
 }
 
 .items-header {
-  @apply flex gap-5 items-center justify-between lg:col-span-3 border-b mb-3 border-gray-300 p-2 pb-1  bg-gray-100
+  @apply flex gap-5 items-center justify-between lg:col-span-3 border-b mb-3 border-gray-300 p-2 pb-1  bg-gray-100 dark:bg-stone-900
 }
 
 .form-body{
@@ -137,4 +137,34 @@
 
 .form-title {
   @apply font-medium text-lg mb-4 mt-2
+}
+
+
+
+
+
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply bg-zinc-900
+  }
+  svg {
+    @apply text-white
+  }
+
+  .btn {
+    color: #eee;
+  }
+
+  h1,
+  h2,
+  h3,
+  h5 {
+    color: #fff !important;
+  }
+
+  p {
+    color: #ccc !important;
+  }
+
+
 }

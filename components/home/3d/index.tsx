@@ -62,13 +62,13 @@ export default function Map() {
  
     return (
         <>
-            <Canvas
+            {/* <Canvas
                 style={{ width: '100vw', height: '100vh', margin: '0 auto' }}
                 performance={{ min: 0.5, max: 1 }}
                 dpr={dpr}
             >
                 <Hero />
-            </Canvas>
+            </Canvas> */}
             <Canvas
                 style={{ width: '100vw', height: '110vh', margin: '0 auto' }}
                 performance={{ min: 0.5, max: 1 }}

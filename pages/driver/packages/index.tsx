@@ -37,12 +37,12 @@ const Packages = () => {
               <div className="flex items-center justify-between gap-5"></div>
             </div>
 
-            <div className="h-full rounded bg-white shadow ">
+            <div className="h-full rounded  shadow ">
               {currentItems.map((item: any) => (
                 <Link
                   href={`${INTERNAL_DRIVER_SHIPMENTS_ROUTE}/${item.id}`}
                   key={item.id}
-                  className="group relative flex items-center gap-3 border-b bg-white p-2 text-black"
+                  className="group relative flex items-center gap-3 border-b p-2 text-black"
                 >
                   <TriangleRightIcon className="relative block h-5 w-5 transform transition-all duration-300 group-hover:translate-x-2" />
                   <p>{item.packageNo}</p>

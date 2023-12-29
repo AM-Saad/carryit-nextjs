@@ -5,7 +5,7 @@ export function registerSocketEvents(packageId: string, handleStatusChange: any,
     socket.connect();
     socket.emit('register', { roomId: packageId, token: localStorage.getItem('didjwt') });
 
-    socket.on('go', () => handleStatusChange('ready'));
+    socket.on('go', () => handleStatusChange('Service is on the way....'));
     socket.on('ignored', reason => handleIgnored(reason));
 
     return () => {

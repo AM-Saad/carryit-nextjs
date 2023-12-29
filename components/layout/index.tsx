@@ -84,9 +84,7 @@ const Layout = ({ meta, children }: Props) => {
 
       {/* Nav */}
       <motion.div
-        className={`fixed top-0 w-full ${scrolled
-          ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl "
-          : "bg-white/0"
+        className={`fixed top-0 w-full dark:text-white ${scrolled ? "border-b border-gray-200 bg-white/50 dark:bg-stone-900/50 backdrop-blur-xl"  : "bg-white/0 dark:bg-stone-900/0" } 
           } z-30 transition-all`}
 
 

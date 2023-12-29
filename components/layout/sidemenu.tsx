@@ -82,7 +82,7 @@ const Sidemenu: React.FC<Props> = memo(({ links, isMobile }) => {
           ref={leafletRef}
           key="leaflet"
           className={`flex h-full w-40
-                        cursor-grab flex-col items-start gap-4 overflow-hidden rounded-tr-lg border border-b-0 bg-gray-50 p-2  px-4 pb-5 transition-all duration-75
+                        cursor-grab flex-col items-start gap-4 overflow-hidden rounded-tr-lg border border-b-0 bg-gray-50 dark:bg-stone-900 p-2  px-4 pb-5 transition-all duration-75
                         active:cursor-grabbing sm:gap-3
                     `}
           animate={controls}
@@ -109,7 +109,7 @@ const Sidemenu: React.FC<Props> = memo(({ links, isMobile }) => {
             <li className="block w-full cursor-pointer mb-5 group" key={link.name}>
               <Link
                 href={link.href}
-                className={`flex w-full cursor-pointer justify-between font-medium text-xs text-gray-500 transition-all duration-300 sm:gap-1 md:text-sm ${router.pathname.includes(link.name.toLowerCase()) ? 'text-gray-900' : 'group-hover:text-gray-900'}`}
+                className={`flex w-full cursor-pointer justify-between font-medium text-xs text-gray-500 dark:text-white transition-all duration-300 sm:gap-1 md:text-sm ${router.pathname.includes(link.name.toLowerCase()) ? 'text-gray-900' : 'group-hover:text-gray-900'}`}
               >
                 <span className="block w-9/12">{link.name}</span>
                 <Image

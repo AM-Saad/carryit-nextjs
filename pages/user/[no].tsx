@@ -59,9 +59,10 @@ const Map: React.FC<{ packageId: string }> = ({ packageId }) => {
 
         socket.on("move", (data: any) => {
             if (data) setError(null)
-            setTimeout(() => {
-                setMarker({ lat: data.coords.lat, lng: data.coords.long })
-            }, 4000)
+            console.log(data)
+            // setTimeout(() => {
+                setMarker({ lat: data.coords.lat, lng: data.coords.lng })
+            // }, 2000)
         });
 
         socket.on("package-closed", (data: any) => setError('Please wait the driver is connecting..'));
@@ -99,6 +100,7 @@ const Map: React.FC<{ packageId: string }> = ({ packageId }) => {
                                 scaleControl: true,
                                 tilt: 45,
                                 heading: 180,
+                                mapId:'90f87356969d889c'
                             }}
                         >
 

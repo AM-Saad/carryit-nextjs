@@ -11,8 +11,8 @@ const Track: React.FC = () => {
     const router = useRouter()
 
     const fetchPackage = async () => {
-        if (!packageNo || packageNo.trim() === '') return setValidationError('Package Number Is Required')
         setValidationError(null)
+        if (!packageNo || packageNo.trim() === '') return setValidationError('Package Number Is Required')
 
         const res: Response<any> = await fetcher(`/api/public/packages/SHP-${packageNo}`)
         if (res.status !== Status.SUCCESS) {

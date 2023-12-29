@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma'
 import { refineResponse } from 'shared/helpers/refineResponse';
 import { Status } from '@/shared/modals/Response';
 import { authMiddleware, Token } from '@/middleware/auth';
+import { ObjectId,toid } from 'mongodb';
 
 
 export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<any>, token: Token) => {
@@ -13,6 +14,8 @@ export default authMiddleware(async (req: NextApiRequest, res: NextApiResponse<a
         return res.status(405).json(refineResponse(Status.METHOD_NOT_ALLOWED, 'Method not allowed'));
     }
     if (req.method === 'GET') {
+        
+        if(!ObjectId.isValid(id)) return res.status(400).json(refineResponse(Status.BAD_REQUEST, 'Invalid Package Identifier'));
         const item = await prisma.package.findFirst({ where: { id: id as string, driverId: token.driverId } });
 
         try {

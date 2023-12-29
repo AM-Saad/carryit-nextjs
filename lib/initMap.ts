@@ -56,9 +56,11 @@ class MapClass {
         };
 
 
+        
         this.map = new google.maps.Map(document.getElementById('map_canvas') as HTMLDivElement, myOptions);
         this.directionsDisplay.setMap(this.map);
         this.directionsDisplay.setPanel(document.getElementById('directionsPanel'));
+
 
 
 
@@ -72,6 +74,7 @@ class MapClass {
 
 
 
+
         google.maps.event.addListener(this.map, 'dragend', () => {
             const bounds: any = this.map?.getBounds();
             const areaBounds = {
@@ -80,8 +83,8 @@ class MapClass {
                 east: bounds.getNorthEast().lng(),
                 west: bounds.getSouthWest().lng()
             };
-            console.log(areaBounds)
         });
+
 
 
 
@@ -92,7 +95,7 @@ class MapClass {
             const overview_path = directions.routes[0].overview_path;
             const startingPoint = overview_path[0];
             const destination = overview_path[overview_path.length - 1];
-            if (!this.startLatlng ) {
+            if (!this.startLatlng) {
                 this.startLatlng = startingPoint;
             }
 

@@ -23,7 +23,7 @@ const UserDropdown: React.FC<{ driver: any }> = ({ driver }) => {
     >
       <Popover
         content={
-          <div className="w-full rounded-md bg-white p-2 sm:w-56">
+          <div className="w-full rounded-md bg-white  dark:bg-stone-900 p-2 sm:w-56">
             <Link
               className="flex items-center justify-start space-x-2 relative w-full rounded-md p-2 text-left text-sm transition-all duration-75 hover:bg-gray-100"
               href="/dashboard"

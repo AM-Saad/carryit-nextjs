@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import Driver from "@/modals/Driver";
 import { Package } from "@/modals/Package";
@@ -20,100 +20,133 @@ interface Props {
 type Libraries = "geometry" | "places";
 const libraries: Libraries[] = ["geometry", "places"];
 
+function moveFromAToB(start, end, callback, interval = 5000) {
+  // Calculate the total number of steps based on the interval
+  const totalDuration = 60000; // For example, 1 minute for the whole journey
+  const numSteps = totalDuration / interval;
 
+  let currentStep = 0;
+  let latStep = (end.lat - start.lat) / numSteps;
+  let lngStep = (end.lng - start.lng) / numSteps;
+
+  const timer = setInterval(() => {
+    if (currentStep > numSteps) {
+      clearInterval(timer);
+      return;
+    }
+
+    let lat = start.lat + (latStep * currentStep);
+    let lng = start.lng + (lngStep * currentStep);
+    callback({ lat, lng });
+
+    currentStep++;
+  }, interval);
+
+  return () => clearInterval(timer); // Return a function to stop the interval
+}
 
 const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
+
+
+  const [currentMap, setCurrentMap] = useState<any>(null);
+  const [directionsPanel, setDirectionsPanel] = useState<boolean>(false);
+  const [status, setStatus] = useState<string>("Detecting Your Location...");
+
+  // Initialize useLocation hook
+  // enabled: whether to fetch location or not
+  // accuracyThreshold: desired accuracy in meters
+  // options: Geolocation API options
+
+  const { location, accuracy, error, isInitializing } = useLocation(true, 3000);
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY!,
     libraries: libraries,
   });
 
-  const [loading, setLoading] = useState(true);
-  const [currentMap, setCurrentMap] = useState<any>(null);
-  const [directionsPanel, setDirectionsPanel] = useState<boolean>(false);
-  const [allowLocation, setAllowLocation] = useState<boolean>(true);
-  const [status, setStatus] = useState<string>("Detecting Your Location...");
-  // Initialize useLocation hook
-  const [location, accuracy, locationError] = useLocation(allowLocation); // assuming you want to set 100 meters as the accuracy threshold
 
-  // Notes from the trip: watchposition in not get updated when the user is moving
 
-  // Error handling state is now managed by the hook
-  const error = locationError || loadError;
+  const mapError = useMemo(() => error || loadError, [error, loadError]);
 
-  const init = useCallback(() => {
-    if (!location || currentMap) return;
+  const isReady = useMemo(() => location ? true : false, [location]);
 
-    setStatus("Location Access Granted. Initializing Map...");
 
+
+  const initMap = useCallback((location) => {
     // initialize map with current location
     const map = new MapClass(
       new google.maps.LatLng(location.lat, location.lng),
       new google.maps.LatLng(
+        // 30.122817,
+        // 31.344050
         currentPackage.receiver.shipping_address.geometry.location.lat,
         currentPackage.receiver.shipping_address.geometry.location.lng,
       ),
     );
-
-    map.initialize();
     setCurrentMap(map);
-    setLoading(false);
-    setStatus("Establishing Connection With Server...");
+    map.initialize();
+  }, []);
 
-  }, [location, currentPackage]);
 
-  const watchLocation = useCallback(() => {
-    if (!location || !currentMap) return;
 
-    currentMap.move_markers(location);
 
-    socket.emit("move", { id: packageId, coords: location });
 
-  }, [location, currentMap, packageId]);
-
-  // Removed askForPermission function, since permission handling is within useLocation
 
   useEffect(() => {
-    if (isLoaded && !currentMap) init();
+    if (isReady && location && !currentMap && !mapError) {
+      setTimeout(() => initMap(location), 1000);
+    }
+  }, [isReady, mapError, currentMap, location]);
 
-  }, [isLoaded, init, currentMap]);
+  useEffect(() => {
+    console.log('location is', location)
+    if (!location || !currentMap) return;
+
+
+    // const startCoord = { lat: 30.12931566719791, lng: 31.347917873568164 };
+    // const endCoord = { lat: 30.122817, lng: 31.344050 };
+
+    // const stopMoving = moveFromAToB(startCoord, endCoord, (nextPoint) => {
+
+      currentMap.move_markers(location);
+
+      socket.emit("move", { id: packageId, coords: location });
+    // });
+  }, [location, currentMap]);
+
+
 
   useEffect(() => {
     let cleanupSocketEvents: any;
 
+    if (packageId && !isInitializing && isLoaded) {
+      setStatus("Establishing Connection With Server...");
+      setTimeout(() => {
+        cleanupSocketEvents = registerSocketEvents(packageId, (msg: string) => {
+          setStatus(msg)
 
-    if (packageId && !loading) {
-      cleanupSocketEvents = registerSocketEvents(packageId, () => setStatus("Go"), () => console.log('error'));
+        }, (errorMsg: string) => setStatus(errorMsg));
+      }, 1000);
+
     }
-
     return () => cleanupSocketEvents && cleanupSocketEvents();
 
-  }, [packageId, loading]);
+  }, [packageId, isInitializing, isLoaded]);
 
-  useEffect(() => {
-    if (currentMap && location) {
-      ready();
-      watchLocation();
 
-    }
-  }, [currentMap, location, ready]);
 
-  // Handle location watching
-  useEffect(() => {
-    const intervalId = setInterval(() => watchLocation(), 4000);
 
-    return () => clearInterval(intervalId);
-  }, [watchLocation]);
   return (
     <div style={{ height: "400px", width: "100%" }}>
       <div className="m-auto my-5 flex flex-col items-center text-center">
-        {loading && !error && (
+        {(!mapError && !currentMap) && (
           <p className="mb-4 font-medium text-gray-800">{status}</p>
         )}
-        {error && (
+
+        {mapError && (
           <p
             className="m-auto mb-4 w-10/12 text-sm font-medium text-red-400 sm:w-8/12"
-            dangerouslySetInnerHTML={{ __html: error instanceof Error ? error.message : error }}
+            dangerouslySetInnerHTML={{ __html: mapError instanceof Error ? mapError.message : mapError }}
           ></p>
         )}
         {/* {allowLocation && (
@@ -140,7 +173,7 @@ const Map: React.FC<Props> = ({ packageId, currentPackage, driver, ready }) => {
         )} */}
       </div>
 
-      {isLoaded && (
+      {isReady && (
         <div className="relative">
           {currentMap && <Info currentMap={currentMap} />}
 
