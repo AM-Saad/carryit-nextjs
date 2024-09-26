@@ -99,8 +99,10 @@ const Home = () => {
 
 
       </div>
+      <div className="mt-36">
 
-      <MainScene />
+        <MainScene />
+      </div>
 
 
     </Layout>

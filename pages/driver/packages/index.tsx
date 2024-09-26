@@ -37,7 +37,7 @@ const Packages = () => {
               <div className="flex items-center justify-between gap-5"></div>
             </div>
 
-            <div className="h-full rounded  shadow ">
+            <div className=" ">
               {currentItems.map((item: any) => (
                 <Link
                   href={`${INTERNAL_DRIVER_SHIPMENTS_ROUTE}/${item.id}`}

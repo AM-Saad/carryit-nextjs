@@ -22,7 +22,7 @@ const Info: React.FC<{ currentMap: any }> = ({ currentMap }) => {
 
     return (
         <>
-            <div className="sm:flex items-center gap-3 text-xs my-3">
+            <div className=" gap-8 items-center my-3 sm:flex text-xs">
                 <p className="text-gray-800 font-medium flex gap-[2px] items-center"><ClockIcon width={14} height={14} />Estimated Duration: <b> {duration || 'Calculating..'}</b></p>
                 <p className="text-gray-800 font-medium flex gap-[2px] items-center"><CountdownTimerIcon width={14} height={14} />Estimated Distance: <b> {distance || 'Calculating..'}</b></p>
             </div>

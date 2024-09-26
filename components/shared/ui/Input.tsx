@@ -26,7 +26,7 @@ const Input: React.FC<Props> = ({ label, id, onChange, type, placeholder, value,
     }, [showPassword, type])
     return (
         <div className="my-2 w-full relative">
-            <label className="block font-medium text-xs text-gray-700" htmlFor={id}>{label}</label>
+            <label className="block font-medium text-xs text-gray-700 dark:text-gray-300" htmlFor={id}>{label}</label>
             <input
                 id={id}
                 className="p-2 rounded-lg border mt-1 outline-none w-full text-xs"

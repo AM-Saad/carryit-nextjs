@@ -188,7 +188,7 @@ const EditableInput: React.FC<Props> = (props, ref) => {
         <div className="mb-1 flex items-center">
           <label
             htmlFor={`update_${label}`}
-            className="editable-input_label mr-1 block text-xs font-medium text-gray-700"
+            className="editable-input_label mr-1 block text-xs font-medium text-gray-700 dark:text-gray-300"
           >
             {label}
           </label>
@@ -197,7 +197,7 @@ const EditableInput: React.FC<Props> = (props, ref) => {
 
         {!isEditing && (
           <p
-            className={`editable-input_value ml-1 text-xs font-medium text-gray-700`}
+            className={`editable-input_value ml-1 text-xs font-medium text-gray-700 dark:text-gray-300`}
           >
             {inputType === "password" ? "......." : newVal || "n.c."}
           </p>

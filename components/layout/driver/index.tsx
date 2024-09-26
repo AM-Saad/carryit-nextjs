@@ -34,7 +34,7 @@ interface Props {
 }
 
 const Layout = ({ meta, children }: Props) => {
-  const scrolled = useScroll(50);
+  const scrolled = useScroll(80);
   const router = useRouter();
 
   const { fetch_driver, driver, driverMeta } = useContext(DriverContext);
@@ -46,10 +46,10 @@ const Layout = ({ meta, children }: Props) => {
   }, []);
 
   return (
-    <>
+    <div className="flex flex-col justify-between min-h-[100svh]">
       <Meta {...meta} />
       <div
-        className={`fixed top-0 w-full ${scrolled ? "border-b border-gray-200 bg-white/50 dark:bg-stone-900/50 backdrop-blur-xl"  : "bg-white/0 dark:bg-stone-900/0" } z-30 transition-all`}
+        className={`w-full ${scrolled ? "fixed top-0 border-b border-gray-200 bg-white/50 dark:bg-stone-900/50 backdrop-blur-xl" : "bg-white/0 dark:bg-stone-900/0"} z-30 transition-all`}
       >
         <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
           <Link href="/" className="flex items-center font-display text-2xl">
@@ -81,18 +81,18 @@ const Layout = ({ meta, children }: Props) => {
       </div>
 
       {/*  Main content goes here */}
-      <main className="flex min-h-[100dvh] w-full gap-3 pr-2 pt-20 sm:gap-5">
+      <main className="flex flex-1 w-full gap-3 pr-2 sm:gap-5">
         {driver && <Sidemenu links={links} isMobile={true} />}
-        <div className={`min-h-[100vh] rounded-md  ${!driver ? 'w-9/12 m-auto' : ' w-full border'}`}>
+        <div className={`rounded-md mb-2 overflow-hidden  ${!driver ? 'w-9/12 m-auto' : ' w-full border'}`}>
           {children}
         </div>
       </main>
 
-      <div className="absolute w-full border-t border-gray-200 bg-white py-5 text-center">
+      <div className="w-full border-t border-gray-200 bg-gray-50 py-2 text-center text-sm h-10">
         <p className="text-gray-500">
           Provided by{" "}
           <a
-            className="font-medium text-gray-800  transition-colors"
+            className="font-medium text-gray-800  transition-colors hover:text-orange-400"
             href="https://amsaad.cc"
             target="_blank"
             rel="noopener noreferrer"
@@ -101,7 +101,7 @@ const Layout = ({ meta, children }: Props) => {
           </a>
         </p>
       </div>
-    </>
+    </div>
   );
 };
 export default Layout;
