@@ -1,4 +1,4 @@
-# Hoptab API and Infrastructure
+# Karry Next APP.
 
 This README is work-in-progress until the MVP reaches a stable state. For now, check out the following repository features:
 
